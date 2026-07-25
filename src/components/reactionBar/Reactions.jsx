@@ -227,7 +227,7 @@ const Reactions = ({ postId, postUserId, currentUser }) => {
                   <a
                     className="twitter-share-button"
                     style={{ color: "inherit" }}
-                    href={`https://twitter.com/intent/tweet?text=Check%20this%20out%20on%20Postsstation:&url=${encodeURIComponent(url())}`}
+                    href={`https://twitter.com/intent/tweet?text=Check%20this%20out%20on%20Poststation:&url=${encodeURIComponent(url())}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   > 

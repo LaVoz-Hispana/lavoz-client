@@ -20,7 +20,7 @@ const Privacy = ({ setOpenPrivacy }) => {
           <p>Terms of use for Poststation.link</p>  
           <p>Last update: 12/12/2023</p>  
           <p>
-            Welcome to Postsstation, an online platform for news and social publishing. By accessing or using our 
+            Welcome to Poststation, an online platform for news and social publishing. By accessing or using our 
             website at www.poststation.link you agree to comply with and be bound by the following Terms of Use. 
             If you do not agree to these terms, please do not use the Site.
           </p>  

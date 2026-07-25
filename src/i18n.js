@@ -115,7 +115,7 @@ i18n
             guest: "Howdy! To upload shorts, please login or make an account.",
           },
           update: {
-            welcome: "Welcome to Postsstation!",
+            welcome: "Welcome to Poststation!",
             setupDesc: "To get started, let's fill out your profile.",
             start: "Get Started",
             optional: "All fields are optional",
@@ -253,7 +253,7 @@ i18n
             error: "Can't login!"
           },
           register: {
-            desc: "Postsstation connects Brazos Valley students with local businesses, non-profits, and residents for project-based work.",
+            desc: "Poststation connects Brazos Valley students with local businesses, non-profits, and residents for project-based work.",
             do: "Do you have an account?",
             question: "What type of account?",
             student: "Student",
@@ -546,7 +546,7 @@ i18n
             rate: "calificar este comentario"
           },
           update: {
-            welcome: "¡Bienvenidos a Postsstation!",
+            welcome: "¡Bienvenidos a Poststation!",
             setupDesc: "Para empezar, vamos a completar tu perfil.",
             start: "¡A empezar!",
             optional: "Todos los campos son opcionales.",
@@ -684,7 +684,7 @@ i18n
             error: "No se puede hacer el login!"
           },
           register: {
-            desc: "Postsstation conecta a estudiantes del Valle Brazos con negocios locales, organizaciones sin fines de lucro y residentes para trabajo por proyectos.",
+            desc: "Poststation conecta a estudiantes del Valle Brazos con negocios locales, organizaciones sin fines de lucro y residentes para trabajo por proyectos.",
             do: "¿Ya tienes cuenta?",
             question: "¿Qué tipo de cuenta?",
             student: "Estudiante",

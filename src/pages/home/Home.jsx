@@ -121,7 +121,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-hero">
-        <h1>Postsstation</h1>
+        <h1>Poststation</h1>
         <p>Brazos Valley Student–Local Marketplace</p>
       </div>
 

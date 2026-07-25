@@ -57,7 +57,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="left">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <img src={Logo} alt="Postsstation Logo" className="logo" />
+          <img src={Logo} alt="Poststation Logo" className="logo" />
         </Link>
         <Link to='/' className="pc" style={{ textDecoration: "none", color: "inherit", display: 'flex' }}>
           <HomeOutlinedIcon className="pc" style={{ justifyContent: "center", alignItems: "center" }} />

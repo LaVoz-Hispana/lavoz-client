@@ -59,7 +59,7 @@ const Login = () => {
             }
         </button>
         <div className="left">
-          <h1>PostsStation</h1>
+          <h1>Poststation</h1>
           <p>
           {t('login.desc')}
           </p>
