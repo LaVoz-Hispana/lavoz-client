@@ -21,7 +21,7 @@ const Reactions = ({ postId, postUserId, currentUser }) => {
     
 
     const url = () => {
-      return `https://www.postsstation.com/post/${postId}`
+      return `${window.location.origin}/post/${postId}`;
     }
 
     let { isLoading, error, data } = useQuery({

@@ -21,7 +21,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
     
 
     const url = () => {
-      return `https://www.postsstation.com/post/${shortId}`
+      return `${window.location.origin}/post/${shortId}`;
     }
 
     let { isLoading, error, data } = useQuery({
@@ -115,12 +115,12 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
 
     const getReaction = () => {
       if (reaction === 0) return (<RecommendIcon className={'icon'}/>);
-      else if (reaction === 1) return (<img src={'https://www.postsstation.com/reactions/thumbs_up.png'}/>);
-      else if (reaction === 2) return (<img src={'https://www.postsstation.com/reactions/heart.png'}/>);
-      else if (reaction === 3) return (<img src={'https://www.postsstation.com/reactions/applause.png'}/>);
-      else if (reaction === 4) return (<img src={'https://www.postsstation.com/reactions/laughing.png'}/>);
-      else if (reaction === 5) return (<img src={'https://www.postsstation.com/reactions/wow.png'}/>);
-      else if (reaction === 6) return (<img src={'https://www.postsstation.com/reactions/high-five.png'}/>);
+      else if (reaction === 1) return (<img src={process.env.PUBLIC_URL + '/reactions/thumbs_up.png'} alt="like"/>);
+      else if (reaction === 2) return (<img src={process.env.PUBLIC_URL + '/reactions/heart.png'} alt="love"/>);
+      else if (reaction === 3) return (<img src={process.env.PUBLIC_URL + '/reactions/applause.png'} alt="applause"/>);
+      else if (reaction === 4) return (<img src={process.env.PUBLIC_URL + '/reactions/laughing.png'} alt="laughing"/>);
+      else if (reaction === 5) return (<img src={process.env.PUBLIC_URL + '/reactions/wow.png'} alt="wow"/>);
+      else if (reaction === 6) return (<img src={process.env.PUBLIC_URL + '/reactions/high-five.png'} alt="high-five"/>);
       else return (process.env.PUBLIC_URL + "/reactions/sad.png");
     }
 
@@ -155,7 +155,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 1 ? 'enlarged' : ''}`} onClick={() => handleSelect(1)}>
                     <div className="reaction-icon">
-                    <img className="reaction-img" src={'https://www.postsstation.com/reactions/thumbs_up.png'}/>
+                    <img className="reaction-img" src={process.env.PUBLIC_URL + '/reactions/thumbs_up.png'} alt="like"/>
                     <div className="label">{t('reactions.like')}</div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 2 ? 'enlarged' : ''}`} onClick={() => handleSelect(2)}>
                     <div className="reaction-icon">
-                    <img src={'https://www.postsstation.com/reactions/heart.png'} className="reaction-img" />
+                    <img src={process.env.PUBLIC_URL + '/reactions/heart.png'} className="reaction-img" alt="love"/>
                     <div className="label">{t('reactions.love')}</div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 3 ? 'enlarged' : ''}`} onClick={() => handleSelect(3)}>
                     <div className="reaction-icon">
-                    <img src={'https://www.postsstation.com/reactions/applause.png'} className="reaction-img" />
+                    <img src={process.env.PUBLIC_URL + '/reactions/applause.png'} className="reaction-img" alt="applause"/>
                     <div className="label">{t('reactions.applause')}</div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 4 ? 'enlarged' : ''}`} onClick={() => handleSelect(4)}>
                     <div className="reaction-icon">
-                    <img src={'https://www.postsstation.com/reactions/laughing.png'} className="reaction-img" />
+                    <img src={process.env.PUBLIC_URL + '/reactions/laughing.png'} className="reaction-img" alt="laughing"/>
                     <div className="label">{t('reactions.laughing')}</div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 5 ? 'enlarged' : ''}`} onClick={() => handleSelect(5)}>
                     <div className="reaction-icon">
-                    <img src={'https://www.postsstation.com/reactions/wow.png'} className="reaction-img" />
+                    <img src={process.env.PUBLIC_URL + '/reactions/wow.png'} className="reaction-img" alt="wow"/>
                     <div className="label">{t('reactions.wow')}</div>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ const ShortReactions = ({ shortId, shortUserId, currentUser }) => {
                 <div className='section'>
                 <div className={`reaction ${reaction === 6 ? 'enlarged' : ''}`} onClick={() => handleSelect(6)}>
                     <div className="reaction-icon">
-                    <img src={'https://www.postsstation.com/reactions/high-five.png'} className="reaction-img" />
+                    <img src={process.env.PUBLIC_URL + '/reactions/high-five.png'} className="reaction-img" alt="high-five"/>
                     <div className="label">{t('reactions.highfive')}</div>
                     </div>
                 </div>
