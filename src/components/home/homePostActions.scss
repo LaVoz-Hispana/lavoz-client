@@ -1,0 +1,45 @@
+@import "../../style.scss";
+
+.home-post-actions {
+  @include themify($themes) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .action-card {
+      display: flex;
+      background-color: themed("bg");
+      border-radius: 16px;
+      box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .action-button {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 18px 14px;
+      background: transparent;
+      border: none;
+      color: themed("textColor");
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+
+      &:first-child {
+        border-right: 1px solid themed("border");
+      }
+
+      &:hover {
+        background-color: themed("bgSoft");
+      }
+
+      svg:first-child {
+        color: #6D1D1D;
+      }
+    }
+  }
+}

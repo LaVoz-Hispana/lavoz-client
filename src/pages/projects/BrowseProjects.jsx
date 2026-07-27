@@ -16,7 +16,7 @@ const BrowseProjects = () => {
   const { currentUser } = useContext(AuthContext);
   const [searchParams] = useSearchParams();
   const [tab, setTab] = useState(searchParams.get("tab") === "projects" ? "projects" : "locals");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("open");
 
   useEffect(() => {
     setTab(searchParams.get("tab") === "projects" ? "projects" : "locals");

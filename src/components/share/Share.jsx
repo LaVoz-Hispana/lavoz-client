@@ -4,7 +4,7 @@ import Friend from "../../assets/friend.png";
 import Flag from "../../assets/tamu_flag.png";
 import Tamu from "../../assets/tamu.jpg";
 import DefaultUser from "../../assets/pfp.jpg";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { makeRequest } from "../../axios"
@@ -13,6 +13,7 @@ import 'react-nested-dropdown/dist/styles.css';
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from "@tanstack/react-query";
 import ReactSimplyCarousel from "react-simply-carousel";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -21,7 +22,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const Share = ({categ}) => {
+const Share = ({categ, showProjectReference = false}) => {
   const [category, setCategory] = useState(categ);
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -172,6 +173,10 @@ const Share = ({categ}) => {
   const [tooManyFiles, setTooManyFiles] = useState(false);
   const [flag, setFlag] = useState(false);
   const [url, setURL] = useState(null);
+  const [projectId, setProjectId] = useState("");
+  const [taggedUserIds, setTaggedUserIds] = useState([]);
+  const [mention, setMention] = useState(null);
+  const postInputRef = useRef(null);
 
   const isVideo = (url) => {
     if (url === null) return false;
@@ -201,6 +206,55 @@ const Share = ({categ}) => {
   
   const queryClient = useQueryClient();
 
+  const { data: escrows } = useQuery({
+    queryKey: ["escrows", "me"],
+    queryFn: () => makeRequest.get("/escrows/me").then((res) => res.data),
+    enabled: showProjectReference && !!currentUser,
+  });
+
+  const referenceableProjects = Array.from(
+    new Map((escrows ?? []).map((escrow) => [
+      escrow.projectId,
+      { id: escrow.projectId, title: escrow.projectTitle },
+    ])).values()
+  );
+
+  const taggableUsers = Array.from(new Map(
+    (escrows ?? [])
+      .filter((escrow) => String(escrow.projectId) === String(projectId))
+      .map((escrow) => {
+        const isStudent = escrow.studentId === currentUser?.id;
+        return isStudent
+          ? { id: escrow.localId, username: escrow.localUsername }
+          : { id: escrow.studentId, username: escrow.studentUsername };
+      })
+      .filter((user) => user.id && user.id !== currentUser?.id)
+      .map((user) => [user.id, user])
+  ).values());
+
+  const handleDescChange = (e) => {
+    const value = e.target.value;
+    const caret = e.target.selectionStart;
+    setDesc(value);
+
+    if (!projectId) return setMention(null);
+    const beforeCaret = value.slice(0, caret);
+    const match = beforeCaret.match(/(?:^|\s)@([^\s@]*)$/);
+    setMention(match ? { start: beforeCaret.lastIndexOf("@"), end: caret, query: match[1].toLowerCase() } : null);
+  };
+
+  const insertMention = (user) => {
+    if (!mention) return;
+    setDesc((current) => `${current.slice(0, mention.start)}@${user.username} ${current.slice(mention.end)}`);
+    setTaggedUserIds((current) => current.includes(user.id) ? current : [...current, user.id]);
+    setMention(null);
+    requestAnimationFrame(() => postInputRef.current?.focus());
+  };
+
+  const mentionSuggestions = mention
+    ? taggableUsers.filter((user) => user.username.toLowerCase().includes(mention.query))
+    : [];
+
   const mutation = useMutation({
     mutationFn: (newPost)=>{
       return makeRequest.post("/posts/addPost", newPost);
@@ -209,6 +263,7 @@ const Share = ({categ}) => {
     () => {
         // invalidate and refetch
         queryClient.invalidateQueries(["posts"]);
+        if (projectId) queryClient.invalidateQueries(["projectPosts", String(projectId)]);
       },
   });
 
@@ -286,11 +341,13 @@ const Share = ({categ}) => {
     }
     setError(false);
     setDisplayMessage(0);
-    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, url });
+    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, url, projectId: projectId || null, taggedUserIds });
     setDesc("");
     setGif(null);
     setURL("");
     setCategory(categ);
+    setProjectId("");
+    setTaggedUserIds([]);
     setFlag(false);
     setTooManyFiles(false);
     setIsSubmitting(false);
@@ -550,7 +607,8 @@ const Share = ({categ}) => {
                 <TextareaAutosize
                   type="text" 
                   placeholder={t('share.create')} 
-                  onChange={e=>setDesc(e.target.value)} 
+                  ref={postInputRef}
+                  onChange={handleDescChange} 
                   value={desc}
                   maxLength={4500}
                   minRows={15}  
@@ -560,12 +618,22 @@ const Share = ({categ}) => {
                 <TextareaAutosize
                   type="text" 
                   placeholder={t('share.create')} 
-                  onChange={e=>setDesc(e.target.value)} 
+                  ref={postInputRef}
+                  onChange={handleDescChange} 
                   value={desc}
                   maxLength={4500}
                   minRows={15}  
                 />
               }
+              {mentionSuggestions.length > 0 && (
+                <div className="mention-suggestions">
+                  {mentionSuggestions.map((user) => (
+                    <button type="button" key={user.id} onMouseDown={(e) => e.preventDefault()} onClick={() => insertMention(user)}>
+                      @{user.username}
+                    </button>
+                  ))}
+                </div>
+              )}
           </div>
           
           <div className="middle">
@@ -621,45 +689,47 @@ const Share = ({categ}) => {
 
         <div className="bottom">
           <div className="left">
-            <div className="item">
-              <img src={Friend}/>
-              {categ !== null ?
-              <span>{categ}</span>
-                :
-                 pathname === '/tamu' ?
-                <Dropdown items={tamuOptions}>
-                  {({ isOpen, onClick }) => (
-                    <button type="button" onClick={onClick} className={"category-label"}>
-                      {category === null ? "Select Category *" : category}
-                    </button>
-                  )}
-                </Dropdown>
-                : pathname === '/news' ?
-                <Dropdown items={newsOptions}>
-                  {({ isOpen, onClick }) => (
-                    <button type="button" onClick={onClick} className={"category-label"}>
-                      {category === null ? "Select Category *" : category}
-                    </button>
-                  )}
-                </Dropdown>
-                : pathname === '/jobs' ?
-                <Dropdown items={jobOptions}>
-                  {({ isOpen, onClick }) => (
-                    <button type="button" onClick={onClick} className={"category-label"}>
-                      {category === null ? "Select Category *" : category}
-                    </button>
-                  )}
-                </Dropdown>
-                : 
-                <Dropdown items={items}>
-                  {({ isOpen, onClick }) => (
-                    <button type="button" onClick={onClick} className={"category-label"}>
-                      {categ !== null ? categ : category === null ? "Select Category *" : category}
-                    </button>
-                  )}
-                </Dropdown>
-              }
-            </div>
+            {!showProjectReference && (
+              <div className="item">
+                <img src={Friend}/>
+                {categ !== null ?
+                <span>{categ}</span>
+                  :
+                   pathname === '/tamu' ?
+                  <Dropdown items={tamuOptions}>
+                    {({ isOpen, onClick }) => (
+                      <button type="button" onClick={onClick} className={"category-label"}>
+                        {category === null ? "Select Category *" : category}
+                      </button>
+                    )}
+                  </Dropdown>
+                  : pathname === '/news' ?
+                  <Dropdown items={newsOptions}>
+                    {({ isOpen, onClick }) => (
+                      <button type="button" onClick={onClick} className={"category-label"}>
+                        {category === null ? "Select Category *" : category}
+                      </button>
+                    )}
+                  </Dropdown>
+                  : pathname === '/jobs' ?
+                  <Dropdown items={jobOptions}>
+                    {({ isOpen, onClick }) => (
+                      <button type="button" onClick={onClick} className={"category-label"}>
+                        {category === null ? "Select Category *" : category}
+                      </button>
+                    )}
+                  </Dropdown>
+                  : 
+                  <Dropdown items={items}>
+                    {({ isOpen, onClick }) => (
+                      <button type="button" onClick={onClick} className={"category-label"}>
+                        {categ !== null ? categ : category === null ? "Select Category *" : category}
+                      </button>
+                    )}
+                  </Dropdown>
+                }
+              </div>
+            )}
             <input
               type="file"
               id="file"
@@ -676,6 +746,17 @@ const Share = ({categ}) => {
                 }
               </div>
             </label>
+            {showProjectReference && (
+              <label className="project-reference">
+                <span>{t("projectPost.referenceProject")}</span>
+                <select value={projectId} onChange={(e) => { setProjectId(e.target.value); setTaggedUserIds([]); }}>
+                  <option value="">{t("projectPost.noProjectReference")}</option>
+                  {referenceableProjects.map((project) => (
+                    <option key={project.id} value={project.id}>{project.title}</option>
+                  ))}
+                </select>
+              </label>
+            )}
             {/* <label>
               <div className="item">
                 <AddReactionIcon style={{color: "gray"}} onClick={()=>setGifOpen(!gifOpen)}/>

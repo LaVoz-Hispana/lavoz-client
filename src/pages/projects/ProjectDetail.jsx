@@ -3,30 +3,18 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/authContext";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import Post from "../../components/post/Post";
-import ProjectShareModal from "../../components/project/ProjectShareModal";
+import ProjectPosts from "../../components/project/ProjectPosts";
 
 const ProjectDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { currentUser } = useContext(AuthContext);
-  const [shareOpen, setShareOpen] = useState(false);
 
   const { isLoading, error, data: project } = useQuery({
     queryKey: ["project", id],
     queryFn: () => makeRequest.get(`/projects/${id}`).then((res) => res.data),
-  });
-
-  const { data: projectPosts } = useQuery({
-    queryKey: ["projectPosts", id],
-    queryFn: () => makeRequest.get(`/posts/project/${id}`).then((res) => res.data),
-    enabled: !!id,
   });
 
   const skills = project?.skills
@@ -97,32 +85,9 @@ const ProjectDetail = () => {
           </div>
         )}
 
-        {currentUser && project.status !== "closed" && (
-          <div className="section create-post-section">
-            <button className="create-post-btn" onClick={() => setShareOpen(true)}>
-              <PostAddIcon fontSize="small" />
-              {t("projectPost.createPost")}
-            </button>
-          </div>
-        )}
       </div>
 
-      {projectPosts && projectPosts.length > 0 && (
-        <div className="activity-feed">
-          <h3 className="activity-heading">{t("projectPost.activityFeed")}</h3>
-          {projectPosts.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
-        </div>
-      )}
-
-      {shareOpen && (
-        <ProjectShareModal
-          projectId={id}
-          projectTitle={project.title}
-          onClose={() => setShareOpen(false)}
-        />
-      )}
+      <ProjectPosts projectId={id} />
     </div>
   );
 };

@@ -429,11 +429,28 @@ const Post = ({ post, openComments = false }) => {
     return url;
   }
 
-  const jobCategories = ["construction", "restaurant", "general", "students", "office", "sales", "temporary"];
+  const jobCategories = ["construction", "restaurant", "students", "office", "sales", "temporary"];
 
   const postTypeLabel = (type) => {
     if (!type) return null;
     return t(`projectPost.${type}`, type.replace(/_/g, " "));
+  };
+
+  const taggedUsers = post.taggedUsers
+    ? post.taggedUsers.split("||").map((tag) => {
+        const [id, username] = tag.split("::");
+        return { id, username };
+      })
+    : [];
+
+  const renderPostText = (text) => {
+    if (taggedUsers.length === 0) return text;
+    return text.split(/(@[^\s@]+)/g).map((part, index) => {
+      const taggedUser = taggedUsers.find((user) => `@${user.username}`.toLowerCase() === part.toLowerCase());
+      return taggedUser
+        ? <Link key={index} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</Link>
+        : part;
+    });
   };
 
   return (
@@ -463,21 +480,6 @@ const Post = ({ post, openComments = false }) => {
           )}
         </div>
         
-        {post.projectId && (
-          <div className="project-banner">
-            <Link
-              to={`/projects/${post.projectId}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-              className="project-banner-link"
-            >
-              {post.projectTitle || t("projectPost.project")}
-            </Link>
-            {post.postType && (
-              <span className="post-type-chip">{postTypeLabel(post.postType)}</span>
-            )}
-          </div>
-        )}
-
         <div className="content">
             {(() => {
               const postText = post.article != null ? post.article : (post.desc ?? "");
@@ -485,10 +487,10 @@ const Post = ({ post, openComments = false }) => {
 
               return (
                 <div style={{ whiteSpace: "pre-line" }}>
-                  {isExpanded
+                  {renderPostText(isExpanded
                     ? truncatedPostText
                     : truncatedPostText.substring(0, PREVIEW_LENGTH)
-                  }
+                  )}
                   {truncatedPostText.length > PREVIEW_LENGTH && (
                     <span
                       onClick={() => setIsExpanded(!isExpanded)}
@@ -500,6 +502,19 @@ const Post = ({ post, openComments = false }) => {
                 </div>
               );
             })()}
+
+            {post.projectId && (
+              <Link to={`/projects/${post.projectId}`} className="project-reference-card">
+                <strong>{post.projectTitle || t("projectPost.project")}</strong>
+                {post.projectDescription && <p>{post.projectDescription}</p>}
+                <div className="reference-footer">
+                  <span>{t("projectPost.project")}</span>
+                  {post.postType && (
+                    <span className="post-type-chip">{postTypeLabel(post.postType)}</span>
+                  )}
+                </div>
+              </Link>
+            )}
 
             <div className="centered" style={{ marginTop: 10 }}>
               {post.img1 === null ? getSingleFile() : getCarousel()}

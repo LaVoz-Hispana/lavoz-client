@@ -6,10 +6,9 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { STATUS_COLORS } from "../../utils/escrowStatus";
-import SubmitService from "../../components/service/SubmitService";
-import SubmitProject from "../../components/project/SubmitProject";
 import Post from "../../components/post/Post";
 import ProjectCard from "../../components/project/ProjectCard";
+import HomePostActions from "../../components/home/HomePostActions";
 
 /* ── Shared home (students and BCS locals) ── */
 const SharedHome = ({ t, isGuest, role }) => {
@@ -18,7 +17,7 @@ const SharedHome = ({ t, isGuest, role }) => {
     queryFn: () => makeRequest.get("/posts").then((r) => r.data),
   });
 
-  const projectActivityPosts = allPosts?.filter((p) => p.projectId != null) ?? [];
+  const homePosts = allPosts ?? [];
   const { isLoading: projectsLoading, data: projects } = useQuery({
     queryKey: ["projects"],
     queryFn: () => makeRequest.get("/projects").then((r) => r.data),
@@ -27,8 +26,15 @@ const SharedHome = ({ t, isGuest, role }) => {
 
   return (
     <div className="home-content">
-      {!isGuest && role === "local" && <SubmitProject />}
-      {!isGuest && role === "student" && <SubmitService />}
+      {!isGuest && <HomePostActions role={role} />}
+
+      {homePosts.length > 0 && (
+        <div className="activity-feed-section">
+          {homePosts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </div>
+      )}
 
       <section className="home-projects-section">
         <div className="home-card-header">
@@ -45,14 +51,6 @@ const SharedHome = ({ t, isGuest, role }) => {
           ))}
         </div>
       </section>
-
-      {!isGuest && projectActivityPosts.length > 0 && (
-        <div className="activity-feed-section">
-          {projectActivityPosts.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

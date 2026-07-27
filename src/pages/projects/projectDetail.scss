@@ -140,51 +140,6 @@
         }
       }
 
-      .create-post-section {
-        display: flex;
-        justify-content: flex-end;
-        border-bottom: none;
-        padding-top: 12px;
-        padding-bottom: 16px;
-      }
-
-      .create-post-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background-color: #6D1D1D;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 18px;
-        font-size: 13px;
-        cursor: pointer;
-        transition: opacity 0.15s;
-
-        &:hover {
-          opacity: 0.88;
-        }
-      }
-    }
-
-    .activity-feed {
-      max-width: 700px;
-      margin: 24px 50px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-
-      @include mobile { margin: 12px; }
-      @include tablet { margin: 16px; }
-
-      .activity-heading {
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: themed("textColorSoft");
-        margin: 0 0 4px;
-      }
     }
   }
 }
