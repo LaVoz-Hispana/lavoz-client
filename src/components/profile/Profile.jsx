@@ -67,19 +67,24 @@ const Profile = ({userId}) => {
     queryFn: () => makeRequest.get("/reviews/users/" + userId).then((res) => res.data),
     enabled: !!data,
   });
+  const refreshReviewData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["completed-projects", userId] }),
+      queryClient.invalidateQueries({ queryKey: ["review-summary", userId] }),
+    ]);
+    // The summary is visible in this profile's bio, so refresh it immediately
+    // after a review changes instead of waiting for a later cache refetch.
+    await queryClient.refetchQueries({ queryKey: ["review-summary", userId], type: "active" });
+  };
   const submitReview = useMutation({
     mutationFn: ({ escrowId, draft }) => makeRequest.post("/reviews/escrows/" + escrowId, draft),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["completed-projects", userId] });
-      queryClient.invalidateQueries({ queryKey: ["review-summary", userId] });
-    },
+    onSuccess: refreshReviewData,
   });
   const updateReview = useMutation({
     mutationFn: ({ reviewId, draft }) => makeRequest.put("/reviews/" + reviewId, draft),
-    onSuccess: () => {
+    onSuccess: async () => {
       setEditingReviewId(null);
-      queryClient.invalidateQueries({ queryKey: ["completed-projects", userId] });
-      queryClient.invalidateQueries({ queryKey: ["review-summary", userId] });
+      await refreshReviewData();
     },
   });
   const profileTabs = data?.account_type === "student"
@@ -274,23 +279,24 @@ const Profile = ({userId}) => {
                       </Link>
                     </div>
                     <div className="project-review-panel">
-                      {project.reviewId && editingReviewId !== project.reviewId && <div className="submitted-review">
-                        <StarRating rating={project.rating} />
-                        {project.commentary && <p>{project.commentary}</p>}
-                        <div className="review-actions"><small>Your review</small><button type="button" className="edit-review" onClick={() => {
-                          setEditingReviewId(project.reviewId);
-                          setReviewDrafts((drafts) => ({ ...drafts, [project.escrowId]: { rating: Number(project.rating), commentary: project.commentary || "" } }));
-                        }}>Edit review</button></div>
+                      {project.authoredReviewId && editingReviewId !== project.authoredReviewId && <div className="submitted-review">
+                        <StarRating rating={project.authoredRating} />
+                        {project.authoredCommentary && <p>{project.authoredCommentary}</p>}
+                        <div className="review-actions"><small>Your review of {project.counterpartName}</small>{project.canEditAuthoredReview && <button type="button" className="edit-review" onClick={() => {
+                          setEditingReviewId(project.authoredReviewId);
+                          setReviewDrafts((drafts) => ({ ...drafts, [project.escrowId]: { rating: Number(project.authoredRating), commentary: project.authoredCommentary || "" } }));
+                        }}>Edit review</button>}</div>
                       </div>}
-                      {project.reviewId && editingReviewId === project.reviewId && renderReviewEditor(project, draft, (event) => {
-                        event.preventDefault(); updateReview.mutate({ reviewId: project.reviewId, draft });
+                      {project.canEditAuthoredReview && project.authoredReviewId && editingReviewId === project.authoredReviewId && renderReviewEditor(project, draft, (event) => {
+                        event.preventDefault(); updateReview.mutate({ reviewId: project.authoredReviewId, draft });
                       }, updateReview.isPending, updateReview.isError ? updateReview.error : null, "Save changes")}
-                      {!project.reviewId && project.canReview && renderReviewEditor(project, draft, (event) => {
+                      {!project.authoredReviewId && project.canReview && renderReviewEditor(project, draft, (event) => {
                         event.preventDefault(); submitReview.mutate({ escrowId: project.escrowId, draft });
                       }, submitReview.isPending, submitReview.isError ? submitReview.error : null, "Leave review")}
-                      {!project.reviewId && !project.canReview && project.receivedReviewId && <div className="submitted-review">
+                      {project.receivedReviewId && Number(project.receivedReviewId) !== Number(project.authoredReviewId) && <div className="submitted-review">
                         <StarRating rating={project.receivedRating} />
                         {project.receivedCommentary && <p>{project.receivedCommentary}</p>}
+                        <div className="review-actions"><small>Review from {project.counterpartName}</small></div>
                       </div>}
                     </div>
                   </article>;
