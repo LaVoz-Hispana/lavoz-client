@@ -28,6 +28,7 @@ const Posts = ({userId, categories}) => {
       { error ? "Something went wrong!" : 
         isLoading ? "loading" : 
         !filteredData ? <div/> :
+        userId != null && filteredData.length === 0 ? <p className="profile-empty posts-empty">No posts yet.</p> :
         filteredData.map((post) => (<Post post={post} key={post.id} />))
       }
     </div>
