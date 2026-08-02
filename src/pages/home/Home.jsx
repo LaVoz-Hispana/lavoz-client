@@ -9,6 +9,8 @@ import { STATUS_COLORS } from "../../utils/escrowStatus";
 import Post from "../../components/post/Post";
 import ProjectCard from "../../components/project/ProjectCard";
 import HomePostActions from "../../components/home/HomePostActions";
+import LaVozLogo from "../../assets/lavoz_logo.png.avif";
+import LaBotanaLogo from "../../assets/labotana_resturant.png.avif";
 
 /* ── Shared home (students and BCS locals) ── */
 const SharedHome = ({ t, isGuest, role }) => {
@@ -49,6 +51,18 @@ const SharedHome = ({ t, isGuest, role }) => {
           {visibleProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
+        </div>
+      </section>
+
+      <section className="home-sponsors" aria-labelledby="sponsor-heading">
+        <p id="sponsor-heading">{t("home.sponsorSupport")}</p>
+        <div className="sponsor-logos">
+          <a href="https://www.lavozaggieland.net" target="_blank" rel="noopener noreferrer">
+            <img src={LaVozLogo} alt="Visit La Voz Hispana" />
+          </a>
+          <a href="https://www.labotanamexicanrestaurant.com" target="_blank" rel="noopener noreferrer">
+            <img src={LaBotanaLogo} alt="Visit La Botana Mexican Restaurant" />
+          </a>
         </div>
       </section>
     </div>
