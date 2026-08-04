@@ -8,6 +8,7 @@ import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import SubmitProject from "./SubmitProject";
+import RatingBadge from "../review/RatingBadge";
 
 const ProjectCard = ({ project }) => {
   const { t } = useTranslation();
@@ -41,7 +42,7 @@ const ProjectCard = ({ project }) => {
         <div className="posted-by">
           <img src={project.profilePic} alt="" />
           <Link to={`/profile/${project.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
-            {project.username}
+            {project.username} <RatingBadge rating={project.averageRating} reviewCount={project.reviewCount} />
           </Link>
         </div>
       </div>

@@ -104,6 +104,8 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          .rating-badge { font-size: 11px; }
         }
 
         .rb-subtitle {
@@ -112,6 +114,8 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          .rating-badge { font-size: 10px; }
         }
       }
 

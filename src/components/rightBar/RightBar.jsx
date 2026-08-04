@@ -11,6 +11,7 @@ import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { AuthContext } from "../../context/authContext";
+import RatingBadge from "../review/RatingBadge";
 
 const RightBar = () => {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ const RightBar = () => {
         <Link key={u.id} to={`/profile/${u.id}`} className="rb-row">
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
-            <span className="rb-title">{u.username}</span>
+            <span className="rb-title">{u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
             <span className="rb-subtitle">{u.skills ? u.skills.split(",")[0].trim() : u.university || "Student"}</span>
           </div>
         </Link>
@@ -62,7 +63,7 @@ const RightBar = () => {
         <Link key={s.id} to={`/talent?tab=services&service=${s.id}`} className="rb-row">
           <div className="rb-row-info">
             <span className="rb-title">{s.title}</span>
-            <span className="rb-subtitle">{s.username}</span>
+            <span className="rb-subtitle">{s.username} <RatingBadge rating={s.averageRating} reviewCount={s.reviewCount} /></span>
           </div>
         </Link>
       )),
@@ -76,7 +77,7 @@ const RightBar = () => {
         <Link key={u.id} to={`/profile/${u.id}`} className="rb-row">
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
-            <span className="rb-title">{u.username}</span>
+            <span className="rb-title">{u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
             <span className="rb-subtitle">{u.location || "BCS Local"}</span>
           </div>
         </Link>
@@ -91,7 +92,7 @@ const RightBar = () => {
         <Link key={p.id} to={`/projects/${p.id}`} className="rb-row">
           <div className="rb-row-info">
             <span className="rb-title">{p.title}</span>
-            <span className="rb-subtitle">{p.username}{p.timeline ? ` · ${p.timeline}` : ""}</span>
+            <span className="rb-subtitle">{p.username} <RatingBadge rating={p.averageRating} reviewCount={p.reviewCount} />{p.timeline ? ` · ${p.timeline}` : ""}</span>
           </div>
         </Link>
       )),

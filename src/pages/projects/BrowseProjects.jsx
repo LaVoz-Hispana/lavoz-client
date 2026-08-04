@@ -8,6 +8,7 @@ import ProjectCard from "../../components/project/ProjectCard";
 import SubmitProject from "../../components/project/SubmitProject";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
+import RatingBadge from "../../components/review/RatingBadge";
 
 const STATUS_ORDER = ["open", "in_escrow", "closed"];
 
@@ -82,7 +83,7 @@ const BrowseProjects = () => {
                 >
                   <div className="local-card">
                     <img className="profilePic" src={user.profilePic} alt="" />
-                    <span className="name">{user.username}</span>
+                    <span className="name">{user.username} <RatingBadge rating={user.averageRating} reviewCount={user.reviewCount} /></span>
                     {user.city && <span className="subtitle">{user.city}</span>}
                   </div>
                 </Link>

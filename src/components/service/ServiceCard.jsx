@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import SubmitService from "./SubmitService";
+import RatingBadge from "../review/RatingBadge";
 
 const ServiceCard = ({ service }) => {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ const ServiceCard = ({ service }) => {
         <div className="posted-by">
           <img src={service.profilePic} alt="" />
           <Link to={`/profile/${service.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
-            {service.username}
+            {service.username} <RatingBadge rating={service.averageRating} reviewCount={service.reviewCount} />
           </Link>
           {service.university && (
             <span className="university">· {service.university}</span>

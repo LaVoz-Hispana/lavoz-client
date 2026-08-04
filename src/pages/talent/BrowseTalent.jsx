@@ -31,6 +31,7 @@ import RoomServiceIcon from "@mui/icons-material/RoomService";
 import EventIcon from "@mui/icons-material/Event";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import RatingBadge from "../../components/review/RatingBadge";
 
 const serviceCategoryIcons = {
   architecture: ArchitectureIcon,
@@ -203,7 +204,7 @@ const BrowseTalent = () => {
                   >
                     <div className="student-card">
                       <img className="profilePic" src={user.profilePic} alt="" />
-                      <span className="name">{user.username}</span>
+                      <span className="name">{user.username} <RatingBadge rating={user.averageRating} reviewCount={user.reviewCount} /></span>
                       {(user.university || user.major) && (
                         <span className="subtitle">
                           {[user.university, user.major].filter(Boolean).join(" · ")}
