@@ -16,6 +16,7 @@ import Cancel from "@mui/icons-material/Cancel";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Carousel from "react-simply-carousel";
+import { isAdmin } from "../../utils/admin";
 
 const Ad = ({ ad }) => {
   const { t, i18n } = useTranslation();
@@ -73,7 +74,7 @@ const Ad = ({ ad }) => {
   }
   
   const handleDelete = async () => {
-    if (currentUser.id === ad.userId || currentUser.account_type === 'admin') {
+    if (currentUser.id === ad.userId || isAdmin(currentUser)) {
       const img0 = ad.img0;
       const img1 = ad.img1;
       const img2 = ad.img2;

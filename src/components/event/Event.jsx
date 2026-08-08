@@ -11,6 +11,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import { isAdmin } from "../../utils/admin";
 
 
 const Event = ({ event }) => {
@@ -53,7 +54,7 @@ const Event = ({ event }) => {
     e.preventDefault();
     if (!currentUser) return;
     const img = event.file;
-    if (currentUser.id === event.userId || currentUser.account_type === 'admin') {
+    if (currentUser.id === event.userId || isAdmin(currentUser)) {
       deleteMutation.mutate(event.id);
       if (event.file != null && event.file != "") {
         await delete_from_s3(img);
@@ -93,10 +94,10 @@ const Event = ({ event }) => {
             </div>
             </div>
             <div className = "center">
-              {(!currentUser ? <div/> : event.userId === currentUser.id || currentUser.account_type === 'admin') && 
+              {(!currentUser ? <div/> : event.userId === currentUser.id || isAdmin(currentUser)) &&
                 <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
               }
-              {!currentUser ? <div/> : menuOpen && (event.userId === currentUser.id || currentUser.account_type === 'admin') && (
+              {!currentUser ? <div/> : menuOpen && (event.userId === currentUser.id || isAdmin(currentUser)) && (
                 <button className="delete" onClick={handleDelete}>delete event</button>
               )}
             </div>

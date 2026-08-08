@@ -21,6 +21,8 @@ import ReactGiphySearchbox from 'react-giphy-searchbox';
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
 import InsertLink from "@mui/icons-material/InsertLink";
+import { isAdmin } from "../../utils/admin";
+import PoststationAdminLogo from "../../assets/poststation-admin.png";
 
 const Post = ({ post, openComments = false }) => {
   const { t } = useTranslation();
@@ -33,6 +35,9 @@ const Post = ({ post, openComments = false }) => {
   const [shareOpen, setShareOpen] = useState(false);
   const [desc, setDesc] = useState("");
   const postId = post.id;
+  const isOfficialPost = Boolean(post.isAdminPost);
+  const authorName = isOfficialPost ? "Poststation" : post.username;
+  const authorProfilePic = isOfficialPost ? PoststationAdminLogo : post.profilePic;
   const [rated, setRated] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [gifOpen, setGifOpen] = useState(false);
@@ -140,7 +145,7 @@ const Post = ({ post, openComments = false }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     if (!currentUser) return;
-    if (currentUser.id === post.userId || currentUser.account_type === 'admin') {
+    if (currentUser.id === post.userId || isAdmin(currentUser)) {
       const img0 = post.img0;
       const img1 = post.img1;
       const img2 = post.img2;
@@ -458,14 +463,18 @@ const Post = ({ post, openComments = false }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.profilePic} alt="" />
+            <img src={authorProfilePic} alt="" />
             <div className="details">
-              <Link
-                to={`/profile/${post.userId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <span className="name">{post.username}</span>
-              </Link>
+              {isOfficialPost ? (
+                <span className="name">{authorName}</span>
+              ) : (
+                <Link
+                  to={`/profile/${post.userId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <span className="name">{authorName}</span>
+                </Link>
+              )}
               <span className="date">{moment(post.createdAt).fromNow()}</span>
               {/* Display only if job: displays job category */}
               {jobCategories.includes(post.category) && (<span className="categ">{post.category}</span>)}
@@ -475,7 +484,7 @@ const Post = ({ post, openComments = false }) => {
             }
           </div>
           <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
-          {currentUser && menuOpen && (post.userId === currentUser.id || currentUser.account_type === 'admin') && (
+          {currentUser && menuOpen && (post.userId === currentUser.id || isAdmin(currentUser)) && (
             <button onClick={handleDelete}>delete</button>
           )}
         </div>

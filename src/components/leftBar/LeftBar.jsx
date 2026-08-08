@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { isAdmin } from "../../utils/admin";
 
 const LeftBar = () => {
   const { t } = useTranslation();
@@ -78,7 +79,7 @@ const LeftBar = () => {
       )}
 
       {/* Admin Dashboard — admin only */}
-      {currentUser?.account_type === 'admin' && (
+      {isAdmin(currentUser) && (
         <Link to="/admin" style={{ textDecoration: "none", color: "inherit" }}>
           <div className={`item${isActivePath("/admin") ? " active" : ""}`}>
             <AdminPanelSettingsOutlinedIcon style={{ width: 20, height: 20 }} />

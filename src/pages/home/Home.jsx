@@ -5,15 +5,13 @@ import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { STATUS_COLORS } from "../../utils/escrowStatus";
 import Post from "../../components/post/Post";
 import ProjectCard from "../../components/project/ProjectCard";
 import HomePostActions from "../../components/home/HomePostActions";
-import LaVozLogo from "../../assets/lavoz_logo.png.avif";
-import LaBotanaLogo from "../../assets/labotana_resturant.png.avif";
+import SponsorCarousel from "../../components/home/SponsorCarousel";
 
 /* ── Shared home (students and BCS locals) ── */
-const SharedHome = ({ t, isGuest, role }) => {
+const SharedHome = ({ t, isGuest, role, currentUser }) => {
   const { data: allPosts } = useQuery({
     queryKey: ["posts"],
     queryFn: () => makeRequest.get("/posts").then((r) => r.data),
@@ -28,7 +26,7 @@ const SharedHome = ({ t, isGuest, role }) => {
 
   return (
     <div className="home-content">
-      {!isGuest && <HomePostActions role={role} />}
+      {!isGuest && <HomePostActions role={role} currentUser={currentUser} />}
 
       {homePosts.length > 0 && (
         <div className="activity-feed-section">
@@ -56,68 +54,8 @@ const SharedHome = ({ t, isGuest, role }) => {
 
       <section className="home-sponsors" aria-labelledby="sponsor-heading">
         <p id="sponsor-heading">{t("home.sponsorSupport")}</p>
-        <div className="sponsor-logos">
-          <a href="https://www.lavozaggieland.net" target="_blank" rel="noopener noreferrer">
-            <img src={LaVozLogo} alt="Visit La Voz Hispana" />
-          </a>
-          <a href="https://www.labotanamexicanrestaurant.com" target="_blank" rel="noopener noreferrer">
-            <img src={LaBotanaLogo} alt="Visit La Botana Mexican Restaurant" />
-          </a>
-        </div>
+        <SponsorCarousel />
       </section>
-    </div>
-  );
-};
-
-/* ── Admin home ── */
-const AdminHome = ({ t }) => {
-  const { data: users } = useQuery({
-    queryKey: ["adminUsers"],
-    queryFn: () => makeRequest.get("/users/").then((r) => r.data),
-  });
-
-  const { data: escrows } = useQuery({
-    queryKey: ["adminEscrows"],
-    queryFn: () => makeRequest.get("/escrows").then((r) => r.data),
-  });
-
-  const stats = [
-    { label: "Total Users",     value: users?.length ?? "—",                                         to: "/admin" },
-    { label: "Active Escrows",  value: escrows?.filter((e) => e.status === "active").length ?? "—",  to: "/admin" },
-    { label: "Pending Matches", value: escrows?.filter((e) => e.status === "pending").length ?? "—", to: "/admin" },
-    { label: "Completed",       value: escrows?.filter((e) => e.status === "completed").length ?? "—",to: "/admin" },
-  ];
-
-  const recentEscrows = escrows?.slice(0, 5) ?? [];
-
-  return (
-    <div className="home-content">
-      <div className="stat-grid">
-        {stats.map((s) => (
-          <Link key={s.label} to={s.to} className="stat-card">
-            <span className="stat-value">{s.value}</span>
-            <span className="stat-label">{s.label}</span>
-          </Link>
-        ))}
-      </div>
-
-      <div className="home-card">
-        <div className="home-card-header">
-          <h3>Recent Escrows</h3>
-          <Link to="/admin">Admin Dashboard →</Link>
-        </div>
-        <div className="escrow-list">
-          {recentEscrows.map((e) => (
-            <Link key={e.id} to={`/escrows/${e.id}`} className="escrow-row">
-              <span className="escrow-title">{e.projectTitle}</span>
-              <span className="escrow-by">{e.studentUsername} ↔ {e.localUsername}</span>
-              <span className="escrow-status" style={{ backgroundColor: STATUS_COLORS[e.status] }}>
-                {t(`escrow.${e.status}`)}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
@@ -137,8 +75,7 @@ const Home = () => {
         <p>Brazos Valley Student–Local Marketplace</p>
       </div>
 
-      {(isGuest || role === "student" || role === "local") && <SharedHome t={t} isGuest={isGuest} role={role} />}
-      {role === "admin" && <AdminHome t={t} />}
+      <SharedHome t={t} isGuest={isGuest} role={role} currentUser={currentUser} />
     </div>
   );
 };

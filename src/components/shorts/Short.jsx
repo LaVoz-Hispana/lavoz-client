@@ -8,6 +8,7 @@ import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 import ShortReactions from "../reactionBar/ShortReactions";
+import { isAdmin } from "../../utils/admin";
 
 const Short = ({ short }) => {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ const Short = ({ short }) => {
     e.preventDefault();
     if (!currentUser) return;
     const video = short.videoURL;
-    if (currentUser.id === short.userId || currentUser.account_type === 'admin') {
+    if (currentUser.id === short.userId || isAdmin(currentUser)) {
       deleteMutation.mutate(shortId);
       if (short.videoURL !== null && short.videoURL !== "") {
         await delete_from_s3(video);
@@ -51,7 +52,7 @@ const Short = ({ short }) => {
     <div className="short">
         <div className="container">
             <div className="deleteMenu">
-              {currentUser && menuOpen && (short.userId === currentUser.id || currentUser.account_type === 'admin') && (
+              {currentUser && menuOpen && (short.userId === currentUser.id || isAdmin(currentUser)) && (
                 <button onClick={handleDelete}>delete</button>
               )}
               <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />

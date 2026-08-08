@@ -6,12 +6,15 @@ import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
 import { STATUS_COLORS } from "../../utils/escrowStatus";
 import EscrowLock from "../../components/admin/EscrowLock";
+import Post from "../../components/post/Post";
+import SponsorManager from "../../components/admin/SponsorManager";
 import moment from "moment";
 
 const AdminDashboard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [tab, setTab] = useState("users");
+  const [adminSection, setAdminSection] = useState("escrow-lock");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -23,6 +26,12 @@ const AdminDashboard = () => {
   const { isLoading: escrowsLoading, data: escrows } = useQuery({
     queryKey: ["adminEscrows"],
     queryFn: () => makeRequest.get("/escrows").then((res) => res.data),
+  });
+
+  const { isLoading: adminPostsLoading, data: adminPosts } = useQuery({
+    queryKey: ["adminPosts"],
+    queryFn: () => makeRequest.get("/posts/admin").then((res) => res.data),
+    enabled: adminSection === "admin-posts",
   });
 
   const filteredUsers = users?.filter((u) =>
@@ -43,8 +52,41 @@ const AdminDashboard = () => {
       </div>
 
       <div className="content">
-        {/* Escrow Lock always visible at top */}
-        <EscrowLock />
+        <div className="tabs admin-section-tabs">
+          <button
+            className={adminSection === "escrow-lock" ? "tab selected" : "tab"}
+            onClick={() => setAdminSection("escrow-lock")}
+          >
+            Escrow Lock
+          </button>
+          <button
+            className={adminSection === "admin-posts" ? "tab selected" : "tab"}
+            onClick={() => setAdminSection("admin-posts")}
+          >
+            Admin Posts
+          </button>
+          <button
+            className={adminSection === "sponsors" ? "tab selected" : "tab"}
+            onClick={() => setAdminSection("sponsors")}
+          >
+            Sponsors
+          </button>
+        </div>
+
+        {adminSection === "admin-posts" && (
+          <section className="admin-posts">
+            {adminPostsLoading && <span className="state">Loading...</span>}
+            {!adminPostsLoading && adminPosts?.length === 0 && (
+              <span className="state">No admin posts yet.</span>
+            )}
+            {adminPosts?.map((post) => <Post key={post.id} post={post} />)}
+          </section>
+        )}
+
+        {adminSection === "sponsors" && <SponsorManager />}
+
+        {adminSection === "escrow-lock" && <>
+          <EscrowLock />
 
         <div className="tabs">
           <button
@@ -180,6 +222,7 @@ const AdminDashboard = () => {
             )}
           </>
         )}
+        </>}
       </div>
     </div>
   );

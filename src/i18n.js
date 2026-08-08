@@ -411,7 +411,7 @@ i18n
           },
           home: {
             newPost: "New Post",
-            sponsorSupport: "Powered by La Voz Hispana and La Botana Mexican Restaurant—helping students turn skills into real-world opportunities.",
+            sponsorSupport: "Thank you to our sponsors for helping students turn skills into real-world opportunities.",
           },
           projectPost: {
             createPost: "Create Post",
@@ -852,7 +852,7 @@ i18n
           },
           home: {
             newPost: "Nueva Publicación",
-            sponsorSupport: "Impulsado por La Voz Hispana y La Botana Mexican Restaurant, ayudando a estudiantes a convertir sus habilidades en oportunidades reales.",
+            sponsorSupport: "Gracias a nuestros patrocinadores por ayudar a estudiantes a convertir sus habilidades en oportunidades reales.",
           },
           projectPost: {
             createPost: "Crear Publicación",

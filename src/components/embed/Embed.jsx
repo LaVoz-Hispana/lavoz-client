@@ -5,9 +5,10 @@ import { useContext } from 'react';
 import { AuthContext } from '../../context/authContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
+import { isAdmin } from "../../utils/admin";
 
 const Embed = ({ embed }) => {
-  const currentUser = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
   const handleClick = (e) => {
@@ -29,7 +30,7 @@ const Embed = ({ embed }) => {
 
   return (
     <div className='embed'>
-        {currentUser.account_type === "admin" &&
+        {isAdmin(currentUser) &&
             <button className='delete-embed' onClick={handleClick}>
                 <DisabledByDefaultIcon/>
             </button>

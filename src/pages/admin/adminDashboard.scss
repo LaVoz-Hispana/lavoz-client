@@ -46,6 +46,12 @@
       font-style: italic;
     }
 
+    .admin-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
     /* Tabs */
     .tabs {
       display: flex;

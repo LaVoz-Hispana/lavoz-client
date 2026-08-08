@@ -3,11 +3,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import SubmitService from "../service/SubmitService";
 import SubmitProject from "../project/SubmitProject";
 import Share from "../share/Share";
+import { isAdmin } from "../../utils/admin";
 
-const HomePostActions = ({ role }) => {
+const HomePostActions = ({ role, currentUser }) => {
   const { t } = useTranslation();
   const [activeForm, setActiveForm] = useState(null);
   const isLocal = role === "local";
@@ -27,6 +29,12 @@ const HomePostActions = ({ role }) => {
           <EditNoteOutlinedIcon />
           <span>{t("home.newPost")}</span>
         </button>
+        {isAdmin(currentUser) && (
+          <button className="action-button" onClick={() => openForm("admin-post")}>
+            <AdminPanelSettingsOutlinedIcon />
+            <span>Admin Post</span>
+          </button>
+        )}
       </div>
 
       {activeForm === "listing" && (
@@ -35,6 +43,7 @@ const HomePostActions = ({ role }) => {
           : <SubmitService onClose={() => setActiveForm(null)} />
       )}
       {activeForm === "post" && <Share categ="general" showProjectReference />}
+      {activeForm === "admin-post" && <Share categ="general" isAdminPost />}
     </section>
   );
 };

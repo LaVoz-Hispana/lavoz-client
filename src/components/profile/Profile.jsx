@@ -18,6 +18,7 @@ import ServiceCard from "../../components/service/ServiceCard";
 import ProjectCard from "../../components/project/ProjectCard";
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import { useTranslation } from "react-i18next";
+import { isAdmin } from "../../utils/admin";
 import { Link } from "react-router-dom";
 
 const StarRating = ({ rating }) => {
@@ -140,7 +141,7 @@ const Profile = ({userId}) => {
                   <span>{data.username}</span>
                   <span className="station"> Station</span>
                 </div>
-                {data.account_type === 'admin' &&
+                {isAdmin(data) &&
                   <div className="business-type">Admin</div>
                 }
                 {data.account_type === 'local' && data.org_name &&

@@ -21,8 +21,9 @@ import { Link } from "react-router-dom";
 import TextareaAutosize from 'react-textarea-autosize';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PoststationAdminLogo from "../../assets/poststation-admin.png";
 
-const Share = ({categ, showProjectReference = false}) => {
+const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
   const [category, setCategory] = useState(categ);
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -257,7 +258,7 @@ const Share = ({categ, showProjectReference = false}) => {
 
   const mutation = useMutation({
     mutationFn: (newPost)=>{
-      return makeRequest.post("/posts/addPost", newPost);
+      return makeRequest.post(isAdminPost ? "/posts/admin" : "/posts/addPost", newPost);
     },
     onSuccess:
     () => {
@@ -341,7 +342,7 @@ const Share = ({categ, showProjectReference = false}) => {
     }
     setError(false);
     setDisplayMessage(0);
-    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, url, projectId: projectId || null, taggedUserIds });
+    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, url, projectId: isAdminPost ? null : projectId || null, taggedUserIds: isAdminPost ? [] : taggedUserIds });
     setDesc("");
     setGif(null);
     setURL("");
@@ -599,7 +600,7 @@ const Share = ({categ, showProjectReference = false}) => {
         <div style={{position: "relative"}}>
           <div className="top">
               <img
-                src={currentUser.profilePic}
+                src={isAdminPost ? PoststationAdminLogo : currentUser.profilePic}
                 alt=""
               />
               {

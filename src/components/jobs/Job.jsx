@@ -21,6 +21,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import { useTranslation } from "react-i18next";
 import InsertLink from "@mui/icons-material/InsertLink";
+import { isAdmin } from "../../utils/admin";
 
 const Job = ({ job }) => {
   const { t, i18n } = useTranslation();
@@ -63,7 +64,7 @@ const Job = ({ job }) => {
     e.preventDefault();
     if (!currentUser) return;
     const img = job.img;
-    if (currentUser.id === job.userId || currentUser.account_type === 'admin') {
+    if (currentUser.id === job.userId || isAdmin(currentUser)) {
       deleteMutation.mutate(job.id);
       if (job.img != null && job.img != "") {
         await delete_from_s3(img);
@@ -106,7 +107,7 @@ const Job = ({ job }) => {
               {!currentUser? <div/> : job.userId === currentUser.id && 
                 <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
               }
-              {!currentUser ? <div/> : menuOpen && (job.userId === currentUser.id || currentUser.account_type === 'admin') && (
+              {!currentUser ? <div/> : menuOpen && (job.userId === currentUser.id || isAdmin(currentUser)) && (
                 <button className="delete" onClick={handleDelete}>delete job</button>
               )}
             </div>

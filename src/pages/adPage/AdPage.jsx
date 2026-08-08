@@ -7,6 +7,7 @@ import PostAd from "../../components/submitAd/postAd";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../context/authContext";
 import Ads from "../../components/ad/Ads";
+import { isAdmin } from "../../utils/admin";
 
 const AdPage = () => {
   const { t, i18n } = useTranslation();
@@ -26,7 +27,7 @@ const AdPage = () => {
           </div>
           <div className = "market-container">
             <PostAd/>
-            {currentUser && currentUser.currentUser.account_type === 'admin' && 
+            {currentUser && isAdmin(currentUser.currentUser) &&
             <div>
               <h1>{t('ad.approveAds')}</h1>
               <Ads/>

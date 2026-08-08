@@ -28,18 +28,13 @@
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.15s ease;
-
-      &:first-child {
-        border-right: 1px solid themed("border");
-      }
+      border-right: 1px solid themed("border");
 
       &:hover {
         background-color: themed("bgSoft");
-      }
-
-      svg:first-child {
         color: #6D1D1D;
       }
+
     }
   }
 }

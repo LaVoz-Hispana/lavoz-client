@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios"
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import { useTranslation } from "react-i18next";
+import { isAdmin } from "../../utils/admin";
 
 const Stories = () => {
   const { t } = useTranslation();
@@ -100,7 +101,7 @@ const Stories = () => {
         <div className="story" key={story.id}>
           <img src={story.img} alt="" />
           <span className={data.length < 5 && "lower"}>{story.username}</span>
-          {(story.userId === currentUser.id || currentUser.account_type === 'admin') && 
+          {(story.userId === currentUser.id || isAdmin(currentUser)) &&
             <div class='x'>
               <DisabledByDefault onClick={(e) => handleDelete(e, story.id, story.image)} color='white'/>
             </div>

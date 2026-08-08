@@ -1,0 +1,25 @@
+@import "../../style.scss";
+
+.sponsor-manager {
+  @include themify($themes) {
+    background: themed("bg");
+    border-radius: 16px;
+    box-shadow: 0 0 25px -10px rgba(0, 0, 0, 0.38);
+    padding: 24px;
+
+    h2, p { margin-top: 0; }
+    p { color: themed("textColorSoft"); }
+
+    form { display: grid; gap: 12px; }
+    input { padding: 10px 12px; border: 1px solid themed("border"); border-radius: 8px; background: themed("bgSoft"); color: themed("textColor"); }
+    button { border: 0; border-radius: 8px; padding: 10px 14px; background: #6D1D1D; color: white; cursor: pointer; width: fit-content; }
+    button:disabled { opacity: .6; cursor: default; }
+
+    .sponsor-manager-list { display: grid; gap: 10px; margin-top: 24px; }
+    article { display: flex; align-items: center; gap: 12px; padding: 10px; border-top: 1px solid themed("border"); }
+    article img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; }
+    article div { display: grid; gap: 4px; flex: 1; min-width: 0; }
+    article a { color: #6D1D1D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    article button { background: #7b2720; }
+  }
+}
