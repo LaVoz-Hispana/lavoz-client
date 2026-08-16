@@ -28,6 +28,8 @@ const SponsorCarousel = () => {
   };
   const activeSponsor = sponsors[activeIndex];
   if (!activeSponsor) return null;
+  const sponsorType = (activeSponsor.sponsorType || "regular").toLowerCase();
+  const sponsorTypeLabel = sponsorType === "principle" ? "Principle" : "Regular";
 
   return (
     <div className="sponsor-carousel" aria-label="Platform sponsors">
@@ -38,6 +40,7 @@ const SponsorCarousel = () => {
       )}
       <a key={activeSponsor.id} className="sponsor-slide" href={activeSponsor.link} target="_blank" rel="noopener noreferrer">
         <img src={activeSponsor.logoUrl} alt={`Visit ${activeSponsor.name}`} />
+        <span className={`sponsor-type-sticker ${sponsorType}`}>{sponsorTypeLabel}</span>
       </a>
       {sponsors.length > 1 && (
         <button type="button" className="sponsor-carousel-control" onClick={() => move(1)} aria-label="Next sponsor">

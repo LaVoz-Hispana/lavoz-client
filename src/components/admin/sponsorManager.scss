@@ -10,16 +10,167 @@
     h2, p { margin-top: 0; }
     p { color: themed("textColorSoft"); }
 
+    .sponsor-section-editor {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      margin: 18px 0 24px;
+      border: 1px solid themed("border");
+      border-radius: 14px;
+      background: themed("bgSoft");
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .editor-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+
+        label {
+          display: grid;
+          gap: 6px;
+          color: themed("textColor");
+          font-size: 13px;
+
+          span {
+            font-weight: 600;
+          }
+        }
+      }
+
+      @include mobile {
+        padding: 14px;
+
+        .editor-grid {
+          grid-template-columns: 1fr;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      .section-meta {
+        color: themed("textColorSoft");
+        font-style: normal;
+        padding: 0;
+        margin-top: -2px;
+      }
+    }
+
     form { display: grid; gap: 12px; }
-    input { padding: 10px 12px; border: 1px solid themed("border"); border-radius: 8px; background: themed("bgSoft"); color: themed("textColor"); }
+    input, textarea {
+      padding: 10px 12px;
+      border: 1px solid themed("border");
+      border-radius: 8px;
+      background: themed("bg");
+      color: themed("textColor");
+      font: inherit;
+    }
+    .sponsor-type-field {
+      display: grid;
+      gap: 6px;
+      color: themed("textColor");
+      font-size: 13px;
+
+      span {
+        font-weight: 600;
+      }
+
+      select {
+        padding: 10px 12px;
+        border: 1px solid themed("border");
+        border-radius: 8px;
+        background: themed("bg");
+        color: themed("textColor");
+        font: inherit;
+      }
+    }
+    textarea { resize: vertical; min-height: 96px; }
     button { border: 0; border-radius: 8px; padding: 10px 14px; background: #6D1D1D; color: white; cursor: pointer; width: fit-content; }
     button:disabled { opacity: .6; cursor: default; }
+    @include mobile {
+      button {
+        width: 100%;
+      }
+    }
 
     .sponsor-manager-list { display: grid; gap: 10px; margin-top: 24px; }
-    article { display: flex; align-items: center; gap: 12px; padding: 10px; border-top: 1px solid themed("border"); }
-    article img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; }
-    article div { display: grid; gap: 4px; flex: 1; min-width: 0; }
+    article {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-top: 1px solid themed("border");
+    }
+    .sponsor-row-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+    article img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; flex: 0 0 auto; }
+    .sponsor-row-content,
+    .sponsor-edit-form { display: grid; gap: 4px; flex: 1; min-width: 0; }
     article a { color: #6D1D1D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sponsor-type-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: white;
+
+      &.regular { background: #6D1D1D; }
+      &.principle { background: #1f4d7a; }
+    }
+    .sponsor-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    .sponsor-edit-form {
+      input,
+      select {
+        width: 100%;
+      }
+    }
+    .sponsor-edit-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    button.secondary {
+      background: themed("bgSoft");
+      color: themed("textColor");
+      border: 1px solid themed("border");
+    }
     article button { background: #7b2720; }
+    @include mobile {
+      article {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .sponsor-row-main {
+        width: 100%;
+      }
+
+      .sponsor-row-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
   }
 }

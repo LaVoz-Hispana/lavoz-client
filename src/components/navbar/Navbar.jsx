@@ -16,7 +16,8 @@ import { makeRequest } from "../../axios";
 
 import "./navbar.scss";
 
-import Logo from "../../assets/Postsstationlogo.png";
+import LogoLight from "../../assets/Postsstationlogo_light.png";
+import LogoDark from "../../assets/Postsstationlogo_dark.png";
 import MxFlag from "../../assets/mx.png";
 import UsFlag from "../../assets/us.png";
 
@@ -31,6 +32,7 @@ const Navbar = () => {
 
   const authLink = (path) => (currentUser ? path : "/login");
   const isActive = (path) => location.pathname.startsWith(path);
+  const logoSrc = darkMode ? LogoDark : LogoLight;
 
   const toggleLng = () => {
     setLanguage(!language);
@@ -57,7 +59,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="left">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <img src={Logo} alt="Poststation Logo" className="logo" />
+          <img src={logoSrc} alt="Poststation Logo" className="logo" />
         </Link>
         <Link to='/' className="pc" style={{ textDecoration: "none", color: "inherit", display: 'flex' }}>
           <HomeOutlinedIcon className="pc" style={{ justifyContent: "center", alignItems: "center" }} />

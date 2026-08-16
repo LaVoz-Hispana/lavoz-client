@@ -12,6 +12,7 @@ import SponsorCarousel from "../../components/home/SponsorCarousel";
 
 /* ── Shared home (students and BCS locals) ── */
 const SharedHome = ({ t, isGuest, role, currentUser }) => {
+  const { i18n } = useTranslation();
   const { data: allPosts } = useQuery({
     queryKey: ["posts"],
     queryFn: () => makeRequest.get("/posts").then((r) => r.data),
@@ -22,7 +23,15 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
     queryKey: ["projects"],
     queryFn: () => makeRequest.get("/projects").then((r) => r.data),
   });
+  const { data: sponsorSection } = useQuery({
+    queryKey: ["sponsor-section"],
+    queryFn: () => makeRequest.get("/sponsors/section").then((r) => r.data),
+  });
   const visibleProjects = projects?.filter((project) => project.status !== "closed") ?? [];
+  const sponsorSupportCopy =
+    i18n.language?.startsWith("es")
+      ? sponsorSection?.contentEs || sponsorSection?.contentEn || t("home.sponsorSupport")
+      : sponsorSection?.contentEn || sponsorSection?.contentEs || t("home.sponsorSupport");
 
   return (
     <div className="home-content">
@@ -53,7 +62,7 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
       </section>
 
       <section className="home-sponsors" aria-labelledby="sponsor-heading">
-        <p id="sponsor-heading">{t("home.sponsorSupport")}</p>
+        <p id="sponsor-heading">{sponsorSupportCopy}</p>
         <SponsorCarousel />
       </section>
     </div>
