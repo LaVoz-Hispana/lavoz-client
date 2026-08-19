@@ -9,6 +9,7 @@ import Post from "../../components/post/Post";
 import ProjectCard from "../../components/project/ProjectCard";
 import HomePostActions from "../../components/home/HomePostActions";
 import SponsorCarousel from "../../components/home/SponsorCarousel";
+import AggieStamp from "../../assets/aggie_stamp.png";
 
 /* ── Shared home (students and BCS locals) ── */
 const SharedHome = ({ t, isGuest, role, currentUser }) => {
@@ -65,6 +66,10 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
         <p id="sponsor-heading">{sponsorSupportCopy}</p>
         <SponsorCarousel />
       </section>
+
+      <div className="home-stamp" aria-label="Aggie stamp">
+        <img src={AggieStamp} alt="Born in Aggieland, made by Aggies" />
+      </div>
     </div>
   );
 };

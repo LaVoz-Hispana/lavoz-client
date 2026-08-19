@@ -258,6 +258,27 @@
       }
     }
 
+    .home-stamp {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0 0;
+      margin-bottom: 8px;
+
+      img {
+        width: min(220px, 48vw);
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.14));
+      }
+
+      @include mobile {
+        img {
+          width: min(180px, 58vw);
+        }
+      }
+    }
+
     /* Escrow list rows */
     .escrow-list {
       display: flex;
