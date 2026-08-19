@@ -4,7 +4,7 @@ import Friend from "../../assets/friend.png";
 import Flag from "../../assets/tamu_flag.png";
 import Tamu from "../../assets/tamu.jpg";
 import DefaultUser from "../../assets/pfp.jpg";
-import { useContext, useRef, useState } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { makeRequest } from "../../axios"
@@ -18,8 +18,6 @@ import ReactSimplyCarousel from "react-simply-carousel";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Link } from "react-router-dom";
-import TextareaAutosize from 'react-textarea-autosize';
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PoststationAdminLogo from "../../assets/poststation-admin.png";
 
@@ -173,11 +171,240 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
   const [gif, setGif] = useState(null);
   const [tooManyFiles, setTooManyFiles] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [url, setURL] = useState(null);
   const [projectId, setProjectId] = useState("");
   const [taggedUserIds, setTaggedUserIds] = useState([]);
   const [mention, setMention] = useState(null);
-  const postInputRef = useRef(null);
+  const editorRef = useRef(null);
+  const selectionRef = useRef({ start: 0, end: 0 });
+
+  const escapeHtml = (value) => value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+  const trimTrailingPunctuation = (value) => {
+    let trimmed = value;
+    let suffix = "";
+
+    while (trimmed && /[.,!?;:)]$/.test(trimmed)) {
+      suffix = trimmed.slice(-1) + suffix;
+      trimmed = trimmed.slice(0, -1);
+    }
+
+    return { trimmed, suffix };
+  };
+
+  const ensureAbsoluteUrl = (url) => {
+    if (!url.match(/^(https?:\/\/|www\.)/)) {
+      return `https://www.${url}`;
+    } else if (url.match(/^www\./)) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
+  const getDisplayUrl = (url) => url
+    .replace(/^https?:\/\/(www\.)?/i, "")
+    .replace(/^www\./i, "")
+    .replace(/\/$/, "");
+
+  const renderRichTextHtml = (value) => {
+    const text = value ?? "";
+    const linkRegex = /((?:https?:\/\/|www\.)[^\s<>()]+)/gi;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(escapeHtml(text.slice(lastIndex, match.index)));
+      }
+
+      const rawUrl = match[1];
+      const { trimmed, suffix } = trimTrailingPunctuation(rawUrl);
+      const displayUrl = getDisplayUrl(trimmed);
+      parts.push(
+        `<a href="${escapeHtml(ensureAbsoluteUrl(trimmed))}" data-raw-url="${escapeHtml(trimmed)}" target="_blank" rel="noopener noreferrer" class="editor-link">${escapeHtml(displayUrl)}</a>${escapeHtml(suffix)}`
+      );
+      lastIndex = match.index + rawUrl.length;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(escapeHtml(text.slice(lastIndex)));
+    }
+
+    return parts.join("");
+  };
+
+  const getLogicalNodeLength = (node) => {
+    if (!node) return 0;
+    if (node.nodeType === Node.TEXT_NODE) return node.nodeValue.length;
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === "BR") return 1;
+      if (node.tagName === "A" && node.classList.contains("editor-link")) {
+        return (node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "").length;
+      }
+
+      return Array.from(node.childNodes).reduce((total, child) => total + getLogicalNodeLength(child), 0);
+    }
+    return 0;
+  };
+
+  const serializeEditorContent = (root) => {
+    const serializeNode = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue;
+      if (node.nodeType !== Node.ELEMENT_NODE) return "";
+      if (node.tagName === "BR") return "\n";
+      if (node.tagName === "A" && node.classList.contains("editor-link")) {
+        return node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "";
+      }
+
+      return Array.from(node.childNodes).map(serializeNode).join("");
+    };
+
+    return serializeNode(root).replace(/\r\n/g, "\n");
+  };
+
+  const getSelectionOffsets = (root) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return null;
+    if (!root.contains(selection.anchorNode) || !root.contains(selection.focusNode)) return null;
+
+    const computeOffset = (targetNode, targetOffset) => {
+      let offset = 0;
+      let found = false;
+
+      const walk = (node) => {
+        if (found) return;
+
+        if (node === targetNode) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            offset += targetOffset;
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.tagName === "A" && node.classList.contains("editor-link")) {
+              const rawLength = (node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "").length;
+              offset += Math.min(targetOffset, rawLength);
+            } else {
+              const children = Array.from(node.childNodes);
+              for (let i = 0; i < Math.min(targetOffset, children.length); i += 1) {
+                offset += getLogicalNodeLength(children[i]);
+              }
+            }
+          }
+          found = true;
+          return;
+        }
+
+        if (node.nodeType === Node.TEXT_NODE) {
+          offset += node.nodeValue.length;
+          return;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+        if (node.tagName === "BR") {
+          offset += 1;
+          return;
+        }
+
+        if (node.tagName === "A" && node.classList.contains("editor-link")) {
+          offset += getLogicalNodeLength(node);
+          return;
+        }
+
+        for (const child of node.childNodes) {
+          walk(child);
+          if (found) return;
+        }
+      };
+
+      walk(root);
+      return offset;
+    };
+
+    return {
+      start: computeOffset(selection.anchorNode, selection.anchorOffset),
+      end: computeOffset(selection.focusNode, selection.focusOffset),
+    };
+  };
+
+  const setSelectionOffsets = (root, start, end = start) => {
+    const selection = window.getSelection();
+    if (!selection) return;
+
+    const range = document.createRange();
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    let charIndex = 0;
+    let startNode = null;
+    let startOffset = 0;
+    let endNode = null;
+    let endOffset = 0;
+    let node;
+
+    while ((node = walker.nextNode())) {
+      const nextCharIndex = charIndex + node.textContent.length;
+
+      if (!startNode && start <= nextCharIndex) {
+        startNode = node;
+        startOffset = Math.max(0, start - charIndex);
+      }
+
+      if (!endNode && end <= nextCharIndex) {
+        endNode = node;
+        endOffset = Math.max(0, end - charIndex);
+        break;
+      }
+
+      charIndex = nextCharIndex;
+    }
+
+    if (!startNode) {
+      startNode = root;
+      startOffset = root.childNodes.length;
+    }
+
+    if (!endNode) {
+      endNode = startNode;
+      endOffset = startOffset;
+    }
+
+    try {
+      if (startNode.nodeType === Node.ELEMENT_NODE && startNode.tagName === "A" && startOffset >= (startNode.dataset.rawUrl || startNode.getAttribute("href") || startNode.textContent || "").length) {
+        range.setStartAfter(startNode);
+      } else {
+        range.setStart(startNode, startOffset);
+      }
+
+      if (endNode.nodeType === Node.ELEMENT_NODE && endNode.tagName === "A" && endOffset >= (endNode.dataset.rawUrl || endNode.getAttribute("href") || endNode.textContent || "").length) {
+        range.setEndAfter(endNode);
+      } else {
+        range.setEnd(endNode, endOffset);
+      }
+      selection.removeAllRanges();
+      selection.addRange(range);
+    } catch (err) {
+      // Ignore invalid restore attempts and keep the browser caret.
+    }
+  };
+
+  const insertTextAtCaret = (root, text) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return false;
+
+    const range = selection.getRangeAt(0);
+    if (!root.contains(range.commonAncestorContainer)) return false;
+
+    range.deleteContents();
+    const textNode = document.createTextNode(text);
+    range.insertNode(textNode);
+    range.setStartAfter(textNode);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return true;
+  };
 
   const isVideo = (url) => {
     if (url === null) return false;
@@ -234,10 +461,14 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
   ).values());
 
   const handleDescChange = (e) => {
-    const value = e.target.value;
-    const caret = e.target.selectionStart;
+    const root = e.currentTarget;
+    const value = serializeEditorContent(root);
     setDesc(value);
 
+    const selection = getSelectionOffsets(root);
+    if (selection) selectionRef.current = selection;
+
+    const caret = selection ? selection.end : value.length;
     if (!projectId) return setMention(null);
     const beforeCaret = value.slice(0, caret);
     const match = beforeCaret.match(/(?:^|\s)@([^\s@]*)$/);
@@ -246,11 +477,31 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
 
   const insertMention = (user) => {
     if (!mention) return;
-    setDesc((current) => `${current.slice(0, mention.start)}@${user.username} ${current.slice(mention.end)}`);
+    const insertedText = `@${user.username} `;
+    setDesc((current) => `${current.slice(0, mention.start)}${insertedText}${current.slice(mention.end)}`);
+    selectionRef.current = {
+      start: mention.start + insertedText.length,
+      end: mention.start + insertedText.length,
+    };
     setTaggedUserIds((current) => current.includes(user.id) ? current : [...current, user.id]);
     setMention(null);
-    requestAnimationFrame(() => postInputRef.current?.focus());
+    requestAnimationFrame(() => editorRef.current?.focus());
   };
+
+  useLayoutEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const html = renderRichTextHtml(desc);
+    if (editor.innerHTML !== html) {
+      editor.innerHTML = html;
+    }
+
+    const selection = selectionRef.current;
+    if (selection) {
+      setSelectionOffsets(editor, selection.start, selection.end);
+    }
+  }, [desc]);
 
   const mentionSuggestions = mention
     ? taggableUsers.filter((user) => user.username.toLowerCase().includes(mention.query))
@@ -342,10 +593,9 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
     }
     setError(false);
     setDisplayMessage(0);
-    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, url, projectId: isAdminPost ? null : projectId || null, taggedUserIds: isAdminPost ? [] : taggedUserIds });
+    mutation.mutate({ desc, img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3], img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7], img8: imgUrls[8], img9: imgUrls[9], category, gifUrl: gif, hasFlag: flag, article, projectId: isAdminPost ? null : projectId || null, taggedUserIds: isAdminPost ? [] : taggedUserIds });
     setDesc("");
     setGif(null);
-    setURL("");
     setCategory(categ);
     setProjectId("");
     setTaggedUserIds([]);
@@ -603,29 +853,39 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
                 src={isAdminPost ? PoststationAdminLogo : currentUser.profilePic}
                 alt=""
               />
-              {
-                (category === 'global' || category === 'latam' || category === 'local' || category === 'usa') ?
-                <TextareaAutosize
-                  type="text" 
-                  placeholder={t('share.create')} 
-                  ref={postInputRef}
-                  onChange={handleDescChange} 
-                  value={desc}
-                  maxLength={4500}
-                  minRows={15}  
-                  // style={{ width: "100%", padding: "10px", fontSize: "16px" }} 
-                />
-                :
-                <TextareaAutosize
-                  type="text" 
-                  placeholder={t('share.create')} 
-                  ref={postInputRef}
-                  onChange={handleDescChange} 
-                  value={desc}
-                  maxLength={4500}
-                  minRows={15}  
-                />
-              }
+              <div
+                ref={editorRef}
+                className="rich-editor"
+                contentEditable
+                role="textbox"
+                aria-multiline="true"
+                data-placeholder={t('share.create')}
+                onInput={handleDescChange}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter") return;
+
+                  event.preventDefault();
+                  const editor = editorRef.current;
+                  if (!editor) return;
+
+                  if (insertTextAtCaret(editor, "\n")) {
+                    handleDescChange({ currentTarget: editor });
+                  }
+                }}
+                onPaste={(event) => {
+                  event.preventDefault();
+                  const pastedText = event.clipboardData.getData("text/plain");
+                  const selection = window.getSelection();
+                  if (!selection || selection.rangeCount === 0) return;
+
+                  const editor = editorRef.current;
+                  if (!editor) return;
+
+                  insertTextAtCaret(editor, pastedText);
+                  handleDescChange({ currentTarget: editorRef.current });
+                }}
+                suppressContentEditableWarning
+              />
               {mentionSuggestions.length > 0 && (
                 <div className="mention-suggestions">
                   {mentionSuggestions.map((user) => (
@@ -636,7 +896,6 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
                 </div>
               )}
           </div>
-          
           <div className="middle">
             {renderFilePreviews()}
           </div>
@@ -772,20 +1031,6 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
                 </div>
               </label>
             }
-            <label>
-              <div className="item">
-                <InsertLinkIcon style={{color: "gray"}}/>
-                <input
-                  name="url"
-                  type="text"
-                  placeholder={t('share.url')}
-                  value={url}
-                  style={{border: "none", fontSize: 12, color: "blue"}}
-                  onChange={e => setURL(e.target.value)}
-                />
-              </div>
-            </label>
-
           </div>
           <div className="right">
             <button onClick={handleClick} disabled={isSubmitting}> {isSubmitting ? t('share.uploading') : t('share.post') } </button>

@@ -20,7 +20,6 @@ import AddGif from "@mui/icons-material/GifBox";
 import ReactGiphySearchbox from 'react-giphy-searchbox';
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
-import InsertLink from "@mui/icons-material/InsertLink";
 import { isAdmin } from "../../utils/admin";
 import PoststationAdminLogo from "../../assets/poststation-admin.png";
 
@@ -434,6 +433,23 @@ const Post = ({ post, openComments = false }) => {
     return url;
   }
 
+  const trimTrailingPunctuation = (value) => {
+    let trimmed = value;
+    let suffix = "";
+
+    while (trimmed && /[.,!?;:)]$/.test(trimmed)) {
+      suffix = trimmed.slice(-1) + suffix;
+      trimmed = trimmed.slice(0, -1);
+    }
+
+    return { trimmed, suffix };
+  };
+
+  const getDisplayUrl = (url) => url
+    .replace(/^https?:\/\/(www\.)?/i, "")
+    .replace(/^www\./i, "")
+    .replace(/\/$/, "");
+
   const jobCategories = ["construction", "restaurant", "students", "office", "sales", "temporary"];
 
   const postTypeLabel = (type) => {
@@ -449,13 +465,67 @@ const Post = ({ post, openComments = false }) => {
     : [];
 
   const renderPostText = (text) => {
-    if (taggedUsers.length === 0) return text;
-    return text.split(/(@[^\s@]+)/g).map((part, index) => {
-      const taggedUser = taggedUsers.find((user) => `@${user.username}`.toLowerCase() === part.toLowerCase());
-      return taggedUser
-        ? <Link key={index} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</Link>
-        : part;
-    });
+    if (!text) return null;
+
+    const renderMentions = (segment, keyPrefix) => {
+      if (taggedUsers.length === 0) return segment;
+
+      return segment.split(/(@[^\s@]+)/g).map((part, index) => {
+        if (!part) return null;
+        const taggedUser = taggedUsers.find((user) => `@${user.username}`.toLowerCase() === part.toLowerCase());
+        return taggedUser
+          ? <Link key={`${keyPrefix}-mention-${index}`} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</Link>
+          : part;
+      });
+    };
+
+    const nodes = [];
+    const richTextRegex = /\[([^\]]+)\]\(((?:https?:\/\/|www\.)[^\s)]+)\)|((?:https?:\/\/|www\.)[^\s<>()]+)/gi;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = richTextRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        nodes.push(...renderMentions(text.slice(lastIndex, match.index), `text-${lastIndex}`));
+      }
+
+      if (match[1] && match[2]) {
+        nodes.push(
+          <a
+            key={`md-link-${match.index}`}
+            href={ensureAbsoluteUrl(match[2])}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-link"
+          >
+            {match[1]}
+          </a>
+        );
+      } else if (match[3]) {
+        const { trimmed, suffix } = trimTrailingPunctuation(match[3]);
+        const displayUrl = getDisplayUrl(trimmed);
+        nodes.push(
+          <a
+            key={`url-${match.index}`}
+            href={ensureAbsoluteUrl(trimmed)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-link"
+          >
+            {displayUrl}
+          </a>
+        );
+        if (suffix) nodes.push(suffix);
+      }
+
+      lastIndex = richTextRegex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      nodes.push(...renderMentions(text.slice(lastIndex), `text-${lastIndex}`));
+    }
+
+    return nodes;
   };
 
   return (
@@ -529,20 +599,6 @@ const Post = ({ post, openComments = false }) => {
               {post.img1 === null ? getSingleFile() : getCarousel()}
             </div>
 
-            {post.url && post.url !== "" && (
-              <div className="row" style={{ alignItems: "center", gap: 10, display: "flex", marginTop: 15 }}>
-                <InsertLink />
-                <a
-                  className="link"
-                  href={ensureAbsoluteUrl(post.url)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ fontSize: 14 }}
-                >
-                  {post.url}
-                </a>
-              </div>
-            )}
             {post.gifUrl && 
             <div style={containerStyle}>
               <iframe
