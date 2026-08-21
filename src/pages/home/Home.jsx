@@ -85,8 +85,8 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-hero">
-        <h1>Poststation</h1>
-        <p>Brazos Valley Student–Local Marketplace</p>
+        <h1>Aggieland's Student-Local Marketplace</h1>
+        <p>Helping students build real-world experience</p>
       </div>
 
       <SharedHome t={t} isGuest={isGuest} role={role} currentUser={currentUser} />

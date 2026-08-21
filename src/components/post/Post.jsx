@@ -22,6 +22,12 @@ import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
 import { isAdmin } from "../../utils/admin";
 import PoststationAdminLogo from "../../assets/poststation-admin.png";
+import {
+  createPostTextRegex,
+  ensureAbsoluteUrl,
+  getDisplayUrl,
+  trimTrailingPunctuation,
+} from "../../utils/postLinks";
 
 const Post = ({ post, openComments = false }) => {
   const { t } = useTranslation();
@@ -420,36 +426,6 @@ const Post = ({ post, openComments = false }) => {
   }
 
   
-  function ensureAbsoluteUrl(url) {
-    // Check if the URL starts with http://, https://, or www.
-    if (!url.match(/^(https?:\/\/|www\.)/)) {
-      // If it doesn't start with any, add https://www.
-      return `https://www.${url}`;
-    } else if (url.match(/^www\./)) {
-      // If it starts with www., add https:// only.
-      return `https://${url}`;
-    }
-    // If it starts with http:// or https://, return as is.
-    return url;
-  }
-
-  const trimTrailingPunctuation = (value) => {
-    let trimmed = value;
-    let suffix = "";
-
-    while (trimmed && /[.,!?;:)]$/.test(trimmed)) {
-      suffix = trimmed.slice(-1) + suffix;
-      trimmed = trimmed.slice(0, -1);
-    }
-
-    return { trimmed, suffix };
-  };
-
-  const getDisplayUrl = (url) => url
-    .replace(/^https?:\/\/(www\.)?/i, "")
-    .replace(/^www\./i, "")
-    .replace(/\/$/, "");
-
   const jobCategories = ["construction", "restaurant", "students", "office", "sales", "temporary"];
 
   const postTypeLabel = (type) => {
@@ -480,7 +456,7 @@ const Post = ({ post, openComments = false }) => {
     };
 
     const nodes = [];
-    const richTextRegex = /\[([^\]]+)\]\(((?:https?:\/\/|www\.)[^\s)]+)\)|((?:https?:\/\/|www\.)[^\s<>()]+)/gi;
+    const richTextRegex = createPostTextRegex();
     let lastIndex = 0;
     let match;
 

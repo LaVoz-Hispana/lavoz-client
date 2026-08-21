@@ -20,6 +20,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Link } from "react-router-dom";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PoststationAdminLogo from "../../assets/poststation-admin.png";
+import {
+  createUrlRegex,
+  ensureAbsoluteUrl,
+  getDisplayUrl,
+  trimTrailingPunctuation,
+} from "../../utils/postLinks";
 
 const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
   const [category, setCategory] = useState(categ);
@@ -184,35 +190,9 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-  const trimTrailingPunctuation = (value) => {
-    let trimmed = value;
-    let suffix = "";
-
-    while (trimmed && /[.,!?;:)]$/.test(trimmed)) {
-      suffix = trimmed.slice(-1) + suffix;
-      trimmed = trimmed.slice(0, -1);
-    }
-
-    return { trimmed, suffix };
-  };
-
-  const ensureAbsoluteUrl = (url) => {
-    if (!url.match(/^(https?:\/\/|www\.)/)) {
-      return `https://www.${url}`;
-    } else if (url.match(/^www\./)) {
-      return `https://${url}`;
-    }
-    return url;
-  };
-
-  const getDisplayUrl = (url) => url
-    .replace(/^https?:\/\/(www\.)?/i, "")
-    .replace(/^www\./i, "")
-    .replace(/\/$/, "");
-
   const renderRichTextHtml = (value) => {
     const text = value ?? "";
-    const linkRegex = /((?:https?:\/\/|www\.)[^\s<>()]+)/gi;
+    const linkRegex = createUrlRegex();
     const parts = [];
     let lastIndex = 0;
     let match;
