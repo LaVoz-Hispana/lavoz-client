@@ -31,8 +31,8 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
   const visibleProjects = projects?.filter((project) => project.status !== "closed") ?? [];
   const sponsorSupportCopy =
     i18n.language?.startsWith("es")
-      ? sponsorSection?.contentEs || sponsorSection?.contentEn || t("home.sponsorSupport")
-      : sponsorSection?.contentEn || sponsorSection?.contentEs || t("home.sponsorSupport");
+      ? sponsorSection?.contentEs || t("home.sponsorSupport")
+      : sponsorSection?.contentEn || t("home.sponsorSupport");
 
   return (
     <div className="home-content">

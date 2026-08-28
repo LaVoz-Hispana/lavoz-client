@@ -404,14 +404,14 @@ i18n
             closeProject: "Close Project",
             deleteProject: "Delete Project",
             deleteConfirm: "Are you sure you want to delete this project? This cannot be undone.",
-            bcsLocalProjects: "BCS Local Projects",
+            bcsLocalProjects: "Local Projects",
             bcsLocals: "BCS Locals",
             noLocals: "No locals found.",
             viewAll: "View all",
           },
           home: {
             newPost: "New Post",
-            sponsorSupport: "Thank you to our sponsors for helping students turn skills into real-world opportunities.",
+            sponsorSupport: "Thanks to our sponsors for helping students turn skills into real-world opportunities.",
           },
           projectPost: {
             createPost: "Create Post",
