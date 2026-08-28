@@ -26,6 +26,11 @@ import {
   getDisplayUrl,
   trimTrailingPunctuation,
 } from "../../utils/postLinks";
+import {
+  getEditorLinkValue,
+  insertTextAtCaret,
+  serializeEditorContent,
+} from "../../utils/richTextEditor";
 
 const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
   const [category, setCategory] = useState(categ);
@@ -205,8 +210,11 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
       const rawUrl = match[1];
       const { trimmed, suffix } = trimTrailingPunctuation(rawUrl);
       const displayUrl = getDisplayUrl(trimmed);
+      const displayIndex = trimmed.toLowerCase().indexOf(displayUrl.toLowerCase());
+      const urlPrefix = displayIndex >= 0 ? trimmed.slice(0, displayIndex) : "";
+      const urlSuffix = displayIndex >= 0 ? trimmed.slice(displayIndex + displayUrl.length) : "";
       parts.push(
-        `<a href="${escapeHtml(ensureAbsoluteUrl(trimmed))}" data-raw-url="${escapeHtml(trimmed)}" target="_blank" rel="noopener noreferrer" class="editor-link">${escapeHtml(displayUrl)}</a>${escapeHtml(suffix)}`
+        `<a href="${escapeHtml(ensureAbsoluteUrl(trimmed))}" data-raw-url="${escapeHtml(trimmed)}" data-display-url="${escapeHtml(displayUrl)}" data-url-prefix="${escapeHtml(urlPrefix)}" data-url-suffix="${escapeHtml(urlSuffix)}" target="_blank" rel="noopener noreferrer" class="editor-link">${escapeHtml(displayUrl)}</a>${escapeHtml(suffix)}`
       );
       lastIndex = match.index + rawUrl.length;
     }
@@ -224,27 +232,12 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       if (node.tagName === "BR") return 1;
       if (node.tagName === "A" && node.classList.contains("editor-link")) {
-        return (node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "").length;
+        return getEditorLinkValue(node).length;
       }
 
       return Array.from(node.childNodes).reduce((total, child) => total + getLogicalNodeLength(child), 0);
     }
     return 0;
-  };
-
-  const serializeEditorContent = (root) => {
-    const serializeNode = (node) => {
-      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue;
-      if (node.nodeType !== Node.ELEMENT_NODE) return "";
-      if (node.tagName === "BR") return "\n";
-      if (node.tagName === "A" && node.classList.contains("editor-link")) {
-        return node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "";
-      }
-
-      return Array.from(node.childNodes).map(serializeNode).join("");
-    };
-
-    return serializeNode(root).replace(/\r\n/g, "\n");
   };
 
   const getSelectionOffsets = (root) => {
@@ -264,7 +257,7 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
             offset += targetOffset;
           } else if (node.nodeType === Node.ELEMENT_NODE) {
             if (node.tagName === "A" && node.classList.contains("editor-link")) {
-              const rawLength = (node.dataset.rawUrl || node.getAttribute("href") || node.textContent || "").length;
+              const rawLength = getEditorLinkValue(node).length;
               offset += Math.min(targetOffset, rawLength);
             } else {
               const children = Array.from(node.childNodes);
@@ -367,23 +360,6 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
     } catch (err) {
       // Ignore invalid restore attempts and keep the browser caret.
     }
-  };
-
-  const insertTextAtCaret = (root, text) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return false;
-
-    const range = selection.getRangeAt(0);
-    if (!root.contains(range.commonAncestorContainer)) return false;
-
-    range.deleteContents();
-    const textNode = document.createTextNode(text);
-    range.insertNode(textNode);
-    range.setStartAfter(textNode);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    return true;
   };
 
   const isVideo = (url) => {
@@ -848,7 +824,7 @@ const Share = ({categ, showProjectReference = false, isAdminPost = false}) => {
                   const editor = editorRef.current;
                   if (!editor) return;
 
-                  if (insertTextAtCaret(editor, "\n")) {
+                  if (insertTextAtCaret(editor, "\n", { exitLinkAtEnd: true })) {
                     handleDescChange({ currentTarget: editor });
                   }
                 }}
