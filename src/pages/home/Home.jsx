@@ -64,12 +64,13 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
 
       <section className="home-sponsors" aria-labelledby="sponsor-heading">
         <p id="sponsor-heading">{sponsorSupportCopy}</p>
-        <SponsorCarousel />
+        <div className="sponsor-showcase">
+          <SponsorCarousel />
+          <div className="home-stamp" aria-label="Aggie stamp">
+            <img src={AggieStamp} alt="Born in Aggieland, made by Aggies" />
+          </div>
+        </div>
       </section>
-
-      <div className="home-stamp" aria-label="Aggie stamp">
-        <img src={AggieStamp} alt="Born in Aggieland, made by Aggies" />
-      </div>
     </div>
   );
 };

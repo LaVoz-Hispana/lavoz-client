@@ -24,7 +24,6 @@ html, body, #root {
   width: 100%;
   margin: 0; 
   padding: 0;
-  user-select: none;
 }
 
 @mixin themify($themes) {
@@ -77,4 +76,3 @@ html, body, #root {
     display: none; 
   }
 }
-

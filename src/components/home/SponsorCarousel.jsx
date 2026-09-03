@@ -4,7 +4,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { makeRequest } from "../../axios";
 
-const OVERVIEW_INDEX = -1;
+const SPONSORS_PER_PAGE = 3;
 
 const SponsorLink = ({ sponsor, className }) => {
   const sponsorType = (sponsor.sponsorType || "regular").toLowerCase();
@@ -24,51 +24,54 @@ const SponsorCarousel = () => {
     queryFn: () => makeRequest.get("/sponsors").then((res) => res.data),
   });
   const sponsors = useMemo(() => uploadedSponsors ?? [], [uploadedSponsors]);
-  const [activeIndex, setActiveIndex] = useState(OVERVIEW_INDEX);
+  const sponsorPages = useMemo(() => (
+    Array.from(
+      { length: Math.ceil(sponsors.length / SPONSORS_PER_PAGE) },
+      (_, pageIndex) => sponsors.slice(
+        pageIndex * SPONSORS_PER_PAGE,
+        (pageIndex + 1) * SPONSORS_PER_PAGE,
+      ),
+    )
+  ), [sponsors]);
+  const [activePage, setActivePage] = useState(0);
 
   useEffect(() => {
-    setActiveIndex((index) => index >= sponsors.length ? OVERVIEW_INDEX : index);
-  }, [sponsors.length]);
+    setActivePage((page) => page >= sponsorPages.length ? 0 : page);
+  }, [sponsorPages.length]);
 
   useEffect(() => {
-    if (sponsors.length < 2) return undefined;
+    if (sponsorPages.length < 2) return undefined;
     const timeout = window.setTimeout(() => {
-      setActiveIndex((index) => index >= sponsors.length - 1 ? OVERVIEW_INDEX : index + 1);
-    }, activeIndex === OVERVIEW_INDEX ? 6000 : 4500);
+      setActivePage((page) => (page + 1) % sponsorPages.length);
+    }, activePage === 0 ? 6000 : 4500);
     return () => window.clearTimeout(timeout);
-  }, [activeIndex, sponsors.length]);
+  }, [activePage, sponsorPages.length]);
 
   const move = (direction) => {
-    const viewCount = sponsors.length + 1;
-    setActiveIndex((index) => (
-      (index + 1 + direction + viewCount) % viewCount
-    ) - 1);
+    setActivePage((page) => (
+      (page + direction + sponsorPages.length) % sponsorPages.length
+    ));
   };
   if (sponsors.length === 0) return null;
 
-  const showOverview = sponsors.length === 1 || activeIndex === OVERVIEW_INDEX;
-  const activeSponsor = showOverview ? null : sponsors[activeIndex];
+  const activeSponsors = sponsorPages[activePage] ?? sponsorPages[0];
 
   return (
     <div className="sponsor-carousel" aria-label="Platform sponsors">
-      {sponsors.length > 1 && (
-        <button type="button" className="sponsor-carousel-control" onClick={() => move(-1)} aria-label="Previous sponsor">
+      {sponsorPages.length > 1 && (
+        <button type="button" className="sponsor-carousel-control" onClick={() => move(-1)} aria-label="Previous sponsors">
           <ArrowBackIosNewIcon fontSize="small" />
         </button>
       )}
       <div className="sponsor-carousel-stage">
-        {showOverview ? (
-          <div key="overview" className="sponsor-grid">
-            {sponsors.map((sponsor) => (
-              <SponsorLink key={sponsor.id} sponsor={sponsor} className="sponsor-card" />
-            ))}
-          </div>
-        ) : (
-          <SponsorLink key={activeSponsor.id} sponsor={activeSponsor} className="sponsor-slide" />
-        )}
+        <div key={activePage} className="sponsor-grid">
+          {activeSponsors.map((sponsor) => (
+            <SponsorLink key={sponsor.id} sponsor={sponsor} className="sponsor-card" />
+          ))}
+        </div>
       </div>
-      {sponsors.length > 1 && (
-        <button type="button" className="sponsor-carousel-control" onClick={() => move(1)} aria-label="Next sponsor">
+      {sponsorPages.length > 1 && (
+        <button type="button" className="sponsor-carousel-control" onClick={() => move(1)} aria-label="Next sponsors">
           <ArrowForwardIosIcon fontSize="small" />
         </button>
       )}
