@@ -25,6 +25,13 @@ i18n
     resources: {
       en: {
         translation: {
+          notificationPreferences: {
+            title: "Email notifications", marketplace: "Escrow and milestone updates",
+            language: "Email language", enabled: "Send me email updates", disabled: "No email updates",
+            loading: "Loading email preferences…", loadError: "Could not load email preferences.",
+            retry: "Try again", save: "Save email preferences", saving: "Saving…",
+            saved: "Email preferences saved.", saveError: "Could not save email preferences. Please try again.",
+          },
           reactions: {
             reactions: "Reactions",
             like: "Like",
@@ -411,6 +418,25 @@ i18n
           },
           home: {
             newPost: "New Post",
+            exploreMarketplace: "Explore Local Activity",
+            activitySubtitle: "Projects and services from the community",
+            filters: "Filters",
+            activityTypes: "Activity types",
+            showActivityFrom: "Show activity from",
+            projectStatus: "Project status",
+            localProjects: "Local Projects",
+            localServices: "Local Services",
+            viewAllProjects: "View all projects",
+            viewAllServices: "View all services",
+            filterProjects: "Filter projects by status",
+            allProjects: "All projects",
+            noMatchingProjects: "No projects match this filter yet.",
+            noMatchingActivity: "No local activity matches these filters yet.",
+            loadingMarketplace: "Loading…",
+            projectsError: "Unable to load projects.",
+            servicesError: "Unable to load services.",
+            categoriesError: "Service categories are unavailable right now.",
+            retry: "Try again",
             sponsorSupport: "Thanks to our sponsors for helping students turn skills into real-world opportunities.",
           },
           projectPost: {
@@ -473,6 +499,13 @@ i18n
 
       es: {
         translation: {
+          notificationPreferences: {
+            title: "Notificaciones por correo", marketplace: "Actualizaciones de escrows e hitos",
+            language: "Idioma del correo", enabled: "Recibir actualizaciones por correo", disabled: "No recibir actualizaciones por correo",
+            loading: "Cargando preferencias de correo…", loadError: "No se pudieron cargar las preferencias de correo.",
+            retry: "Intentar de nuevo", save: "Guardar preferencias de correo", saving: "Guardando…",
+            saved: "Preferencias de correo guardadas.", saveError: "No se pudieron guardar las preferencias. Inténtalo de nuevo.",
+          },
           reactions: {
             reactions: "Reacciónes",
             like: "Me gusta",
@@ -852,6 +885,25 @@ i18n
           },
           home: {
             newPost: "Nueva Publicación",
+            exploreMarketplace: "Explora la actividad local",
+            activitySubtitle: "Proyectos y servicios de la comunidad",
+            filters: "Filtros",
+            activityTypes: "Tipos de actividad",
+            showActivityFrom: "Mostrar actividad de",
+            projectStatus: "Estado del proyecto",
+            localProjects: "Proyectos locales",
+            localServices: "Servicios locales",
+            viewAllProjects: "Ver todos los proyectos",
+            viewAllServices: "Ver todos los servicios",
+            filterProjects: "Filtrar proyectos por estado",
+            allProjects: "Todos los proyectos",
+            noMatchingProjects: "No hay proyectos que coincidan con este filtro.",
+            noMatchingActivity: "No hay actividad local que coincida con estos filtros.",
+            loadingMarketplace: "Cargando…",
+            projectsError: "No se pudieron cargar los proyectos.",
+            servicesError: "No se pudieron cargar los servicios.",
+            categoriesError: "Las categorías de servicios no están disponibles en este momento.",
+            retry: "Intentar de nuevo",
             sponsorSupport: "Gracias a nuestros patrocinadores por ayudar a estudiantes a convertir sus habilidades en oportunidades reales.",
           },
           projectPost: {

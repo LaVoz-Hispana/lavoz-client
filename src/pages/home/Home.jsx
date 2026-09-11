@@ -1,12 +1,11 @@
 import "./home.scss";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import Post from "../../components/post/Post";
-import ProjectCard from "../../components/project/ProjectCard";
+import HomeMarketplace from "../../components/home/HomeMarketplace";
 import HomePostActions from "../../components/home/HomePostActions";
 import SponsorCarousel from "../../components/home/SponsorCarousel";
 import AggieStamp from "../../assets/aggie_stamp.png";
@@ -20,15 +19,10 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
   });
 
   const homePosts = allPosts ?? [];
-  const { isLoading: projectsLoading, data: projects } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => makeRequest.get("/projects").then((r) => r.data),
-  });
   const { data: sponsorSection } = useQuery({
     queryKey: ["sponsor-section"],
     queryFn: () => makeRequest.get("/sponsors/section").then((r) => r.data),
   });
-  const visibleProjects = projects?.filter((project) => project.status !== "closed") ?? [];
   const sponsorSupportCopy =
     i18n.language?.startsWith("es")
       ? sponsorSection?.contentEs || t("home.sponsorSupport")
@@ -46,21 +40,7 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
         </div>
       )}
 
-      <section className="home-projects-section">
-        <div className="home-card-header">
-          <h2>{t("projects.bcsLocalProjects")}</h2>
-          <Link to="/projects?tab=projects">{t("projects.viewAll")} →</Link>
-        </div>
-        {projectsLoading && <span className="home-projects-state">Loading...</span>}
-        {!projectsLoading && visibleProjects.length === 0 && (
-          <span className="home-projects-state">{t("projects.noProjects")}</span>
-        )}
-        <div className="home-projects-feed">
-          {visibleProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      </section>
+      <HomeMarketplace />
 
       <section className="home-sponsors" aria-labelledby="sponsor-heading">
         <p id="sponsor-heading">{sponsorSupportCopy}</p>
