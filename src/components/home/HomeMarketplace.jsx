@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import TuneIcon from "@mui/icons-material/Tune";
 import CategoryIcon from "@mui/icons-material/Category";
 import { makeRequest } from "../../axios";
 import { serviceCategoryIcons } from "../../utils/serviceCategoryIcons";
@@ -15,7 +14,6 @@ const projectStatuses = [
 
 export default function HomeMarketplace() {
   const { t } = useTranslation();
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [sources, setSources] = useState({ projects: true, services: true });
   const [projectStatus, setProjectStatus] = useState("open");
   const [serviceCategory, setServiceCategory] = useState("all");
@@ -48,25 +46,9 @@ export default function HomeMarketplace() {
           <h2 id="home-marketplace-heading">{t("home.exploreMarketplace")}</h2>
           <p>{t("home.activitySubtitle")}</p>
         </div>
-        <button type="button" className="activity-filter-trigger" aria-expanded={filtersOpen}
-          aria-controls="home-activity-filters" onClick={() => setFiltersOpen((open) => !open)}>
-          <TuneIcon aria-hidden="true" /><span>{t("home.filters")}</span>
-          <span className="filter-count">{sourceCount}</span>
-        </button>
       </div>
 
-      <div className="active-filter-summary" aria-live="polite">
-        {sources.projects && <button type="button" className="summary-pill project-summary"
-          aria-expanded={filtersOpen} aria-controls="home-activity-filters" onClick={() => setFiltersOpen(true)}>
-          {t("home.localProjects")} · {t(projectStatuses.find(([status]) => status === projectStatus)[1])}
-        </button>}
-        {sources.services && <button type="button" className="summary-pill service-summary"
-          aria-expanded={filtersOpen} aria-controls="home-activity-filters" onClick={() => setFiltersOpen(true)}>
-          {t("home.localServices")} · {categoryOptions.find(({ slug }) => slug === serviceCategory)?.name}
-        </button>}
-      </div>
-
-      {filtersOpen && <div id="home-activity-filters" className="activity-filter-panel">
+      <div id="home-activity-filters" className="activity-filter-panel">
         <div className="activity-source-filter" role="group" aria-label={t("home.activityTypes")}>
           <p>{t("home.showActivityFrom")}</p>
           <div>{["projects", "services"].map((source) => (
@@ -104,7 +86,7 @@ export default function HomeMarketplace() {
           <span className="selected-service-category" aria-live="polite">{categoryOptions.find(({ slug }) => slug === serviceCategory)?.name}</span>
           {categories.isError && <span role="alert" className="home-projects-state">{t("home.categoriesError")}</span>}
         </div>}
-      </div>}
+      </div>
 
       <div id="home-marketplace-results" className="home-activity-results" aria-busy={activityLoading}>
         {activityLoading && <p className="home-projects-state" role="status">{t("home.loadingMarketplace")}</p>}
