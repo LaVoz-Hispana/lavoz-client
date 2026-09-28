@@ -18,7 +18,13 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: 'en',
+    supportedLngs: ['en', 'es'],
+    load: 'languageOnly',
     debug: true,
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
@@ -361,6 +367,8 @@ i18n
           },
           talent: {
             browse: "Browse Talent",
+            studentTalent: "Student Talent",
+            studentServices: "Student Services",
             students: "Students",
             services: "Services",
             searchPlaceholder: "Search by skill or name...",
@@ -828,6 +836,8 @@ i18n
           },
           talent: {
             browse: "Ver Talento",
+            studentTalent: "Talento Estudiantil",
+            studentServices: "Servicios Estudiantiles",
             students: "Estudiantes",
             services: "Servicios",
             searchPlaceholder: "Buscar por habilidad o nombre...",

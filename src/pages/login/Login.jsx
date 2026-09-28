@@ -6,23 +6,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
-import i18next, { changeLanguage } from "i18next";
 import MX from "../../assets/mx.png";
+import { LanguageContext } from "../../context/language";
 
 const Login = () => {
   const { t } = useTranslation();
+  const { language, langToggle } = useContext(LanguageContext);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
   const [err, setErr] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [language, setLanguage] = useState(i18next.language === 'es');
-  const toggleLng = () => {
-    setLanguage(!language);
-    if (i18next.language == 'es') i18next.changeLanguage('en');
-    else i18next.changeLanguage('es');
-  }
 
   const navigate = useNavigate()
 
@@ -47,14 +42,14 @@ const Login = () => {
 
   return (
     <div className="login">
-        <button className = "language-toggle pc" onClick={toggleLng}>
-            {language ?
+        <button className = "language-toggle pc" onClick={langToggle}>
+            {language === "es" ?
               <img src={MX} className="flag"/> : <img src={US} className="flag"/>
             }
         </button>
       <div className="card">
-        <button className = "language-toggle mobile" onClick={toggleLng}>
-            {language ?
+        <button className = "language-toggle mobile" onClick={langToggle}>
+            {language === "es" ?
               <img src={MX} className="flag"/> : <img src={US} className="flag"/>
             }
         </button>

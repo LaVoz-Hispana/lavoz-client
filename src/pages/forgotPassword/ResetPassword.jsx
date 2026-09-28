@@ -9,8 +9,8 @@ import { RecoveryContext } from "../../context/recoveryContext";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
-import i18next, { changeLanguage } from "i18next";
 import MX from "../../assets/mx.png";
+import { LanguageContext } from "../../context/language";
 
 const ResetPassword = () => {
     const [err, setErr] = useState(null);
@@ -25,12 +25,7 @@ const ResetPassword = () => {
     const navigate = useNavigate();
 
     const { t } = useTranslation([]);
-    const [language, setLanguage] = useState(i18next.language === 'es');
-    const toggleLng = () => {
-      setLanguage(!language);
-      if (i18next.language == 'es') i18next.changeLanguage('en');
-      else i18next.changeLanguage('es');
-    }
+    const { language, langToggle } = useContext(LanguageContext);
 
     const handleChange = e => {
         setInputs(prev=>({...prev, [e.target.name]:e.target.value }));
@@ -69,8 +64,8 @@ const ResetPassword = () => {
     return (
         <div className="forgotPassword">
             <div className="card">
-                <button className = "language-toggle" onClick={toggleLng}>
-                    {language ?
+                <button className = "language-toggle" onClick={langToggle}>
+                    {language === "es" ?
                     <img src={MX} className="flag"/> : <img src={US} className="flag"/>
                     }
                 </button>

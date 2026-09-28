@@ -6,8 +6,8 @@ import { RecoveryContext } from "../../context/recoveryContext";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
-import i18next, { changeLanguage } from "i18next";
 import MX from "../../assets/mx.png";
+import { LanguageContext } from "../../context/language";
 
 const ForgotPassword = () => {
     const [err, setErr] = useState(null);
@@ -15,13 +15,8 @@ const ForgotPassword = () => {
     const { setEmail, email, setOTP } = useContext(RecoveryContext);
     const [ emailInput, setEmailInput ] = useState(null);
     const { t } = useTranslation([]);
+    const { language, langToggle } = useContext(LanguageContext);
     const navigate = useNavigate();
-    const [language, setLanguage] = useState(i18next.language === 'es');
-    const toggleLng = () => {
-      setLanguage(!language);
-      if (i18next.language == 'es') i18next.changeLanguage('en');
-      else i18next.changeLanguage('es');
-    }
     const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
     const navigateToOtp = () => {
@@ -67,8 +62,8 @@ const ForgotPassword = () => {
     return (
         <div className="forgotPassword">
             <div className="card">
-                <button className = "language-toggle" onClick={toggleLng}>
-                    {language ?
+                <button className = "language-toggle" onClick={langToggle}>
+                    {language === "es" ?
                     <img src={MX} className="flag"/> : <img src={US} className="flag"/>
                     }
                 </button>

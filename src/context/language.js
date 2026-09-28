@@ -1,29 +1,32 @@
-import { createContext, useEffect, useState } from "react";
-import { withNamespaces } from 'react-i18next';
-import i18next, { changeLanguage } from "i18next";
+import { createContext, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export const LanguageContext = createContext();
 
 export const LanguageContextProvider = ({ children }) => {
-  const [language, setLanguage] = useState(
-    JSON.parse(localStorage.getItem("language")) || "es"
+  // i18next is the single source of truth. Keeping a second React state here
+  // allowed the toggle icon and translated components to get out of sync.
+  const { i18n } = useTranslation();
+  const language = (i18n.resolvedLanguage || i18n.language || "en")
+    .split("-")[0];
+
+  const setLanguage = useCallback(
+    (nextLanguage) => i18n.changeLanguage(nextLanguage),
+    [i18n]
   );
 
-  const langToggle = () => {
-    if (language == 'es') {
-        setLanguage("en");
-    }
-    else {
-        setLanguage("es");
-    }
-  };
+  const langToggle = useCallback(
+    () => setLanguage(language === "es" ? "en" : "es"),
+    [language, setLanguage]
+  );
 
-  useEffect(() => {
-    localStorage.setItem("language", language);
-  }, [language]);
+  const value = useMemo(
+    () => ({ language, setLanguage, langToggle }),
+    [language, setLanguage, langToggle]
+  );
 
   return (
-    <LanguageContext.Provider value={{ language, langToggle }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

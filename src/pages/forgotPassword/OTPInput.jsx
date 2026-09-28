@@ -5,8 +5,8 @@ import { makeRequest } from "../../axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
-import i18next, { changeLanguage } from "i18next";
 import MX from "../../assets/mx.png";
+import { LanguageContext } from "../../context/language";
 
 const OTPInput = () => {
   const [err, setErr] = useState(null);
@@ -19,12 +19,7 @@ const OTPInput = () => {
   const navigate = useNavigate();
 
   const { t } = useTranslation([]);
-  const [language, setLanguage] = useState(i18next.language === 'es');
-  const toggleLng = () => {
-    setLanguage(!language);
-    if (i18next.language == 'es') i18next.changeLanguage('en');
-    else i18next.changeLanguage('es');
-  }
+  const { language, langToggle } = useContext(LanguageContext);
 
   const handlePress = () => {
     console.log(sent);
@@ -102,8 +97,8 @@ const OTPInput = () => {
   return (
     <div className="otpInput">
       <div className="card">
-        <button className = "language-toggle" onClick={toggleLng}>
-            {language ?
+        <button className = "language-toggle" onClick={langToggle}>
+            {language === "es" ?
             <img src={MX} className="flag"/> : <img src={US} className="flag"/>
             }
         </button>

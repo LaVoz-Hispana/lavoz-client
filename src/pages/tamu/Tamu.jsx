@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const Tamu = () => {
   const { t, i18n } = useTranslation();
+  const isEnglish = (i18n.resolvedLanguage || i18n.language).startsWith('en');
   const [selectedCategory, setSelectedCategory] = useState("tamu");
   const [currentView, setCurrentView] = useState("home");
 
@@ -39,7 +40,7 @@ const Tamu = () => {
           <div className="news-container">
               <Share categ={null}/>
               <div className="section" style={{marginTop: 50}}>
-                  {i18n.language == 'en' ?
+                  {isEnglish ?
                         <iframe title="tamu-english" width="100%" height="440"  src="https://rss.app/embed/v1/carousel/_Vla9Lh2zzuM6diy3" frameborder="0"></iframe>
                       :
                         <iframe title="tamu-spanish" width="100%" height="440"  src="https://rss.app/embed/v1/carousel/_N0wzxrQ4tvROvxUB" frameborder="0"></iframe>

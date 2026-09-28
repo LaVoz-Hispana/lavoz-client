@@ -42,7 +42,7 @@ const RightBar = () => {
     {
       show: students.length > 0,
       icon: <SchoolOutlinedIcon />,
-      label: "Student Talent",
+      label: t("talent.studentTalent"),
       to: "/talent",
       rows: students.map((u) => (
         <Link key={u.id} to={`/profile/${u.id}`} className="rb-row">
@@ -57,7 +57,7 @@ const RightBar = () => {
     {
       show: featuredServices.length > 0,
       icon: <StarBorderOutlinedIcon />,
-      label: "Student Services",
+      label: t("talent.studentServices"),
       to: "/talent?tab=services",
       rows: featuredServices.map((s) => (
         <Link key={s.id} to={`/talent?tab=services&service=${s.id}`} className="rb-row">

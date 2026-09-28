@@ -11,8 +11,8 @@ import MessageBell from "../notification/MessageBell";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
 import { makeRequest } from "../../axios";
+import { LanguageContext } from "../../context/language";
 
 import "./navbar.scss";
 
@@ -24,8 +24,8 @@ import UsFlag from "../../assets/us.png";
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser, clearUser } = useContext(AuthContext);
+  const { language, langToggle } = useContext(LanguageContext);
   const { t } = useTranslation();
-  const [language, setLanguage] = useState(i18next.language === 'es');
   const navigate = useNavigate();
   const location = useLocation();
   const [err, setErr] = useState(null);
@@ -33,11 +33,6 @@ const Navbar = () => {
   const authLink = (path) => (currentUser ? path : "/login");
   const isActive = (path) => location.pathname.startsWith(path);
   const logoSrc = darkMode ? LogoDark : LogoLight;
-
-  const toggleLng = () => {
-    setLanguage(!language);
-    i18next.changeLanguage(language ? 'en' : 'es');
-  }
 
   const logout = async () => {
     clearUser();
@@ -69,8 +64,8 @@ const Navbar = () => {
         ) : (
           <DarkModeOutlinedIcon className="pc" onClick={toggle} style={{ cursor: "pointer" }} />
         )}
-        <button className="language-toggle" onClick={toggleLng}>
-          <img src={language ? MxFlag : UsFlag} className="flag" alt="Language Flag"/>
+        <button className="language-toggle" onClick={langToggle}>
+          <img src={language === "es" ? MxFlag : UsFlag} className="flag" alt="Language Flag"/>
         </button>
       </div>
       {currentUser ? (
