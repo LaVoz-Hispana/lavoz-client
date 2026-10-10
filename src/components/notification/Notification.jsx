@@ -88,6 +88,14 @@ const Notification = ({ notification }) => {
     }, [notification, mutation]);
 
     const buildNotif = () => {
+        if (['application_submitted', 'application_selected', 'application_rejected', 'application_withdrawn'].includes(type)) {
+            return <Link to={`/projects/${notification.objectId}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <div className="notif"><div className="notifRow"><div className="text">
+                    <span>{t(`resumeApplications.notifications.${type}`)}</span>
+                    <span className="date">{moment(notification.createdAt).fromNow()}</span>
+                </div>{notification.new === 1 && <FiberManualRecordIcon style={{ color: "red", marginRight: 15 }} fontSize="small" />}</div></div>
+            </Link>;
+        }
         if (type === 'reaction') {
             return(
                 <Link to={"/post/"+notification.postId} style={{ textDecoration: "none", color: "inherit" }}>

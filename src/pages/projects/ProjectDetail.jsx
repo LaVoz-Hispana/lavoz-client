@@ -7,6 +7,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import ProjectPosts from "../../components/project/ProjectPosts";
+import ProjectApplications from "../../components/applications/ProjectApplications";
 
 const ProjectDetail = () => {
   const { t } = useTranslation();
@@ -85,6 +86,7 @@ const ProjectDetail = () => {
           </div>
         )}
 
+        <ProjectApplications project={project} />
       </div>
 
       <ProjectPosts projectId={id} />

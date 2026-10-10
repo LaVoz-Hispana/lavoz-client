@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { resumeApplicationEnglish, resumeApplicationSpanish } from './resumeApplicationStrings';
 
 import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -31,6 +32,7 @@ i18n
     resources: {
       en: {
         translation: {
+          resumeApplications: resumeApplicationEnglish,
           notificationPreferences: {
             title: "Email notifications", marketplace: "Escrow and milestone updates",
             language: "Email language", enabled: "Send me email updates", disabled: "No email updates",
@@ -507,6 +509,7 @@ i18n
 
       es: {
         translation: {
+          resumeApplications: resumeApplicationSpanish,
           notificationPreferences: {
             title: "Notificaciones por correo", marketplace: "Actualizaciones de escrows e hitos",
             language: "Idioma del correo", enabled: "Recibir actualizaciones por correo", disabled: "No recibir actualizaciones por correo",

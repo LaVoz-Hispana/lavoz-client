@@ -6,6 +6,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
+import ResumeLibrary from "../../components/resume/ResumeLibrary";
 
 const FirstLogin = () => {
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const FirstLogin = () => {
             <br />
             <p className="another-msg">{t('update.optional')}</p>
           </div>
+          {currentUser.account_type === "student" && <ResumeLibrary optional />}
           <form>
             <div className="files">
               <label style={{textAlign: "center"}} htmlFor="cover">

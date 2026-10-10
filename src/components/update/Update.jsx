@@ -7,6 +7,7 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../context/authContext";
 import NotificationPreferences from "./NotificationPreferences";
+import ResumeLibrary from "../resume/ResumeLibrary";
 
 const Update = ({ setOpenUpdate, user, first }) => {
     const { t, i18n } = useTranslation();
@@ -143,6 +144,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
         <div className="wrapper">
           <h1>{t('update.submit')}</h1>
           <NotificationPreferences userId={currentUser.id} />
+          {currentUser.account_type === "student" && Number(user.id) === Number(currentUser.id) && <ResumeLibrary />}
           <form>
             <div className="files">
               <label htmlFor="cover">

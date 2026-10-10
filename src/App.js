@@ -31,6 +31,7 @@ import BrowseProjects from "./pages/projects/BrowseProjects";
 import ProjectDetail from "./pages/projects/ProjectDetail";
 import BrowseTalent from "./pages/talent/BrowseTalent";
 import MyEscrows from "./pages/escrows/MyEscrows";
+import MyApplications from "./pages/applications/MyApplications";
 import EscrowDetail from "./pages/escrows/EscrowDetail";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import { RoleGuard } from "./utils/roleGuard";
@@ -142,6 +143,10 @@ function App() {
         {
           path: "/escrows",
           element: <MyEscrows />,
+        },
+        {
+          path: "/applications",
+          element: <RoleGuard roles={["student"]}><MyApplications /></RoleGuard>,
         },
         {
           path: "/escrows/:id",

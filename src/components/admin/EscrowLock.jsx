@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
+import { featureError } from "../../utils/resumes";
 
 const EscrowLock = () => {
   const { t } = useTranslation();
@@ -62,7 +63,7 @@ const EscrowLock = () => {
     onError: (err) => {
       const data = err?.response?.data;
       setServerError(
-        typeof data === "string" ? data : data?.message || data?.error || t("admin.lockError")
+        data?.code ? featureError(err, t) : typeof data === "string" ? data : data?.message || data?.error || t("admin.lockError")
       );
     },
   });

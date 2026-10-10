@@ -58,6 +58,15 @@ const LeftBar = () => {
         </Link>
       )}
 
+      {currentUser?.account_type === 'student' && (
+        <Link to="/applications" style={{ textDecoration: "none", color: "inherit" }}>
+          <div className={`item${isActivePath("/applications") ? " active" : ""}`}>
+            <PostAddIcon style={{ width: 20, height: 20 }} />
+            <span>{t('resumeApplications.myApplications')}</span>
+          </div>
+        </Link>
+      )}
+
       {/* My Escrows — logged-in student + local, or guest preview */}
       {(!currentUser || currentUser.account_type !== 'admin') && (
         <Link to={authLink("/escrows")} style={{ textDecoration: "none", color: "inherit" }}>

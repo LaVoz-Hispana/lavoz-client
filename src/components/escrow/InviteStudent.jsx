@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
+import { featureError } from "../../utils/resumes";
 
 const InviteStudent = ({ studentId, studentUsername, onClose }) => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const InviteStudent = ({ studentId, studentUsername, onClose }) => {
     onError: (err) => {
       const data = err?.response?.data;
       setServerError(
-        typeof data === "string" ? data : data?.message || data?.error || t("escrow.inviteError")
+        data?.code ? featureError(err, t) : typeof data === "string" ? data : data?.message || data?.error || t("escrow.inviteError")
       );
     },
   });
