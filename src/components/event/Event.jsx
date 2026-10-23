@@ -1,6 +1,7 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./event.scss";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Link } from "react-router-dom";
+
 import { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -12,6 +13,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import { isAdmin } from "../../utils/admin";
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 
 const Event = ({ event }) => {
@@ -82,14 +84,14 @@ const Event = ({ event }) => {
             <h3>{event.name}</h3>
             <div className="user">
             <div className="userInfo">
-                <img src={event.profilePic} alt="" />
+                <img src={event.profilePic || DefaultAvatar} alt="" />
                 <div className="details">
-                <Link
+                {event.profileVisible !== false && event.userId ? <ProfileLink
                     to={`/profile/${event.userId}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                 >
                     <span className="name">{event.username}</span>
-                </Link>
+                </ProfileLink> : <span className="name">{event.username}</span>}
                 </div>
             </div>
             </div>

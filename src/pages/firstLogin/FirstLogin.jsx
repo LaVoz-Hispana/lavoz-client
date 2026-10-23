@@ -1,6 +1,8 @@
 import { makeRequest } from "../../axios";
+import ProviderFields from "../../components/provider/ProviderFields";
+import { providerError, saveProfile } from "../../utils/providerProfile";
 import "./firstLogin.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useContext, useState, useEffect } from "react";
@@ -11,14 +13,15 @@ import ResumeLibrary from "../../components/resume/ResumeLibrary";
 const FirstLogin = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const {currentUser} = useContext(AuthContext);
+  const {currentUser, updateUser} = useContext(AuthContext);
   const [cover, setCover] = useState(null);
   const [profile, setProfile] = useState(null);
   const [categories, setCategories] = useState([]);
   const [categoriesError, setCategoriesError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
   const [texts, setTexts] = useState({
       email: currentUser.email,
-      password: currentUser.password,
       name: currentUser.name,
       city: currentUser.city,
       website: currentUser.website,
@@ -30,8 +33,10 @@ const FirstLogin = () => {
       major: currentUser.major || '',
       grad_year: currentUser.grad_year || '',
       serviceCategoryIds: currentUser.serviceCategoryIds || [],
-      org_name: currentUser.org_name || '',
-      org_type: currentUser.org_type || '',
+      provider_type: currentUser.provider_type || '',
+      contact_person_name: currentUser.contact_person_name || '',
+      company_name: currentUser.company_name || '',
+      organization_name: currentUser.organization_name || '',
     });
 
     useEffect(() => {
@@ -51,19 +56,24 @@ const FirstLogin = () => {
     }, []);
   
     const upload = async (file) => {
-      console.log(file)
       try {
         const formData = new FormData();
         formData.append("file", file);
         const res = await makeRequest.post("/upload", formData);
         return res.data;
       } catch (err) {
-        console.log(err);
+        throw err;
       }
     };
   
     const handleChange = (e) => {
-      setTexts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+      setFormError(null);
+      setTexts((prev) => e.target.name === "provider_type" ? {
+        ...prev,
+        provider_type: e.target.value,
+        company_name: e.target.value === "company" ? prev.company_name : "",
+        organization_name: e.target.value === "organization" ? prev.organization_name : "",
+      } : ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const toggleServiceCategory = (categoryId) => {
@@ -80,36 +90,46 @@ const FirstLogin = () => {
   
     const mutation = useMutation({
         mutationFn: (user) => {
-            return makeRequest.put("/users", user);
+            return saveProfile(currentUser, user);
         },
         onSuccess: () => {
           // Invalidate and refetch
-          queryClient.invalidateQueries(["user"]);
+          queryClient.invalidateQueries({ queryKey: ["user"] });
         },
     });
 
     const getStarted = async (e) => {
       e.preventDefault();
-      await handleClick();
-      navigate("/");
+      if (await handleClick()) navigate("/");
     }
   
     const handleClick = async () => {
-    
+      if (isSubmitting) return false;
+      if (currentUser.account_type === "local") {
+        if (!texts.provider_type) { setFormError(t("provider.errors.typeRequired")); return false; }
+        if (!texts.contact_person_name.trim()) { setFormError(t("provider.errors.contactRequired")); return false; }
+        if (texts.provider_type === "company" && !texts.company_name.trim()) { setFormError(t("provider.errors.companyRequired")); return false; }
+        if (texts.provider_type === "organization" && !texts.organization_name.trim()) { setFormError(t("provider.errors.organizationRequired")); return false; }
+      }
+      setIsSubmitting(true);
       try {
         let coverUrl = cover ? await upload(cover) : currentUser.coverPic;
         let profileUrl = profile ? await upload(profile) : currentUser.profilePic;
     
-        await mutation.mutateAsync({
+        const savedUser = await mutation.mutateAsync({
           ...texts,
           coverPic: coverUrl,
           profilePic: profileUrl,
         });
+        updateUser(savedUser);
         setCover(null);
         setProfile(null);
+        return true;
       } catch (error) {
-        console.error("File upload failed:", error.message);
-        // Handle the error, e.g., show a user-friendly message
+        setFormError(providerError(error, t));
+        return false;
+      } finally {
+        setIsSubmitting(false);
       }
     };
   
@@ -121,10 +141,10 @@ const FirstLogin = () => {
           <div className="welcome-msg">
             <span>{t('update.setupDesc')}</span>
             <br />
-            <p className="another-msg">{t('update.optional')}</p>
+            <p className="another-msg">{currentUser.account_type === "local" ? t("provider.requiredSetup") : t('update.optional')}</p>
           </div>
           {currentUser.account_type === "student" && <ResumeLibrary optional />}
-          <form>
+          <form id="onboarding-profile" onSubmit={getStarted}>
             <div className="files">
               <label style={{textAlign: "center"}} htmlFor="cover">
                 <span>{t('update.cover')}</span>
@@ -171,28 +191,18 @@ const FirstLogin = () => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.email')}</label>
-              <input
+              <input aria-label={t("update.email")}
                 type="text"
                 value={texts.email}
                 name="email"
-                onChange={handleChange}
+                readOnly
                 placeholder={t('update.email')}
               />
             </div>
 
             <div className="row">
-            <label className="pc-none">{t('update.password')}</label>
-              <input
-                type="password"
-                value={texts.password}
-                name="password"
-                onChange={handleChange}
-                placeholder={t('update.password')}
-              />
-            </div>
-            <div className="row">
               <label className="pc-none">{t('update.name')}</label>
-              <input
+              <input aria-label={t("update.name")}
                 type="text"
                 value={texts.name}
                 name="name"
@@ -202,7 +212,7 @@ const FirstLogin = () => {
             </div>
             <div className='row'>
               <label className="pc-none">{t('update.bio')}</label>
-              <input
+              <input aria-label={t("update.bio")}
                 type="text"
                 value={texts.bio}
                 name="bio"
@@ -212,7 +222,7 @@ const FirstLogin = () => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.country')}</label>
-              <input
+              <input aria-label={t("update.country")}
                 type="text"
                 name="city"
                 value={texts.city}
@@ -222,7 +232,7 @@ const FirstLogin = () => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.language')}</label>
-              <input
+              <input aria-label={t("update.language")}
                 type="text"
                 name="language"
                 value={texts.language}
@@ -262,7 +272,7 @@ const FirstLogin = () => {
             </div> */}
             <div className="row">
               <label className="pc-none">{t('update.website')}</label>
-              <input
+              <input aria-label={t("update.website")}
                 type="text"
                 name="website"
                 value={texts.website}
@@ -273,7 +283,7 @@ const FirstLogin = () => {
             {currentUser.account_type === 'student' && <>
               <div className="row">
                 <label className="pc-none">{t('update.skills')}</label>
-                <input
+                <input aria-label={t("update.skills")}
                   type="text"
                   name="skills"
                   value={texts.skills}
@@ -311,7 +321,7 @@ const FirstLogin = () => {
               </div>
               <div className="row">
                 <label className="pc-none">{t('update.major')}</label>
-                <input
+                <input aria-label={t("update.major")}
                   type="text"
                   name="major"
                   value={texts.major}
@@ -321,7 +331,7 @@ const FirstLogin = () => {
               </div>
               <div className="row">
                 <label className="pc-none">{t('update.gradYear')}</label>
-                <input
+                <input aria-label={t("update.gradYear")}
                   type="text"
                   name="grad_year"
                   value={texts.grad_year}
@@ -331,34 +341,13 @@ const FirstLogin = () => {
               </div>
             </>}
 
-            {currentUser.account_type === 'local' && <>
-              <div className="row">
-                <label className="pc-none">{t('update.orgType')}</label>
-                <select name="org_type" value={texts.org_type} onChange={handleChange}>
-                  <option value="">{t('update.selectOrgType')}</option>
-                  <option value="Business">{t('update.orgTypeBusiness')}</option>
-                  <option value="Non-profit">{t('update.orgTypeNonprofit')}</option>
-                  <option value="Resident">{t('update.orgTypeResident')}</option>
-                </select>
-              </div>
-              {(texts.org_type === 'Business' || texts.org_type === 'Non-profit') && (
-                <div className="row">
-                  <label className="pc-none">{t('update.orgName')}</label>
-                  <input
-                    type="text"
-                    name="org_name"
-                    value={texts.org_name}
-                    onChange={handleChange}
-                    placeholder={t('update.orgNamePlaceholder')}
-                  />
-                </div>
-              )}
-            </>}
+            {currentUser.account_type === "local" && <ProviderFields values={texts} onChange={handleChange} disabled={isSubmitting} />}
 
             {/* <span className = "description">{t('update.msg')}</span> */}
           </form>
           
-          <button className="continue" onClick={getStarted}>{t('update.start')}</button>
+          {formError && <span className="error-msg" role="alert">{formError}</span>}
+          <button className="continue" type="submit" form="onboarding-profile" disabled={isSubmitting}>{isSubmitting ? t("provider.saving") : t('update.start')}</button>
           
         </div>
       </div>

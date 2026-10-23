@@ -1,6 +1,7 @@
+import ProfileLink from "../../components/profile/ProfileLink";
 import "./browseTalent.scss";
 import { useState, useContext, useEffect, useRef } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import ServiceCard from "../../components/service/ServiceCard";
@@ -12,6 +13,7 @@ import { serviceCategoryIcons } from "../../utils/serviceCategoryIcons";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import RatingBadge from "../../components/review/RatingBadge";
+import { isAdmin } from "../../utils/admin";
 
 const BrowseTalent = () => {
   const { t } = useTranslation();
@@ -28,19 +30,22 @@ const BrowseTalent = () => {
   const categoryCarouselRef = useRef(null);
   const focusedServiceId = searchParams.get("service");
 
+  const canBrowseStudents = currentUser?.account_type === "local" || isAdmin(currentUser);
+
   useEffect(() => {
-    setTab(searchParams.get("tab") === "services" ? "services" : "students");
-  }, [searchParams]);
+    setTab(searchParams.get("tab") === "services" || !canBrowseStudents ? "services" : "students");
+  }, [searchParams, canBrowseStudents]);
 
   const isLocal = currentUser?.account_type === "local";
 
   const { isLoading: usersLoading, error: usersError, data: users } = useQuery({
-    queryKey: ["talentUsers"],
+    queryKey: ["talentUsers", currentUser?.id],
     queryFn: () => makeRequest.get("/users/").then((res) => res.data),
+    enabled: canBrowseStudents,
   });
 
   const { isLoading: servicesLoading, error: servicesError, data: services } = useQuery({
-    queryKey: ["services"],
+    queryKey: ["services", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/services").then((res) => res.data),
   });
 
@@ -120,12 +125,12 @@ const BrowseTalent = () => {
 
       <div className="content">
         <div className="tabs">
-          <button
+          {canBrowseStudents && <button
             className={tab === "students" ? "tab selected" : "tab"}
             onClick={() => setTab("students")}
           >
             {t("talent.students")}
-          </button>
+          </button>}
           <button
             className={tab === "services" ? "tab selected" : "tab"}
             onClick={() => setTab("services")}
@@ -134,7 +139,7 @@ const BrowseTalent = () => {
           </button>
         </div>
 
-        {tab === "students" && (
+        {canBrowseStudents && tab === "students" && (
           <>
             <div className="search-bar">
               <input
@@ -145,8 +150,8 @@ const BrowseTalent = () => {
               />
             </div>
 
-            {usersLoading && <span className="state">Loading...</span>}
-            {usersError && <span className="state">Failed to load students.</span>}
+            {usersLoading && <span className="state">{t("talent.loading")}</span>}
+            {usersError && <span className="state">{t("talent.loadError")}</span>}
             {!usersLoading && filtered.length === 0 && (
               <span className="state">{t("talent.noStudents")}</span>
             )}
@@ -154,7 +159,7 @@ const BrowseTalent = () => {
             <div className="student-grid">
               {filtered.map((user) => (
                 <div key={user.id} className="student-card-wrapper">
-                  <Link
+                  <ProfileLink
                     to={`/profile/${user.id}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
@@ -177,7 +182,7 @@ const BrowseTalent = () => {
                         </div>
                       )}
                     </div>
-                  </Link>
+                  </ProfileLink>
                   {isLocal && (
                     <button
                       className="invite-btn"
@@ -244,7 +249,7 @@ const BrowseTalent = () => {
                 </button>
               )}
             </div>
-            {servicesLoading && <span className="state">Loading...</span>}
+            {servicesLoading && <span className="state">{t("talent.loading")}</span>}
             {servicesError && <span className="state">Failed to load services.</span>}
             {!servicesLoading && (!filteredServices || filteredServices.length === 0) && (
               <span className="state">

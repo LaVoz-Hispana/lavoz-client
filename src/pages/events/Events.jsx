@@ -11,9 +11,10 @@ import { useTranslation } from "react-i18next";
 
 const Events = () => {
   const { t } = useTranslation();
+  const { currentUser } = useContext(AuthContext);
 
   const { isLoading, data } = useQuery({
-      queryKey: ["events"],
+      queryKey: ["events", currentUser?.id || "anonymous"],
       queryFn: () => makeRequest.get("/posts/events").then((res) => {return res.data})
   });
 

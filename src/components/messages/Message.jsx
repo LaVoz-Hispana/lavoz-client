@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import "./messages.scss";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 const Message = ( {message, currentUser} ) => {
     const queryClient = useQueryClient();
@@ -31,7 +32,7 @@ const Message = ( {message, currentUser} ) => {
     return(
         <div className="row">
             {message.msgTo === currentUser.id && (
-                <img src={message.profilePic} className="profilePic" />
+                <img src={message.profilePic || DefaultAvatar} className="profilePic" alt="" />
             )}
             <div className={message.msgFrom === currentUser.id ? "msg-to" : "msg-from"}>
                 {message.msg}

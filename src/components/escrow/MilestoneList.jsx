@@ -1,11 +1,13 @@
 import "./milestoneList.scss";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import MilestoneCard from "./MilestoneCard";
 import MilestoneForm from "./MilestoneForm";
 import { useMilestones, useCreateMilestone } from "../../hooks/useMilestones";
 import { ESCROW_STATUS } from "../../utils/escrowStatus";
 
 const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
+  const { t } = useTranslation();
   const [adding, setAdding] = useState(false);
   const [createError, setCreateError] = useState(null);
 
@@ -46,7 +48,7 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
   if (error) {
     return (
       <div className="milestone-list">
-        <span className="list-state">Failed to load milestones.</span>
+        <span className="list-state">{t("escrow.milestoneLoadError")}</span>
       </div>
     );
   }
@@ -54,7 +56,7 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
   return (
     <div className="milestone-list">
       {milestones?.length === 0 && !adding && (
-        <span className="list-state">No milestones yet.</span>
+        <span className="list-state">{t("escrow.noMilestones")}</span>
       )}
 
       <div className="cards">

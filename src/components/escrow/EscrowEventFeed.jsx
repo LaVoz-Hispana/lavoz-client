@@ -1,6 +1,8 @@
 import "./escrowEventFeed.scss";
 import moment from "moment";
 import { useEscrowEvents } from "../../hooks/useEscrowEvents";
+import ProviderBadge from "../provider/ProviderBadge";
+import { useTranslation } from "react-i18next";
 
 const EVENT_LABELS = {
   escrow_created:    "Escrow created",
@@ -28,8 +30,6 @@ const EVENT_BORDER_COLORS = {
   escrow_cancelled:  "#e74c3c",
 };
 
-const ROLE_LABELS = { local: "Local", student: "Student", admin: "Admin" };
-
 const SkeletonRow = () => (
   <div className="event-row skeleton" aria-hidden="true">
     <div className="sk-avatar" />
@@ -41,6 +41,7 @@ const SkeletonRow = () => (
 );
 
 const EscrowEventFeed = ({ escrowId, escrowStatus }) => {
+  const { t } = useTranslation();
   const { isLoading, error, data: events } = useEscrowEvents(escrowId, escrowStatus);
 
   return (
@@ -84,9 +85,10 @@ const EscrowEventFeed = ({ escrowId, escrowStatus }) => {
               <div className="event-content">
                 <div className="event-header">
                   <span className="actor-name">{event.actorUsername}</span>
+                  <ProviderBadge label={event.actorProviderTypeLabel} />
                   {event.actorRole && (
                     <span className="role-badge" data-role={event.actorRole}>
-                      {ROLE_LABELS[event.actorRole] ?? event.actorRole}
+                      {event.actorRole === "local" ? t("register.local") : event.actorRole === "student" ? t("register.student") : event.actorRole === "admin" ? t("admin.dashboard") : event.actorRole}
                     </span>
                   )}
                   <span className="event-type">

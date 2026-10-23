@@ -1,5 +1,6 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./short.scss";
-import { Link } from "react-router-dom";
+
 import { useState, useContext } from "react";
 import moment from "moment";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import { AuthContext } from "../../context/authContext";
 import { useTranslation } from "react-i18next";
 import ShortReactions from "../reactionBar/ShortReactions";
 import { isAdmin } from "../../utils/admin";
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 const Short = ({ short }) => {
   const { t } = useTranslation();
@@ -67,14 +69,14 @@ const Short = ({ short }) => {
             </div>
             
             <div className="userInfo">
-                <img src={short.profilePic} alt="" />
+                <img src={short.profilePic || DefaultAvatar} alt="" />
                 <div className="details">
-                    <Link
+                    {short.profileVisible !== false && short.userId ? <ProfileLink
                         to={`/profile/${short.userId}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                     >
                         <span className="name">{short.username}</span>
-                    </Link>
+                    </ProfileLink> : <span className="name">{short.username}</span>}
                     <span className="date">{moment(short.createdAt).fromNow()}</span>
                 </div>
             </div>

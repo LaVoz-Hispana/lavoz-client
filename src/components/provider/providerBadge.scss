@@ -1,0 +1,23 @@
+.provider-type-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(109, 29, 29, 0.1);
+  color: #6d1d1d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  vertical-align: middle;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.project-detail .card-header .provider-type-badge,
+.escrow-detail .card-header .provider-type-badge {
+  background: #fff;
+  color: #6d1d1d;
+}
+.project-detail .card-header .posted-by { flex-wrap: wrap; }
+

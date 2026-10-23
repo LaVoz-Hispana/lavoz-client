@@ -1,3 +1,4 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./projectCard.scss";
 import { Link } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -9,6 +10,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import SubmitProject from "./SubmitProject";
 import RatingBadge from "../review/RatingBadge";
+import ProviderBadge from "../provider/ProviderBadge";
+import { featureError, invalidateApplications } from "../../utils/resumes";
 
 const ProjectCard = ({ project }) => {
   const { t } = useTranslation();
@@ -22,12 +25,12 @@ const ProjectCard = ({ project }) => {
 
   const closeMutation = useMutation({
     mutationFn: () => makeRequest.put(`/projects/${project.id}/close`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+    onSuccess: () => invalidateApplications(queryClient),
   });
 
   const deleteMutation = useMutation({
     mutationFn: () => makeRequest.delete(`/projects/${project.id}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+    onSuccess: () => invalidateApplications(queryClient),
   });
 
   const isOwner = currentUser && currentUser.id === project.userId;
@@ -41,9 +44,9 @@ const ProjectCard = ({ project }) => {
         <h3>{project.title}</h3>
         <div className="posted-by">
           <img src={project.profilePic} alt="" />
-          <Link to={`/profile/${project.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
-            {project.username} <RatingBadge rating={project.averageRating} reviewCount={project.reviewCount} />
-          </Link>
+          <ProfileLink to={`/profile/${project.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
+            {project.providerDisplayName || project.username} <ProviderBadge providerType={project.provider_type} label={project.providerTypeLabel} /> <RatingBadge rating={project.averageRating} reviewCount={project.reviewCount} />
+          </ProfileLink>
         </div>
       </div>
 
@@ -79,7 +82,7 @@ const ProjectCard = ({ project }) => {
         {isOwner && project.status === "open" && (
           <button
             className="close-btn"
-            onClick={() => closeMutation.mutate()}
+            onClick={() => { if (window.confirm(t("projects.closeConfirm"))) closeMutation.mutate(); }}
             disabled={closeMutation.isPending}
           >
             {t("projects.closeProject")}
@@ -97,6 +100,7 @@ const ProjectCard = ({ project }) => {
           </button>
         )}
       </div>
+      {(closeMutation.isError || deleteMutation.isError) && <p role="alert">{featureError(closeMutation.error || deleteMutation.error, t)}</p>}
       {isEditing && (
         <div className="project-edit-modal" role="dialog" aria-modal="true" aria-label={t("projects.edit")}>
           <div className="project-edit-modal-backdrop" onClick={() => setIsEditing(false)} />

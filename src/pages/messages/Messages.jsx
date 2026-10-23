@@ -8,6 +8,8 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import TextField from "@mui/material/TextField";
 import MessageThread from '../../components/messages/MessageThread';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import DefaultAvatar from "../../assets/pfp.jpg";
+import ProviderBadge from "../../components/provider/ProviderBadge";
 
 const Messages = () => {
     const { currentUser } = useContext(AuthContext);
@@ -18,7 +20,7 @@ const Messages = () => {
     const maxLength = 100;
 
     const { isLoading, error, data } = useQuery({
-      queryKey: ["allUsers"],
+      queryKey: ["allUsers", currentUser.id],
       queryFn: () => makeRequest.get("/users/").then((res) => res.data),
     });
 
@@ -32,15 +34,15 @@ const Messages = () => {
       if (!isLoading && data) {
         const filteredUsers = data.filter((user) =>
           user.id !== currentUser.id &&
-          user.username.toLowerCase().includes(inputText)
+          (user.providerDisplayName || user.username).toLowerCase().includes(inputText)
         );
 
         return (
           filteredUsers.map((user) =>
-            <div key={user.id} className="user" onClick={() => setSelectedUser(user.id)}>
-              <img className="small-img" src={user.profilePic} alt={`${user.username}'s profile`} />
+            <div key={user.id} className="user" onClick={() => handleChange(user.id, user.providerDisplayName || user.username)}>
+              <img className="small-img" src={user.profilePic || DefaultAvatar} alt={`${user.providerDisplayName || user.username}'s profile`} />
               <div className="info">
-                <span className="username">{user.username}</span>
+                <span className="username">{user.providerDisplayName || user.username} <ProviderBadge providerType={user.provider_type} label={user.providerTypeLabel} /></span>
               </div>
             </div>
           )
@@ -52,7 +54,7 @@ const Messages = () => {
     };
   
     const { isLoading: isMLoading, error: mError, data: mData } = useQuery({
-      queryKey: ["allMessages"],
+      queryKey: ["allMessages", currentUser.id],
       queryFn: () => makeRequest.get("/messages/all").then((res) => res.data),
     });
 
@@ -104,9 +106,9 @@ const Messages = () => {
             mData.map((thread) => (
               <div key={thread.msg} className="conversation" onClick={() => handleChange(thread.user_id, thread.user_name)}>
                 <div style={{display: "flex", gap: 20, alignItems: "center"}}>
-                  <img src={thread.user_profile_pic} alt={`${thread.user_username}'s profile`} />
+                  <img src={thread.user_profile_pic || DefaultAvatar} alt={`${thread.user_username}'s profile`} />
                   <div className="info">
-                    <span className="username">{thread.user_username}</span>
+                    <span className="username">{thread.user_username} <ProviderBadge providerType={thread.user_provider_type} label={thread.user_provider_type_label} /></span>
                     <div className="preview">
                       <span style={{ fontWeight: (thread.latest_message_read == 0 && thread.latest_message_to == currentUser.id) ? 'bold' : 'normal' }}>{thread.latest_message_content.length > 100 ? `${thread.latest_message_content.substring(0, 100)}...` : thread.latest_message_content}</span>
                       <span className="date">{moment(thread.latest_message_time).fromNow()}</span>

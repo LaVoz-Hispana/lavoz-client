@@ -19,7 +19,7 @@ const Jobs = () => {
   };
 
   const { isLoading: isJobsLoading, error: jobError, data: jobData } = useQuery({
-    queryKey: ["jobs"],
+    queryKey: ["jobs", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/posts/jobs").then((res) => {return res.data})
   });
 

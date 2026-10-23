@@ -1,5 +1,6 @@
+import ProfileLink from "../../components/profile/ProfileLink";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { AuthContext } from "../../context/authContext";
 import "./users.scss";
 import { useQuery } from "@tanstack/react-query";
@@ -46,13 +47,13 @@ const Users = () => {
         return (
             <div className="user-list">
                 {filteredUsers.slice(0, 16).map((user) => 
-                <Link to={"/profile/" + user.id} style={{ textDecoration: "none", color: "inherit" }}>
+                <ProfileLink to={"/profile/" + user.id} style={{ textDecoration: "none", color: "inherit" }}>
                   <div className="user" key={user.id}>
                       <img className="profilePic" src= {user.profilePic}/>
                       <span>{user.username}</span>
                       {/* <button>{user.following === 1 ? "Following" : "Follow"}</button> */}
                   </div>
-                </Link>
+                </ProfileLink>
                 )}
             </div>
         )
@@ -72,13 +73,13 @@ const Users = () => {
         return (
             <div className="user-list">
                 {filteredUsers.slice(0, 16).map((user)  => 
-                <Link to={"/profile/" + user.id} style={{ textDecoration: "none", color: "inherit" }}>
+                <ProfileLink to={"/profile/" + user.id} style={{ textDecoration: "none", color: "inherit" }}>
                   <div className="user" key={user.id}>
                       <img className="profilePic" src= {user.profilePic}/>
                       <span>{user.username}</span>
                       {/* <button>Following</button> */}
                   </div>
-                </Link>
+                </ProfileLink>
                 )}
             </div>
         )

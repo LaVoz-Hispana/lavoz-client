@@ -35,9 +35,8 @@ const Navbar = () => {
   const logoSrc = darkMode ? LogoDark : LogoLight;
 
   const logout = async () => {
+    await makeRequest.post("/auth/logout", {});
     clearUser();
-    const res = await makeRequest.post("/auth/logout", {
-    });
   };
 
   const handleLogout = async (e) => {
@@ -46,7 +45,7 @@ const Navbar = () => {
       await logout();
       navigate("/login");
     } catch (err) {
-      setErr(err.response.data);
+      setErr(err.response?.data || t("privacy.profileUnavailable"));
     }
   };
 

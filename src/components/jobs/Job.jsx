@@ -1,10 +1,11 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./job.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Link } from "react-router-dom";
+
 import Comments from "../comments/Comments";
 import { useState, useContext, useEffect } from "react";
 import moment from "moment";
@@ -22,6 +23,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { useTranslation } from "react-i18next";
 import InsertLink from "@mui/icons-material/InsertLink";
 import { isAdmin } from "../../utils/admin";
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 const Job = ({ job }) => {
   const { t, i18n } = useTranslation();
@@ -92,14 +94,14 @@ const Job = ({ job }) => {
             <h3>{job.name}</h3>
             <div className="user">
             <div className="userInfo">
-                <img src={job.profilePic} alt="" />
+                <img src={job.profilePic || DefaultAvatar} alt="" />
                 <div className="details">
-                <Link
+                {job.profileVisible !== false && job.userId ? <ProfileLink
                     to={`/profile/${job.userId}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                 >
                     <span className="name">{job.username}</span>
-                </Link>
+                </ProfileLink> : <span className="name">{job.username}</span>}
                 </div>
             </div>
             </div>

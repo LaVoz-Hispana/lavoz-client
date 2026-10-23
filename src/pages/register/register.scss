@@ -235,3 +235,36 @@
     }
   }
 }
+
+.register .provider-fields {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+
+  label { font-size: 0.82rem; font-weight: 600; }
+  select { padding: 10px; border: 1px solid lightgray; border-radius: 5px; }
+}
+
+.register .card .right form {
+  .password-toggle { width: auto; padding: 6px; margin-left: -36px; background: transparent; color: #6d1d1d; display: inline-flex; }
+  .policy-link { width: auto; padding: 0; background: transparent; color: #1256a0; text-decoration: underline; font: inherit; }
+  :focus-visible { outline: 2px solid #6d1d1d; outline-offset: 3px; }
+  .provider-fields { box-sizing: border-box; min-width: 0; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+  .provider-fields .row { display: grid; gap: 6px; }
+  .provider-fields input, .provider-fields select { box-sizing: border-box; width: 100%; min-width: 0; }
+}
+
+.register {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  height: auto;
+  padding: 24px 0;
+  .card { box-sizing: border-box; flex-shrink: 0; }
+}
+@media (max-width: 1200px) {
+  .register {
+    padding: 0;
+    .card { min-height: 100dvh; padding: 0; }
+    .card .right { box-sizing: border-box; min-width: 0; padding: 58px 24px 24px; gap: 28px; }
+  }
+}

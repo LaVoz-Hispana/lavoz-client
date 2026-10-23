@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { STATUS_COLORS } from "../../utils/escrowStatus";
 import moment from "moment";
+import ProviderBadge from "../provider/ProviderBadge";
 
 const EscrowCard = ({ escrow }) => {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ const EscrowCard = ({ escrow }) => {
           </div>
           <div className="row">
             <span className="label">{t("escrow.local")}:</span>
-            <span>{escrow.localUsername}</span>
+            <span>{escrow.localUsername} <ProviderBadge label={escrow.localProviderTypeLabel} /></span>
           </div>
           <div className="row">
             <span className="label">{t("escrow.lastUpdated")}:</span>

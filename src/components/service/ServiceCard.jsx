@@ -1,5 +1,6 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./serviceCard.scss";
-import { Link } from "react-router-dom";
+
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
@@ -8,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import SubmitService from "./SubmitService";
 import RatingBadge from "../review/RatingBadge";
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 const ServiceCard = ({ service }) => {
   const { t } = useTranslation();
@@ -21,6 +23,7 @@ const ServiceCard = ({ service }) => {
   });
 
   const isOwner = currentUser && currentUser.id === service.userId;
+  const profileVisible = service.profileVisible !== false && Boolean(service.userId);
 
   const skills = service.skills
     ? service.skills.split(",").map((s) => s.trim()).filter(Boolean)
@@ -34,10 +37,10 @@ const ServiceCard = ({ service }) => {
           <span className="category-badge">{service.categoryName}</span>
         )}
         <div className="posted-by">
-          <img src={service.profilePic} alt="" />
-          <Link to={`/profile/${service.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <img src={service.profilePic || DefaultAvatar} alt="" />
+          {profileVisible ? <ProfileLink to={`/profile/${service.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
             {service.username} <RatingBadge rating={service.averageRating} reviewCount={service.reviewCount} />
-          </Link>
+          </ProfileLink> : <span>{service.username}</span>}
           {service.university && (
             <span className="university">· {service.university}</span>
           )}
@@ -64,9 +67,9 @@ const ServiceCard = ({ service }) => {
       </div>
 
       <div className="card-footer">
-        <Link to={`/profile/${service.userId}`}>
+        {isOwner && <ProfileLink to={`/profile/${service.userId}`}>
           <button>{t("talent.viewProfile")}</button>
-        </Link>
+        </ProfileLink>}
         {isOwner && (
           <>
             <button className="edit-btn" onClick={() => setIsEditing(true)}>

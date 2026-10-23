@@ -17,7 +17,7 @@ const Stories = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["stories"],
+    queryKey: ["stories", currentUser.id],
     queryFn: () => makeRequest.get("/stories").then((res) => {return res.data})
   });
 

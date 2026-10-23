@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./register.scss";
 import { useContext, useState } from "react";
-import axios from "axios";
 import Terms from "../../components/terms/Terms";
 import Privacy from "../../components/terms/Privacy";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -11,44 +10,51 @@ import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
 import MX from "../../assets/mx.png";
 import { makeRequest } from "../../axios";
+import ProviderFields from "../../components/provider/ProviderFields";
+import { providerError } from "../../utils/providerProfile";
 import { LanguageContext } from "../../context/language";
 
 const Register = () => {
   const navigate = useNavigate();
   const { t } = useTranslation([]);
   const { language, langToggle } = useContext(LanguageContext);
-  const { login } = useContext(AuthContext);
+  const { updateUser } = useContext(AuthContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [err, setErr] = useState(null);
   const [page, setPage] = useState(0);
   const [acctType, setAcctType] = useState(null); // user's response to account type: business or personal?
   const [visible, setVisible] = useState(false);
-  const { setCurrentUser } = useContext(AuthContext);
+
 
   const [inputs, setInputs] = useState({
     username:"",
     email:"",
     password:"",
     confirmPassword: '', 
-    account_type: ""
+    account_type: "",
+    provider_type: "",
+    contact_person_name: "",
+    company_name: "",
+    organization_name: "",
   });
-  const [loginInfo, setLoginInfo] = useState({
-    username: "",
-    password: ""
-  });
-
-  const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
   const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
   const handleChange = e => {
-    setInputs(prev=>({...prev, [e.target.name]:e.target.value }));
+    setInputs(prev => e.target.name === "provider_type" ? {
+      ...prev,
+      provider_type: e.target.value,
+      company_name: e.target.value === "company" ? prev.company_name : "",
+      organization_name: e.target.value === "organization" ? prev.organization_name : "",
+    } : {...prev, [e.target.name]:e.target.value });
     setErr(null); // Reset error when input changes
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (
       inputs.username === '' ||
       inputs.password === '' ||
@@ -73,26 +79,41 @@ const Register = () => {
       setErr(t('register.email'));
       return;
     }
-
-    let userId = 0;
-    try {
-      const res = await makeRequest.post("/auth/register", inputs);
-      userId = res.data.id;
-      if (res.data.token) {
-        localStorage.setItem("accessToken", res.data.token);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setErr("User already exists.");
+    if (inputs.account_type === "local" && !inputs.provider_type) {
+      setErr(t("provider.errors.typeRequired"));
       return;
     }
-    setCurrentUser({email: inputs.email, account_type: inputs.account_type, password: inputs.password, id: userId, coverPic: "https://lavozbucket.s3.amazonaws.com/default_cover.jpg", profilePic: "https://lavozbucket.s3.amazonaws.com/pfp.jpg"});
-    navigate("/firstLogin");
+    if (inputs.account_type === "local" && !inputs.contact_person_name.trim()) {
+      setErr(t("provider.errors.contactRequired"));
+      return;
+    }
+    if (inputs.account_type === "local" && inputs.provider_type === "company" && !inputs.company_name.trim()) {
+      setErr(t("provider.errors.companyRequired"));
+      return;
+    }
+    if (inputs.account_type === "local" && inputs.provider_type === "organization" && !inputs.organization_name.trim()) {
+      setErr(t("provider.errors.organizationRequired"));
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { data } = await makeRequest.post("/auth/register", inputs);
+      if (data.token) localStorage.setItem("accessToken", data.token);
+      updateUser({ username: inputs.username, email: inputs.email, ...data,
+        coverPic: "https://lavozbucket.s3.amazonaws.com/default_cover.jpg",
+        profilePic: "https://lavozbucket.s3.amazonaws.com/pfp.jpg" });
+      navigate("/firstLogin");
+    } catch (error) {
+      setErr(error.response?.status === 409 ? t("register.exists") : providerError(error, t));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChoice = (choice) => {
     setAcctType(choice);
-    setInputs(prev=>({...prev, account_type: choice }));
+    setInputs(prev=>({...prev, account_type: choice, provider_type: "", contact_person_name: "", company_name: "", organization_name: "" }));
     setPage(1);
   }
   
@@ -100,14 +121,14 @@ const Register = () => {
     <div className="register">
           <button className = "language-toggle pc" onClick={langToggle}>
             {language === "es" ?
-                <img src={MX} className="flag"/> : <img src={US} className="flag"/>
+                <img src={MX} className="flag" alt="Español"/> : <img src={US} className="flag" alt="English"/>
               }
           </button>
       <div className="card">
 
           <button className = "language-toggle mobile" onClick={langToggle}>
             {language === "es" ?
-                <img src={MX} className="flag"/> : <img src={US} className="flag"/>
+                <img src={MX} className="flag" alt="Español"/> : <img src={US} className="flag" alt="English"/>
               }
           </button>
           <Link to="/login" className="login-button mobile">
@@ -136,49 +157,33 @@ const Register = () => {
                 <span className='description'>{t('register.localDesc')}</span>
               </div>
           : 
-              <form>
-                <input type="email" placeholder={t('update.email')} name="email" onChange={handleChange}/>
-                <input type="text" placeholder={t('login.username')} name="username" onChange={handleChange}/>
+              <form onSubmit={handleClick}>
+                <input aria-label={t("update.email")} type="email" value={inputs.email} placeholder={t('update.email')} name="email" onChange={handleChange}/>
+                <input aria-label={t("login.username")} type="text" value={inputs.username} placeholder={t('login.username')} name="username" onChange={handleChange}/>
+                {acctType === "local" && <ProviderFields values={inputs} onChange={handleChange} disabled={isSubmitting} />}
                 {/* {acctType === 'business' ? <input type="text" placeholder={t('register.businessName')} name="name" onChange={handleChange}/>
                 : <input type="text" placeholder={t('update.name')} name="name" onChange={handleChange}/>
                 } */}
-        {visible === true ? (
-          <div className="passwords">
-            <input placeholder={t('update.password')} type="text" name="password" onChange={handleChange} />
-            <VisibilityIcon className="eye" onClick={() => setVisible(!visible)} />
+        {[['password', 'update.password'], ['confirmPassword', 'register.confirm']].map(([name, label]) => (
+          <div className="passwords" key={name}>
+            <input aria-label={t(label)} value={inputs[name]} placeholder={t(label)} type={visible ? "text" : "password"} name={name} onChange={handleChange} autoComplete="new-password" required />
+            <button type="button" className="password-toggle" aria-label={t(visible ? "provider.hidePassword" : "provider.showPassword")} aria-pressed={visible} onClick={() => setVisible(!visible)}>
+              {visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </button>
           </div>
-        ) : (
-          <div className="passwords">
-            <input placeholder={t('update.password')} type="password" name="password" onChange={handleChange} />
-            <VisibilityOffIcon className="eye" onClick={() => setVisible(!visible)} />
-          </div>
-        )}
+        ))}
 
-        {/* Similar modification for confirmPassword */}
-        {visible === true ? (
-          <div className="passwords">
-            <input placeholder={t('register.confirm')} type="text" name="confirmPassword" onChange={handleChange} onKeyDown={(e) => e.key === 'Enter' ? handleClick : ""}/>
-            <VisibilityIcon className="eye" onClick={() => setVisible(!visible)} />
-          </div>
-        ) : (
-          <div className="passwords">
-            <input placeholder={t('register.confirm')} type="password" name="confirmPassword" onChange={handleChange} onKeyDown={(e) => e.key === 'Enter' ? handleClick : ""}/>
-            <VisibilityOffIcon className="eye" onClick={() => setVisible(!visible)} />
-          </div>
-        )}
-                
-                
           <div className="notice">
             <span>{t('register.terms')}</span> 
-            <span style={{textDecoration: "underline", color: "blue"}} onClick={() => setOpenTerms(true)}>{t('register.privacy')}</span>
+            <button type="button" className="policy-link" onClick={() => setOpenPrivacy(true)}>{t('register.privacy')}</button>
             <span> {t('register.and')} </span>
-            <span style={{textDecoration: "underline", color: "blue"}} onClick={() => setOpenPrivacy(true)}>{t('register.use')}</span>
+            <button type="button" className="policy-link" onClick={() => setOpenTerms(true)}>{t('register.use')}</button>
           </div>
 
-          {err && <div className="notice" style={{color: 'red'}}>{err}</div>}
+          {err && <div role="alert" className="notice" style={{color: 'red'}}>{err}</div>}
           <div className="buttonRow">
-              <button className='back' onClick={() => setPage(0)}>{t('register.back')}</button>
-              <button onClick={handleClick}>{t('login.register')}</button>
+              <button type="button" disabled={isSubmitting} className='back' onClick={() => setPage(0)}>{t('register.back')}</button>
+              <button type="submit" disabled={isSubmitting}>{t(isSubmitting ? "provider.saving" : "login.register")}</button>
           </div>
         </form>
         }

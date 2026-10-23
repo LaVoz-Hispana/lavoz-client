@@ -2,14 +2,16 @@ import Posts from "../../components/posts/Posts"
 import ShareShort from "../../components/shorts/ShareShort"
 import Short from "../../components/shorts/Short";
 import "./shorts.scss"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { makeRequest } from "../../axios";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { AuthContext } from "../../context/authContext";
 
 const Shorts = () => {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState("tamu");
+  const { currentUser } = useContext(AuthContext);
 
   const queryClient = useQueryClient();
   const handleCategoryPress = (category) => {
@@ -17,7 +19,7 @@ const Shorts = () => {
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["shorts"],
+    queryKey: ["shorts", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/posts/shorts").then((res) => {return res.data})
   });
 

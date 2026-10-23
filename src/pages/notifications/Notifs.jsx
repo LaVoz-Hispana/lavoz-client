@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import moment from 'moment';
 import "./notifs.scss";
@@ -13,7 +13,7 @@ const Notifs = () => {
   const { currentUser } = useContext(AuthContext);
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["notifications"],
+    queryKey: ["notifications", currentUser.id],
     queryFn: () => makeRequest.get("/notifications/all").then((res) => {return res.data})
   });
 

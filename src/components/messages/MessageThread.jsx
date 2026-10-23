@@ -1,5 +1,6 @@
+import ProfileLink from "../profile/ProfileLink";
 import { useContext, useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+
 import { AuthContext } from "../../context/authContext";
 import moment from 'moment';
 import "./messages.scss";
@@ -8,6 +9,8 @@ import { makeRequest } from "../../axios";
 import SendIcon from '@mui/icons-material/Send';
 import InputEmoji from 'react-input-emoji';
 import Message from "./Message";
+import DefaultAvatar from "../../assets/pfp.jpg";
+import ProviderBadge from "../provider/ProviderBadge";
 
 const MessageThread = ({user, name}) => {
   const { currentUser } = useContext(AuthContext);
@@ -50,12 +53,12 @@ const MessageThread = ({user, name}) => {
   });
 
   const { data: threadUser } = useQuery({
-    queryKey: ["threadUser", userId],
-    queryFn: () => makeRequest.get("/users/find/" + userId).then((res) => res.data),
+    queryKey: ["threadUser", currentUser.id, userId],
+    queryFn: () => makeRequest.get("/messages/participant/" + userId).then((res) => res.data),
   });
 
   const { isLoading, error, data: mData } = useQuery({
-    queryKey: ["messages"],
+    queryKey: ["messages", currentUser.id, userId],
     queryFn: () => makeRequest.get("/messages?userId=" + userId).then((res) => {return res.data})
   });
 
@@ -91,10 +94,10 @@ const MessageThread = ({user, name}) => {
             {!isLoading && mData &&
               <div className="thread">
                 {threadUser && (
-                  <Link to={`/profile/${threadUser.id}`} className="thread-header" style={{ textDecoration: "none", color: "inherit" }}>
-                    <img src={threadUser.profilePic} alt={threadUser.username} className="thread-header-pic" />
-                    <span className="thread-header-name">{threadUser.username}</span>
-                  </Link>
+                  threadUser.profileVisible ? <ProfileLink to={`/profile/${threadUser.id}`} className="thread-header" style={{ textDecoration: "none", color: "inherit" }}>
+                    <img src={threadUser.profilePic || DefaultAvatar} alt="" className="thread-header-pic" />
+                    <span className="thread-header-name">{threadUser.username}</span><ProviderBadge providerType={threadUser.provider_type} label={threadUser.providerTypeLabel} />
+                  </ProfileLink> : <div className="thread-header"><img src={threadUser.profilePic || DefaultAvatar} alt="" className="thread-header-pic" /><span className="thread-header-name">{threadUser.username}</span><ProviderBadge providerType={threadUser.provider_type} label={threadUser.providerTypeLabel} /></div>
                 )}
                 {/* Render messages grouped by day */}
                 {Object.entries(groupedMessages).map(([day, messages]) => (

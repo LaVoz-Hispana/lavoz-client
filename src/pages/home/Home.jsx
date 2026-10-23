@@ -14,7 +14,7 @@ import AggieStamp from "../../assets/aggie_stamp.png";
 const SharedHome = ({ t, isGuest, role, currentUser }) => {
   const { i18n } = useTranslation();
   const { data: allPosts } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/posts").then((r) => r.data),
   });
 
@@ -66,7 +66,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-hero">
-        <h1>Aggieland's Student-Local Marketplace</h1>
+        <h1>{t("home.marketplaceTitle")}</h1>
         <p>Helping students build real-world experience</p>
       </div>
 

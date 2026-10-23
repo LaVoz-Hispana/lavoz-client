@@ -9,6 +9,7 @@ import EscrowLock from "../../components/admin/EscrowLock";
 import Post from "../../components/post/Post";
 import SponsorManager from "../../components/admin/SponsorManager";
 import moment from "moment";
+import ProviderBadge from "../../components/provider/ProviderBadge";
 
 const AdminDashboard = () => {
   const { t } = useTranslation();
@@ -129,31 +130,25 @@ const AdminDashboard = () => {
                   <thead>
                     <tr>
                       <th>{t("admin.name")}</th>
-                      <th>{t("admin.email")}</th>
                       <th>{t("admin.type")}</th>
-                      <th>{t("admin.joined")}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredUsers.map((u) => (
                       <tr
                         key={u.id}
-                        onClick={() => navigate(`/profile/${u.id}`)}
-                        className="clickable"
                       >
                         <td>
                           <div className="user-cell">
                             <img src={u.profilePic} alt="" />
-                            <span>{u.username}</span>
+                            <span>{u.providerDisplayName || u.username} <ProviderBadge providerType={u.provider_type} label={u.providerTypeLabel} /></span>
                           </div>
                         </td>
-                        <td>{u.email}</td>
                         <td>
                           <span className={`type-badge ${u.account_type}`}>
-                            {u.account_type}
+                            {u.account_type === "local" ? t("register.local") : u.account_type === "student" ? t("register.student") : t("admin.dashboard")}
                           </span>
                         </td>
-                        <td>{u.createdAt ? moment(u.createdAt).format("MMM D, YYYY") : "—"}</td>
                       </tr>
                     ))}
                   </tbody>

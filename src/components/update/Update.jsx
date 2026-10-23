@@ -1,5 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { makeRequest } from "../../axios";
+import ProviderFields from "../../components/provider/ProviderFields";
+import { providerError, saveProfile } from "../../utils/providerProfile";
 import "./update.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -10,7 +12,7 @@ import NotificationPreferences from "./NotificationPreferences";
 import ResumeLibrary from "../resume/ResumeLibrary";
 
 const Update = ({ setOpenUpdate, user, first }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [cover, setCover] = useState(null);
     const [profile, setProfile] = useState(null);
     const [skillInput, setSkillInput] = useState("");
@@ -19,11 +21,12 @@ const Update = ({ setOpenUpdate, user, first }) => {
     );
     const [categories, setCategories] = useState([]);
     const [categoriesError, setCategoriesError] = useState(false);
+    const [formError, setFormError] = useState(null);
     const { updateUser, currentUser } = useContext(AuthContext);
     const [texts, setTexts] = useState({
       email: user.email,
       phone: user.phone || '',
-      password: user.password,
+      name: user.name || "",
       username: user.username,
       city: user.city,
       website: user.website,
@@ -35,11 +38,12 @@ const Update = ({ setOpenUpdate, user, first }) => {
       major: user.major || '',
       grad_year: user.grad_year || '',
       serviceCategoryIds: (user.serviceCategories || []).map((category) => String(category.id)),
-      org_name: user.org_name || '',
-      org_type: user.org_type || '',
+      provider_type: user.provider_type || '',
+      contact_person_name: user.contact_person_name || '',
+      company_name: user.company_name || '',
+      organization_name: user.organization_name || '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const id = currentUser.id;
 
     useEffect(() => {
       if (user.account_type !== "student") return undefined;
@@ -65,12 +69,18 @@ const Update = ({ setOpenUpdate, user, first }) => {
         const res = await makeRequest.post("/upload", formData);
         return res.data;
       } catch (err) {
-        console.log(err);
+        throw err;
       }
     };
   
     const handleChange = (e) => {
-      setTexts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+      setFormError(null);
+      setTexts((prev) => e.target.name === "provider_type" ? {
+        ...prev,
+        provider_type: e.target.value,
+        company_name: e.target.value === "company" ? prev.company_name : "",
+        organization_name: e.target.value === "organization" ? prev.organization_name : "",
+      } : ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const toggleServiceCategory = (categoryId) => {
@@ -104,17 +114,24 @@ const Update = ({ setOpenUpdate, user, first }) => {
     const queryClient = useQueryClient();
   
     const mutation = useMutation({
-        mutationFn: (user) => {
-            return makeRequest.put("/users", user);
+        mutationFn: (profile) => {
+            return saveProfile(user, profile);
         },
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["user", user.id] });
+          queryClient.invalidateQueries({ queryKey: ["user"] });
           queryClient.invalidateQueries({ queryKey: ["allUsers"] });
         },
     });
   
     const handleClick = async (e) => {
       e.preventDefault();
+      if (isSubmitting) return;
+      if (user.account_type === "local") {
+        if (!texts.provider_type) return setFormError(t("provider.errors.typeRequired"));
+        if (!texts.contact_person_name.trim()) return setFormError(t("provider.errors.contactRequired"));
+        if (texts.provider_type === "company" && !texts.company_name.trim()) return setFormError(t("provider.errors.companyRequired"));
+        if (texts.provider_type === "organization" && !texts.organization_name.trim()) return setFormError(t("provider.errors.organizationRequired"));
+      }
       setIsSubmitting(true);
 
       try {
@@ -122,19 +139,18 @@ const Update = ({ setOpenUpdate, user, first }) => {
         let profileUrl = profile ? await upload(profile) : user.profilePic;
 
         const updatedTexts = { ...texts, skills: skills.join(", ") };
-        await mutation.mutateAsync({
+        const savedUser = await mutation.mutateAsync({
           ...updatedTexts,
           coverPic: coverUrl,
           profilePic: profileUrl,
         });
-        let userData = {...updatedTexts, coverPic: coverUrl, profilePic: profileUrl, id: id};
-        updateUser(userData);
+        updateUser(savedUser);
         setOpenUpdate(false);
         setCover(null);
         setProfile(null);
         setIsSubmitting(false);
       } catch (error) {
-        console.error("Profile update failed:", error.message);
+        setFormError(providerError(error, t));
         setIsSubmitting(false);
       }
     };
@@ -145,7 +161,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
           <h1>{t('update.submit')}</h1>
           <NotificationPreferences userId={currentUser.id} />
           {currentUser.account_type === "student" && Number(user.id) === Number(currentUser.id) && <ResumeLibrary />}
-          <form>
+          <form onSubmit={handleClick}>
             <div className="files">
               <label htmlFor="cover">
                 <span className="img-label">{t('update.cover')}</span>
@@ -192,18 +208,18 @@ const Update = ({ setOpenUpdate, user, first }) => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.email')}</label>
-              <input
+              <input aria-label={t("update.email")}
                 type="text"
                 value={texts.email}
                 name="email"
-                onChange={handleChange}
+                readOnly
                 placeholder={t('update.email')}
               />
             </div>
 
             <div className="row">
               <label className="pc-none">{t('update.phone')}</label>
-              <input
+              <input aria-label={t("update.phone")}
                 type="tel"
                 value={texts.phone}
                 name="phone"
@@ -213,29 +229,19 @@ const Update = ({ setOpenUpdate, user, first }) => {
             </div>
 
             <div className="row">
-              <label className="pc-none">{t('login.username')}</label>
-              <input
+              <label className="pc-none">{t('update.name')}</label>
+              <input aria-label={t("update.name")}
                 type="text"
-                value={texts.username}
+                value={texts.name}
                 name="name"
                 onChange={handleChange}
-                placeholder={t('login.username')}
+                placeholder={t('update.name')}
               />
             </div>
 
-            <div className="row">
-            <label className="pc-none">{t('update.password')}</label>
-              <input
-                type="password"
-                value={texts.password}
-                name="password"
-                onChange={handleChange}
-                placeholder={t('update.password')}
-              />
-            </div>
             <div className='row'>
               <label className="pc-none">{t('update.bio')}</label>
-              <input
+              <input aria-label={t("update.bio")}
                 type="text"
                 value={texts.bio}
                 name="bio"
@@ -245,7 +251,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.country')}</label>
-              <input
+              <input aria-label={t("update.country")}
                 type="text"
                 name="city"
                 value={texts.city}
@@ -255,7 +261,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
             </div>
             <div className="row">
               <label className="pc-none">{t('update.language')}</label>
-              <input
+              <input aria-label={t("update.language")}
                 type="text"
                 name="language"
                 value={texts.language}
@@ -295,7 +301,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
             </div> */}
             <div className="row">
               <label className="pc-none">{t('update.website')}</label>
-              <input
+              <input aria-label={t("update.website")}
                 type="text"
                 name="website"
                 value={texts.website}
@@ -359,7 +365,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
               </div>
               <div className="row">
                 <label className="pc-none">{t('update.major')}</label>
-                <input
+                <input aria-label={t("update.major")}
                   type="text"
                   name="major"
                   value={texts.major}
@@ -369,7 +375,7 @@ const Update = ({ setOpenUpdate, user, first }) => {
               </div>
               <div className="row">
                 <label className="pc-none">{t('update.gradYear')}</label>
-                <input
+                <input aria-label={t("update.gradYear")}
                   type="text"
                   name="grad_year"
                   value={texts.grad_year}
@@ -379,30 +385,11 @@ const Update = ({ setOpenUpdate, user, first }) => {
               </div>
             </>}
 
-            {user.account_type === 'local' && <>
-              <div className="row">
-                <label className="pc-none">{t('update.orgName')}</label>
-                <input
-                  type="text"
-                  name="org_name"
-                  value={texts.org_name}
-                  onChange={handleChange}
-                  placeholder={t('update.orgNamePlaceholder')}
-                />
-              </div>
-              <div className="row">
-                <label className="pc-none">{t('update.orgType')}</label>
-                <select name="org_type" value={texts.org_type} onChange={handleChange}>
-                  <option value="">{t('update.selectOrgType')}</option>
-                  <option value="Business">{t('update.orgTypeBusiness')}</option>
-                  <option value="Non-profit">{t('update.orgTypeNonprofit')}</option>
-                  <option value="Resident">{t('update.orgTypeResident')}</option>
-                </select>
-              </div>
-            </>}
+            {user.account_type === "local" && <ProviderFields values={texts} onChange={handleChange} disabled={isSubmitting} />}
 
             {/* <span className = "description">{t('update.msg')}</span> */}
-            <button onClick={handleClick} disabled={isSubmitting}> {!isSubmitting ? t('update.update') : t('update.updating') } </button>
+            {formError && <span className="error-msg" role="alert">{formError}</span>}
+            <button type="submit" disabled={isSubmitting}> {!isSubmitting ? t('update.update') : t('update.updating') } </button>
           </form>
           <button className="close" onClick={() => setOpenUpdate(false)}>
             <DisabledByDefaultIcon style={{color: "red"}}/>

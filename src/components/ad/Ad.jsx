@@ -1,12 +1,15 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./ad.scss";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Link } from "react-router-dom";
+
 import { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
 import Tamu from "../../assets/tamu_flag.png";
+import DefaultAvatar from "../../assets/pfp.jpg";
+import ProviderBadge from "../provider/ProviderBadge";
 import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -367,14 +370,15 @@ const Ad = ({ ad }) => {
         <div className="container">
             <div className="user">
             <div className="userInfo">
-                <img src={ad.profilePic} alt="" />
+                <img src={ad.profilePic || DefaultAvatar} alt="" />
                 <div className="details">
-                <Link
+                {ad.profileVisible !== false && ad.userId ? <ProfileLink
                     to={`/profile/${ad.userId}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                 >
                     <span className="name">{ad.username}</span>
-                </Link>
+                    <ProviderBadge providerType={ad.provider_type} label={ad.providerTypeLabel} />
+                </ProfileLink> : <span className="name">{ad.username}</span>}
                 <span className="date">{moment(ad.createdAt).fromNow()}</span>
                 </div>
             </div>

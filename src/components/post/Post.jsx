@@ -1,3 +1,4 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./post.scss";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -22,6 +23,8 @@ import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
 import { isAdmin } from "../../utils/admin";
 import PoststationAdminLogo from "../../assets/poststation-admin.png";
+import DefaultAvatar from "../../assets/pfp.jpg";
+import ProviderBadge from "../provider/ProviderBadge";
 import {
   createPostTextRegex,
   ensureAbsoluteUrl,
@@ -42,7 +45,8 @@ const Post = ({ post, openComments = false }) => {
   const postId = post.id;
   const isOfficialPost = Boolean(post.isAdminPost);
   const authorName = isOfficialPost ? "Poststation" : post.username;
-  const authorProfilePic = isOfficialPost ? PoststationAdminLogo : post.profilePic;
+  const authorProfilePic = isOfficialPost ? PoststationAdminLogo : (post.profilePic || DefaultAvatar);
+  const authorProfileVisible = post.profileVisible !== false && Boolean(post.userId);
   const [rated, setRated] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [gifOpen, setGifOpen] = useState(false);
@@ -66,7 +70,7 @@ const Post = ({ post, openComments = false }) => {
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["likes", post.id],
+    queryKey: ["likes", currentUser?.id || "anonymous", post.id],
     queryFn: () => makeRequest.get("/likes?postId=" + post.id).then((res) => {return res.data})
   });
   const queryClient = useQueryClient();
@@ -239,7 +243,7 @@ const Post = ({ post, openComments = false }) => {
   });
 
   const { isLoading: commentsLoading, error: commentError, data: commentData } = useQuery({
-    queryKey: ["comments", postId],
+    queryKey: ["comments", currentUser?.id || "anonymous", postId],
     queryFn: () => makeRequest.get("/comments?postId=" + postId).then((res) => {return res.data})
   });
 
@@ -449,9 +453,10 @@ const Post = ({ post, openComments = false }) => {
       return segment.split(/(@[^\s@]+)/g).map((part, index) => {
         if (!part) return null;
         const taggedUser = taggedUsers.find((user) => `@${user.username}`.toLowerCase() === part.toLowerCase());
-        return taggedUser
-          ? <Link key={`${keyPrefix}-mention-${index}`} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</Link>
-          : part;
+        if (!taggedUser) return part;
+        return taggedUser.id
+          ? <ProfileLink key={`${keyPrefix}-mention-${index}`} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</ProfileLink>
+          : <span key={`${keyPrefix}-mention-${index}`} className="inline-mention">{part}</span>;
       });
     };
 
@@ -511,17 +516,18 @@ const Post = ({ post, openComments = false }) => {
           <div className="userInfo">
             <img src={authorProfilePic} alt="" />
             <div className="details">
-              {isOfficialPost ? (
+              {isOfficialPost || !authorProfileVisible ? (
                 <span className="name">{authorName}</span>
               ) : (
-                <Link
+                <ProfileLink
                   to={`/profile/${post.userId}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <span className="name">{authorName}</span>
-                </Link>
+                </ProfileLink>
               )}
               <span className="date">{moment(post.createdAt).fromNow()}</span>
+              {!isOfficialPost && <ProviderBadge providerType={post.provider_type} label={post.providerTypeLabel} />}
               {/* Display only if job: displays job category */}
               {jobCategories.includes(post.category) && (<span className="categ">{post.category}</span>)}
             </div>

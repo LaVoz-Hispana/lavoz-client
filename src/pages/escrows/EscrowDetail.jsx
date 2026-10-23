@@ -13,6 +13,8 @@ import { useEscrowDetail, useFinalizeEscrow } from "../../hooks/useEscrowDetail"
 import MilestoneList from "../../components/escrow/MilestoneList";
 import MilestoneProgress from "../../components/escrow/MilestoneProgress";
 import EscrowEventFeed from "../../components/escrow/EscrowEventFeed";
+import ProviderBadge from "../../components/provider/ProviderBadge";
+import EscrowReview from "../../components/review/EscrowReview";
 
 const extractError = (err, fallback) => {
   const data = err?.response?.data;
@@ -78,7 +80,7 @@ const EscrowDetail = () => {
           <div className="parties">
             <span>{t("escrow.student")}: <strong>{escrow.studentUsername}</strong></span>
             <span>·</span>
-            <span>{t("escrow.local")}: <strong>{escrow.localUsername}</strong></span>
+            <span>{t("escrow.local")}: <strong>{escrow.localUsername}</strong> <ProviderBadge label={escrow.localProviderTypeLabel} /></span>
           </div>
           {escrow.progress && <MilestoneProgress progress={escrow.progress} />}
           <p className="updated-at">
@@ -167,15 +169,17 @@ const EscrowDetail = () => {
               className="feed-toggle"
               onClick={() => setFeedOpen((v) => !v)}
               aria-expanded={feedOpen}
-              aria-label="Toggle activity feed"
+              aria-label={t("escrow.toggleActivity")}
             >
-              Activity {feedOpen ? "▲" : "▼"}
+              {t("escrow.activity")} {feedOpen ? "▲" : "▼"}
             </button>
             <div className="feed-body">
               <EscrowEventFeed escrowId={id} escrowStatus={escrow.status} />
             </div>
           </div>
         </div>
+
+        {escrow.status === ESCROW_STATUS.COMPLETED && (isStudent || isLocal) && <EscrowReview escrowId={id} />}
 
         {/* ── Comments (completed escrows only) ── */}
         {escrow.status === ESCROW_STATUS.COMPLETED && escrow.showcasePostId && (

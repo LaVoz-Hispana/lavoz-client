@@ -25,7 +25,7 @@ const Reactions = ({ postId, postUserId, currentUser }) => {
     }
 
     let { isLoading, error, data } = useQuery({
-      queryKey: ["likes", postId],
+      queryKey: ["likes", currentUser?.id || "anonymous", postId],
       queryFn: () => makeRequest.get("/likes?postId=" + postId).then((res) => {return res.data})
     });
 

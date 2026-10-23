@@ -20,7 +20,6 @@ import "./style.scss";
 import { useContext, useEffect } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './i18n';
 import ForgotPassword from "./pages/forgotPassword/forgotPassword";
 import OTPInput from "./pages/forgotPassword/OTPInput";
@@ -46,8 +45,6 @@ function App() {
   
   const { darkMode } = useContext(DarkModeContext);
 
-  const queryClient = new QueryClient();
-
   const NavigationWrapper = () => {
     const navigate = useNavigate();
     
@@ -63,8 +60,7 @@ function App() {
     const isHome = location.pathname === "/";
 
     return (
-      <QueryClientProvider client={queryClient}>
-        <div className={`theme-${darkMode ? "dark" : "light"}`} style={{height: '100%'}}>
+      <div className={`theme-${darkMode ? "dark" : "light"}`} style={{height: '100%'}}>
           <Navbar style={{height: '5%'}} />
           <div style={{ display: "flex", height: '95%', width: '100%' }}>
             <LeftBar/>
@@ -73,8 +69,7 @@ function App() {
             </div>
             <RightBar />
           </div>
-        </div>
-      </QueryClientProvider>
+      </div>
     );
   };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -6,6 +6,7 @@ import { makeRequest } from "../../axios";
 import { serviceCategoryIcons } from "../../utils/serviceCategoryIcons";
 import ProjectCard from "../project/ProjectCard";
 import ServiceCard from "../service/ServiceCard";
+import { AuthContext } from "../../context/authContext";
 
 const projectStatuses = [
   ["open", "projects.open"], ["in_escrow", "projects.inEscrow"],
@@ -14,10 +15,11 @@ const projectStatuses = [
 
 export default function HomeMarketplace() {
   const { t } = useTranslation();
+  const { currentUser } = useContext(AuthContext);
   const [projectStatus, setProjectStatus] = useState("open");
   const [serviceCategory, setServiceCategory] = useState("all");
   const projects = useQuery({ queryKey: ["projects"], queryFn: () => makeRequest.get("/projects").then((res) => res.data), enabled: Boolean(projectStatus) });
-  const services = useQuery({ queryKey: ["services"], queryFn: () => makeRequest.get("/services").then((res) => res.data), enabled: Boolean(serviceCategory) });
+  const services = useQuery({ queryKey: ["services", currentUser?.id || "anonymous"], queryFn: () => makeRequest.get("/services").then((res) => res.data), enabled: Boolean(serviceCategory) });
   const categories = useQuery({ queryKey: ["serviceCategories"], queryFn: () => makeRequest.get("/categories").then((res) => res.data) });
 
   const categoryOptions = [{ slug: "all", name: t("talent.allCategories") }, ...(categories.data || [])];

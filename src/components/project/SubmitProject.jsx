@@ -1,9 +1,11 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./submitProject.scss";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useTranslation } from "react-i18next";
+
 
 const SubmitProject = ({ project, onClose }) => {
   const { t } = useTranslation();
@@ -25,6 +27,7 @@ const SubmitProject = ({ project, onClose }) => {
   const [error, setError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [needsProviderSetup, setNeedsProviderSetup] = useState(currentUser.providerProfileComplete === false);
 
   useEffect(() => {
     let cancelled = false;
@@ -108,8 +111,10 @@ const SubmitProject = ({ project, onClose }) => {
     },
     onError: (err) => {
       const data = err?.response?.data;
+      if (data?.code === "provider_profile_incomplete") setNeedsProviderSetup(true);
       setServerError(
-        typeof data === "string" ? data : data?.message || data?.error || "Something went wrong. Please try again."
+        data?.code === "provider_profile_incomplete" ? t("provider.completeProfile")
+          : typeof data === "string" ? data : data?.message || data?.error || "Something went wrong. Please try again."
       );
     },
   });
@@ -130,15 +135,16 @@ const SubmitProject = ({ project, onClose }) => {
           <img src={currentUser.profilePic} alt="" />
           <h2>{isEditing ? t("projects.edit") : t("projects.post")}</h2>
         </div>
+        {needsProviderSetup && <p role="status">{t("provider.completeProfile")} <ProfileLink to={`/profile/${currentUser.id}`}>{t("update.update")}</ProfileLink></p>}
         <form onSubmit={handleSubmit}>
-          <input
+          <input aria-label={t("projects.titleField")}
             type="text"
             name="title"
             value={texts.title}
             onChange={handleChange}
             placeholder={t("projects.titleField")}
           />
-          <textarea
+          <textarea aria-label={t("projects.descField")}
             name="description"
             value={texts.description}
             onChange={handleChange}
@@ -178,14 +184,14 @@ const SubmitProject = ({ project, onClose }) => {
               </div>
             )}
           </div>
-          <input
+          <input aria-label={t("projects.timeline")}
             type="text"
             name="timeline"
             value={texts.timeline}
             onChange={handleChange}
             placeholder={t("projects.timelinePlaceholder")}
           />
-          <textarea
+          <textarea aria-label={t("projects.deliverables")}
             name="deliverables"
             value={texts.deliverables}
             onChange={handleChange}

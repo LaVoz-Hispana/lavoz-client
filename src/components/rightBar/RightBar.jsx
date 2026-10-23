@@ -1,3 +1,4 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./rightBar.scss";
 import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -12,6 +13,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { AuthContext } from "../../context/authContext";
 import RatingBadge from "../review/RatingBadge";
+import ProviderBadge from "../provider/ProviderBadge";
 
 const RightBar = () => {
   const { t } = useTranslation();
@@ -25,11 +27,11 @@ const RightBar = () => {
     queryFn: () => makeRequest.get("/projects").then((r) => r.data),
   });
   const { data: users } = useQuery({
-    queryKey: ["allUsers"],
+    queryKey: ["allUsers", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/users/").then((r) => r.data),
   });
   const { data: services } = useQuery({
-    queryKey: ["services"],
+    queryKey: ["services", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/services").then((r) => r.data),
   });
 
@@ -45,13 +47,13 @@ const RightBar = () => {
       label: t("talent.studentTalent"),
       to: "/talent",
       rows: students.map((u) => (
-        <Link key={u.id} to={`/profile/${u.id}`} className="rb-row">
+        <ProfileLink key={u.id} to={`/profile/${u.id}`} className="rb-row">
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
             <span className="rb-title">{u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
             <span className="rb-subtitle">{u.skills ? u.skills.split(",")[0].trim() : u.university || "Student"}</span>
           </div>
-        </Link>
+        </ProfileLink>
       )),
     },
     {
@@ -74,11 +76,11 @@ const RightBar = () => {
       label: t("projects.bcsLocals"),
       to: "/projects",
       rows: locals.map((u) => (
-        <Link key={u.id} to={`/profile/${u.id}`} className="rb-row">
+        <Link key={u.id} to={`/projects?tab=projects&provider=${u.id}`} className="rb-row">
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
-            <span className="rb-title">{u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
-            <span className="rb-subtitle">{u.location || "BCS Local"}</span>
+            <span className="rb-title">{u.providerDisplayName || u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
+            <span className="rb-subtitle"><ProviderBadge providerType={u.provider_type} label={u.providerTypeLabel} /> {u.city || t("register.local")}</span>
           </div>
         </Link>
       )),
@@ -92,7 +94,7 @@ const RightBar = () => {
         <Link key={p.id} to={`/projects/${p.id}`} className="rb-row">
           <div className="rb-row-info">
             <span className="rb-title">{p.title}</span>
-            <span className="rb-subtitle">{p.username} <RatingBadge rating={p.averageRating} reviewCount={p.reviewCount} />{p.timeline ? ` · ${p.timeline}` : ""}</span>
+            <span className="rb-subtitle">{p.providerDisplayName || p.username} <ProviderBadge providerType={p.provider_type} label={p.providerTypeLabel} /> <RatingBadge rating={p.averageRating} reviewCount={p.reviewCount} />{p.timeline ? ` · ${p.timeline}` : ""}</span>
           </div>
         </Link>
       )),

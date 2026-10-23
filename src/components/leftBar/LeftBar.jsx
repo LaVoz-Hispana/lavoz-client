@@ -1,3 +1,4 @@
+import ProfileLink from "../profile/ProfileLink";
 import "./leftBar.scss";
 import Groups from "../../assets/2.png";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -32,12 +33,12 @@ const LeftBar = () => {
     <>
       {currentUser && (
         <div className="row">
-          <Link to={`/profile/${currentUser.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <ProfileLink to={`/profile/${currentUser.id}`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className="user">
               <img src={currentUser.profilePic} alt="" />
               <span>{currentUser.username}</span>
             </div>
-          </Link>
+          </ProfileLink>
         </div>
       )}
 

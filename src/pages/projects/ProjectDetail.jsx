@@ -1,3 +1,4 @@
+import ProfileLink from "../../components/profile/ProfileLink";
 import "./projectDetail.scss";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import ProjectPosts from "../../components/project/ProjectPosts";
 import ProjectApplications from "../../components/applications/ProjectApplications";
+import ProviderBadge from "../../components/provider/ProviderBadge";
 
 const ProjectDetail = () => {
   const { t } = useTranslation();
@@ -22,8 +24,8 @@ const ProjectDetail = () => {
     ? project.skills.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
 
-  if (isLoading) return <div className="project-detail"><span className="state">Loading...</span></div>;
-  if (error || !project) return <div className="project-detail"><span className="state">Project not found.</span></div>;
+  if (isLoading) return <div className="project-detail"><span className="state" role="status">{t("projects.loading")}</span></div>;
+  if (error || !project) return <div className="project-detail"><span className="state" role="alert">{t("projects.notFound")}</span></div>;
 
   return (
     <div className="project-detail">
@@ -45,9 +47,10 @@ const ProjectDetail = () => {
           <div className="posted-by">
             <img src={project.profilePic} alt="" />
             <span>{t("projects.postedBy")}: </span>
-            <Link to={`/profile/${project.userId}`} style={{ textDecoration: "none" }}>
-              {project.username}
-            </Link>
+            <ProfileLink to={`/profile/${project.userId}`} style={{ textDecoration: "none" }}>
+              {project.providerDisplayName || project.username}
+            </ProfileLink>
+            <ProviderBadge providerType={project.provider_type} label={project.providerTypeLabel} />
           </div>
         </div>
 

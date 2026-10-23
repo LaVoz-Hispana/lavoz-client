@@ -115,3 +115,23 @@ test("Spanish library exposes translated accessible labels and error messages", 
   const list = screen.getByRole("list");
   expect(await within(list).findByText("Predeterminado")).toBeInTheDocument();
 });
+
+test("switching from owner to student immediately removes cached applicant identities", async () => {
+  applications = [{ id: 10, projectId: 5, resumeId: 7, resumeLabel: "Private CV", status: "submitted", projectStatus: "open", createdAt: resume.createdAt,
+    applicant: { id: 2, username: "Private Applicant", profilePic: "private-photo" } }];
+  const view = setup(undefined, { id: 3, account_type: "local" });
+  expect(await screen.findByText("Private Applicant")).toBeInTheDocument();
+  makeRequest.get.mockImplementation(() => new Promise(() => {}));
+  view.rerender(view.wrap(<ProjectApplications project={project} />, { id: 4, account_type: "student" }));
+  expect(screen.queryByText("Private Applicant")).not.toBeInTheDocument();
+  expect(screen.queryByText("Private CV")).not.toBeInTheDocument();
+  expect(screen.queryByRole("img")).not.toBeInTheDocument();
+});
+
+test("a forbidden owner response never renders cached applicant details", async () => {
+  makeRequest.get.mockRejectedValue({ response: { status: 403, data: { code: "forbidden" } } });
+  setup(undefined, { id: 3, account_type: "local" });
+  expect(await screen.findByRole("alert")).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Select Applicant" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("img")).not.toBeInTheDocument();
+});

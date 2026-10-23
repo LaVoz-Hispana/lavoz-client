@@ -1,3 +1,4 @@
+import ProfileLink from "../profile/ProfileLink";
 import { useContext, useState, useEffect } from "react";
 import "./notification.scss";
 import { AuthContext } from "../../context/authContext";
@@ -7,6 +8,8 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import DefaultAvatar from "../../assets/pfp.jpg";
+import ProviderBadge from "../provider/ProviderBadge";
 
 const Notification = ({ notification }) => {
     const { t, i18n } = useTranslation();
@@ -17,7 +20,7 @@ const Notification = ({ notification }) => {
 
     // get post by id — only relevant for reaction/comment notifications
     const { isLoading, error, data } = useQuery({
-        queryKey: ["post", notification.postId],
+        queryKey: ["post", currentUser.id, notification.postId],
         queryFn: () => makeRequest.get("/posts/find?id=" + notification.postId).then((res) => res.data),
         enabled: !!notification.postId,
     });
@@ -102,10 +105,10 @@ const Notification = ({ notification }) => {
                     <div className="notif">
                         <div className="notifRow">
                             <div className="pfp">
-                                <img className="profilePic" src={notification.profilePic}/>
+                                <img className="profilePic" src={notification.profilePic || DefaultAvatar} alt="" />
                                 <div className="text">
                                     <div>
-                                        <span>{notification.username} {t('notifs.reaction')}</span>
+                                        <span>{notification.username} <ProviderBadge providerType={notification.provider_type} label={notification.providerTypeLabel} /> {t('notifs.reaction')}</span>
                                         {displayReaction()}
                                         <span>{t('notifs.topost')}</span>
                                     </div>
@@ -121,14 +124,13 @@ const Notification = ({ notification }) => {
             )
         }
         else if (type === 'follow') {
-            return(
-                <Link to={"/profile/"+notification.userFrom} style={{ textDecoration: "none", color: "inherit" }}>
+            const content = (
                     <div className="notif">
                         <div className="notifRow">
                             <div className="pfp">
-                                <img className="profilePic" src={notification.profilePic}/>
+                                <img className="profilePic" src={notification.profilePic || DefaultAvatar} alt="" />
                                 <div className="text">
-                                    <span>{notification.username} {t('notifs.follow')}</span>
+                                    <span>{notification.username} <ProviderBadge providerType={notification.provider_type} label={notification.providerTypeLabel} /> {t('notifs.follow')}</span>
                                     <span className="date">{moment(notification.createdAt).fromNow()}</span>
                                 </div>
                             </div>
@@ -137,8 +139,10 @@ const Notification = ({ notification }) => {
                             }
                         </div>
                     </div>
-                </Link>
-            )
+            );
+            return notification.profileVisible !== false && notification.userFrom
+                ? <ProfileLink to={"/profile/"+notification.userFrom} style={{ textDecoration: "none", color: "inherit" }}>{content}</ProfileLink>
+                : content;
         }
         else if ([
             'escrow_invited', 'student_accepted', 'student_declined',
@@ -150,9 +154,9 @@ const Notification = ({ notification }) => {
                     <div className="notif">
                         <div className="notifRow">
                             <div className="pfp">
-                                <img className="profilePic" src={notification.profilePic} alt="" />
+                                <img className="profilePic" src={notification.profilePic || DefaultAvatar} alt="" />
                                 <div className="text">
-                                    <span>{notification.username} {t(`notifs.${type}`)}</span>
+                                    <span>{notification.username} <ProviderBadge providerType={notification.provider_type} label={notification.providerTypeLabel} /> {t(`notifs.${type}`)}</span>
                                     <span className="date">{moment(notification.createdAt).fromNow()}</span>
                                 </div>
                             </div>
@@ -170,9 +174,9 @@ const Notification = ({ notification }) => {
                 <div className= "notif">
                     <div className="notifRow">
                         <div className="pfp">
-                            <img className="profilePic" src={notification.profilePic}/>
+                            <img className="profilePic" src={notification.profilePic || DefaultAvatar} alt="" />
                             <div className="text">
-                                <span>{notification.username} {t('notifs.comment')}</span>
+                                <span>{notification.username} <ProviderBadge providerType={notification.provider_type} label={notification.providerTypeLabel} /> {t('notifs.comment')}</span>
                                 <span className="date">{moment(notification.createdAt).fromNow()}</span>
                             </div>
                         </div>

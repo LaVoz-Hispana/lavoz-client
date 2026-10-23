@@ -1,5 +1,6 @@
 import "./comment.scss";
 import moment from "moment";
+import DefaultAvatar from "../../assets/pfp.jpg";
 
 const Comment = ({ comment }) => {
   const containerStyle = {
@@ -18,7 +19,7 @@ const Comment = ({ comment }) => {
   return (
     <div className="comment">
       <div className="comment-content">
-        <img className="pfp" src={comment.profilePic} alt="" />
+        <img className="pfp" src={comment.profilePic || DefaultAvatar} alt="" />
         <div className="comment-info">
           <span>{comment.username}</span>
           <p>{comment.desc}</p>
