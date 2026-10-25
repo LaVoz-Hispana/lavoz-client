@@ -1,19 +1,16 @@
 import axios from "axios"
 import { navigateTo } from "./utils/navigation";
+import { resolveApiBaseUrl } from "./utils/apiBaseUrl";
 
-// const isLocalHost = window.location.hostname === "localhost";
-// const isProduction = process.env.REACT_APP_IS_PRODUCTION === "true";
-
-// const baseURL = isProduction ? "https://server.postsstation.com/api/" : 
-//     isLocalHost ? "http://localhost:8800/api" : process.env.REACT_APP_NETWORK_ADDR;
-
-// export const makeRequest = axios.create({
-//     baseURL,
-//     withCredentials: true,
-// });
+const baseURL = resolveApiBaseUrl({
+    nodeEnv: process.env.NODE_ENV,
+    apiUrl: process.env.REACT_APP_API_URL,
+    hostname: window.location.hostname,
+    protocol: window.location.protocol,
+});
 
 export const makeRequest = axios.create({
-    baseURL: "https://poststation-api-391b2ced2a59.herokuapp.com/api/",
+    baseURL,
     withCredentials: true,
 });
 
@@ -35,6 +32,7 @@ makeRequest.interceptors.response.use(
             if (hasSession) {
                 localStorage.removeItem("user");
                 localStorage.removeItem("accessToken");
+                window.dispatchEvent(new Event("poststation:session-cleared"));
                 navigateTo("/login");
             }
         }

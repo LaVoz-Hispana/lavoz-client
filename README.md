@@ -1,4 +1,45 @@
 
+# Node.js and Vercel deployment
+
+Use Node.js 24.x (`nvm use` reads `.nvmrc`). The `engines.node` setting in
+`package.json` also selects Node.js 24 for Vercel builds.
+
+In Vercel, select **Settings → Build and Deployment → Node.js Version → 24.x**,
+then redeploy. Use this frontend directory as the project root, the Create React
+App framework preset, `yarn build` as the build command, and `build` as the output
+directory. Keep existing environment variables configured.
+
+The current dependency lock is `yarn.lock` (Yarn Classic). Install with
+`yarn install --frozen-lockfile`; the older `package-lock.json` does not include
+all current dependencies. If Vercel has an npm install-command override, change
+it to `yarn install --frozen-lockfile` to use the tested dependency versions.
+
+Verify locally with `CI=true yarn test --watchAll=false --runInBand` and
+`yarn build`. This frontend produces static browser assets; changing its Vercel
+build Node.js version does not change the separately hosted API's runtime.
+
+# API connection
+
+API selection is automatic:
+
+- `npm start` connects to port 8800 on the browser's current host. For example,
+  `http://localhost:3000` uses `http://localhost:8800/api`, and opening the app
+  through a LAN IP uses that same IP for the API. The API must allow that frontend
+  origin through its CORS configuration.
+- `npm run build` uses `https://poststation-api-391b2ced2a59.herokuapp.com/api`,
+  including Vercel production and preview deployments and locally served builds.
+  Preview deployments use the production API unless explicitly overridden; the
+  backend must also allow their frontend origins through CORS.
+
+To use a different API, set `REACT_APP_API_URL` to its complete base URL including
+`/api`. For local development, use `.env.development.local`. For Vercel, set it
+in the desired deployment environment and redeploy. CRA embeds configuration at
+build time, so restart the development server after local configuration changes.
+
+`REACT_APP_IS_PRODUCTION` and `REACT_APP_NETWORK_ADDR` are no longer used to select
+the API; existing values can be removed. Axios continues sending credentials and
+the stored bearer token.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

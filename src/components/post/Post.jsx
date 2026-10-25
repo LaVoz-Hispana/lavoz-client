@@ -18,7 +18,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ImageNotFound from "../../assets/img_not_found.png";
 import AddGif from "@mui/icons-material/GifBox";
-import ReactGiphySearchbox from 'react-giphy-searchbox';
+import GiphySearchbox from '../gif/GiphySearchbox';
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
 import { isAdmin } from "../../utils/admin";
@@ -304,16 +304,12 @@ const Post = ({ post, openComments = false }) => {
         }
         {gifOpen &&
           <div className='searchbox-wrapper'>
-            <ReactGiphySearchbox 
+            <GiphySearchbox
               apiKey='wTlyF2IWF5BelAJ5IdnYcy5NJPZlEW5Z' 
               onSelect={(item) => {
                 setGif(item.embed_url);
                 setGifOpen(false);
               }}
-              masonryConfig = {[
-                {columns: 2, imageWidth:110,gutter:5},
-                {mq: "700px", columns: 3, imageWidth: 120, gutter: 5}
-              ]}
               />
           </div>
         }
