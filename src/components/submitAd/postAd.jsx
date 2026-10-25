@@ -12,7 +12,6 @@ import { useMutation, QueryClient, useQueryClient } from "@tanstack/react-query"
 import { makeRequest } from "../../axios"
 import { Dropdown } from 'react-nested-dropdown';
 import 'react-nested-dropdown/dist/styles.css';
-import ReactGiphySearchbox from 'react-giphy-searchbox';
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 import { useTranslation } from "react-i18next";
