@@ -16,10 +16,19 @@ const MilestoneProgress = ({ progress }) => {
       ) : (
         <>
           <div className="progress-label">
-            <span>{approved} of {total} milestones approved</span>
+            <span>
+              {approved} of {total} milestones approved
+            </span>
             <span className="pct">{pct}%</span>
           </div>
-          <div className="progress-track" role="progressbar" aria-valuenow={approved} aria-valuemin={0} aria-valuemax={total} aria-valuetext={`${approved} of ${total} milestones approved`}>
+          <div
+            className="progress-track"
+            role="progressbar"
+            aria-valuenow={approved}
+            aria-valuemin={0}
+            aria-valuemax={total}
+            aria-valuetext={`${approved} of ${total} milestones approved`}
+          >
             <div className="progress-fill" style={{ width: `${pct}%` }} />
           </div>
         </>

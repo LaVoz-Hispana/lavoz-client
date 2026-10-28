@@ -15,7 +15,7 @@ const HomePostActions = ({ role, currentUser }) => {
   const isLocal = role === "local";
 
   const openForm = (form) => {
-    setActiveForm((current) => current === form ? null : form);
+    setActiveForm((current) => (current === form ? null : form));
   };
 
   return (
@@ -30,18 +30,22 @@ const HomePostActions = ({ role, currentUser }) => {
           <span>{t("home.newPost")}</span>
         </button>
         {isAdmin(currentUser) && (
-          <button className="action-button" onClick={() => openForm("admin-post")}>
+          <button
+            className="action-button"
+            onClick={() => openForm("admin-post")}
+          >
             <AdminPanelSettingsOutlinedIcon />
             <span>Admin Post</span>
           </button>
         )}
       </div>
 
-      {activeForm === "listing" && (
-        isLocal
-          ? <SubmitProject onClose={() => setActiveForm(null)} />
-          : <SubmitService onClose={() => setActiveForm(null)} />
-      )}
+      {activeForm === "listing" &&
+        (isLocal ? (
+          <SubmitProject onClose={() => setActiveForm(null)} />
+        ) : (
+          <SubmitService onClose={() => setActiveForm(null)} />
+        ))}
       {activeForm === "post" && <Share categ="general" showProjectReference />}
       {activeForm === "admin-post" && <Share categ="general" isAdminPost />}
     </section>

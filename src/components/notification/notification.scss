@@ -10,12 +10,12 @@
       padding: 10px;
     }
 
-    @include tablet{
+    @include tablet {
       padding: 20px;
     }
 
     h4 {
-      color: #6D1D1D;
+      color: #6d1d1d;
       font-size: medium;
       margin: 10px 0px;
     }
@@ -37,7 +37,7 @@
     .reaction {
       width: 20px;
       height: 20px;
-      align-self: 'center';
+      align-self: "center";
       margin: 0px 8px;
     }
 
@@ -90,13 +90,13 @@
         }
 
         button {
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           border-radius: 10px;
           color: white;
           font-weight: bold;
         }
       }
-  }
+    }
 
     .notif:hover {
       box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.18);

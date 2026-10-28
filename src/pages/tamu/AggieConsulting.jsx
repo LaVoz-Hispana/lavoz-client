@@ -64,14 +64,25 @@ const AggieConsulting = () => {
 
       <div className="consulting-grid">
         {listings.map((listing) => (
-          <div key={`${listing.company}-${listing.project}`} className="consulting-card">
-            <div className={`consulting-type ${listing.type.toLowerCase()}`}>{listing.type}</div>
+          <div
+            key={`${listing.company}-${listing.project}`}
+            className="consulting-card"
+          >
+            <div className={`consulting-type ${listing.type.toLowerCase()}`}>
+              {listing.type}
+            </div>
             <h3 className="consulting-company">{listing.company}</h3>
             <p className="consulting-project">{listing.project}</p>
             <div className="consulting-meta">
-              <span>{t("consulting.compensation")} {listing.compensation}</span>
-              <span>{t("consulting.timeframe")} {listing.timeframe}</span>
-              <span>{t("consulting.location")} {listing.location}</span>
+              <span>
+                {t("consulting.compensation")} {listing.compensation}
+              </span>
+              <span>
+                {t("consulting.timeframe")} {listing.timeframe}
+              </span>
+              <span>
+                {t("consulting.location")} {listing.location}
+              </span>
             </div>
           </div>
         ))}

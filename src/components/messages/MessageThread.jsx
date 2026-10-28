@@ -2,17 +2,17 @@ import ProfileLink from "../profile/ProfileLink";
 import { useContext, useState, useRef, useEffect } from "react";
 
 import { AuthContext } from "../../context/authContext";
-import moment from 'moment';
+import moment from "moment";
 import "./messages.scss";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import SendIcon from '@mui/icons-material/Send';
-import InputEmoji from 'react-input-emoji';
+import SendIcon from "@mui/icons-material/Send";
+import InputEmoji from "react-input-emoji";
 import Message from "./Message";
 import DefaultAvatar from "../../assets/pfp.jpg";
 import ProviderBadge from "../provider/ProviderBadge";
 
-const MessageThread = ({user, name}) => {
+const MessageThread = ({ user, name }) => {
   const { currentUser } = useContext(AuthContext);
   const [inputText, setInputText] = useState("");
   const [newMsg, setNewMsg] = useState("");
@@ -30,7 +30,9 @@ const MessageThread = ({user, name}) => {
   };
 
   const handleClick = () => {
-    if (newMsg == "") {return;}
+    if (newMsg == "") {
+      return;
+    }
     const msgTo = userId;
     const msg = newMsg;
     setMsgSubmitted(true);
@@ -39,7 +41,6 @@ const MessageThread = ({user, name}) => {
       setMsgSubmitted(false);
     }, 700);
     setNewMsg("");
-
   };
 
   const mutation = useMutation({
@@ -54,12 +55,22 @@ const MessageThread = ({user, name}) => {
 
   const { data: threadUser } = useQuery({
     queryKey: ["threadUser", currentUser.id, userId],
-    queryFn: () => makeRequest.get("/messages/participant/" + userId).then((res) => res.data),
+    queryFn: () =>
+      makeRequest
+        .get("/messages/participant/" + userId)
+        .then((res) => res.data),
   });
 
-  const { isLoading, error, data: mData } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: mData,
+  } = useQuery({
     queryKey: ["messages", currentUser.id, userId],
-    queryFn: () => makeRequest.get("/messages?userId=" + userId).then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/messages?userId=" + userId).then((res) => {
+        return res.data;
+      }),
   });
 
   // Auto-scroll to the latest message
@@ -87,56 +98,109 @@ const MessageThread = ({user, name}) => {
 
   const handleChange = (e) => {
     setNewMsg(e.target.value);
-  }
+  };
 
   return (
-        <div className="msg-right">
-            {!isLoading && mData &&
-              <div className="thread">
-                {threadUser && (
-                  threadUser.profileVisible ? <ProfileLink to={`/profile/${threadUser.id}`} className="thread-header" style={{ textDecoration: "none", color: "inherit" }}>
-                    <img src={threadUser.profilePic || DefaultAvatar} alt="" className="thread-header-pic" />
-                    <span className="thread-header-name">{threadUser.username}</span><ProviderBadge providerType={threadUser.provider_type} label={threadUser.providerTypeLabel} />
-                  </ProfileLink> : <div className="thread-header"><img src={threadUser.profilePic || DefaultAvatar} alt="" className="thread-header-pic" /><span className="thread-header-name">{threadUser.username}</span><ProviderBadge providerType={threadUser.provider_type} label={threadUser.providerTypeLabel} /></div>
-                )}
-                {/* Render messages grouped by day */}
-                {Object.entries(groupedMessages).map(([day, messages]) => (
-                    <div key={day} className="convo">
-                    <div className="date">
-                        {moment(day).format("dddd M/D/YYYY")}
-                    </div>
-                    {messages.map((message) => (
-                        <Message key={message.id} message={message} currentUser={currentUser}>
-                        {/* Add ref to the last message */}
-                        </Message>
-                    ))}
-                    <div ref={endOfMessagesRef} />
-                    </div>
-                ))}
+    <div className="msg-right">
+      {!isLoading && mData && (
+        <div className="thread">
+          {threadUser &&
+            (threadUser.profileVisible ? (
+              <ProfileLink
+                to={`/profile/${threadUser.id}`}
+                className="thread-header"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <img
+                  src={threadUser.profilePic || DefaultAvatar}
+                  alt=""
+                  className="thread-header-pic"
+                />
+                <span className="thread-header-name">
+                  {threadUser.username}
+                </span>
+                <ProviderBadge
+                  providerType={threadUser.provider_type}
+                  label={threadUser.providerTypeLabel}
+                />
+              </ProfileLink>
+            ) : (
+              <div className="thread-header">
+                <img
+                  src={threadUser.profilePic || DefaultAvatar}
+                  alt=""
+                  className="thread-header-pic"
+                />
+                <span className="thread-header-name">
+                  {threadUser.username}
+                </span>
+                <ProviderBadge
+                  providerType={threadUser.provider_type}
+                  label={threadUser.providerTypeLabel}
+                />
               </div>
-            }
-            
-            <div className="writePC">
-              <img className="pfp" src={currentUser.profilePic} alt="" />
-              <InputEmoji 
-                placeholder="Message..." 
-                value={newMsg}
-                onChange={setNewMsg}
-                borderRadius = {10}
-              />
-              <button className="submit" disabled = {msgSubmitted} onClick = {handleClick}> <SendIcon style={msgSubmitted === false ? {color: "gray"} : {color: "green"}}/> </button>
+            ))}
+          {/* Render messages grouped by day */}
+          {Object.entries(groupedMessages).map(([day, messages]) => (
+            <div key={day} className="convo">
+              <div className="date">{moment(day).format("dddd M/D/YYYY")}</div>
+              {messages.map((message) => (
+                <Message
+                  key={message.id}
+                  message={message}
+                  currentUser={currentUser}
+                >
+                  {/* Add ref to the last message */}
+                </Message>
+              ))}
+              <div ref={endOfMessagesRef} />
             </div>
-
-            <div className="writeMobile">
-              <input 
-                placeholder="Message..."
-                value={newMsg}
-                onChange={handleChange}
-              />
-              <button className="submit" disabled = {msgSubmitted} onClick = {handleClick}> <SendIcon style={msgSubmitted === false ? {color: "gray"} : {color: "green"}}/> </button>
-            </div>
-
+          ))}
         </div>
+      )}
+
+      <div className="writePC">
+        <img className="pfp" src={currentUser.profilePic} alt="" />
+        <InputEmoji
+          placeholder="Message..."
+          value={newMsg}
+          onChange={setNewMsg}
+          borderRadius={10}
+        />
+        <button
+          className="submit"
+          disabled={msgSubmitted}
+          onClick={handleClick}
+        >
+          {" "}
+          <SendIcon
+            style={
+              msgSubmitted === false ? { color: "gray" } : { color: "green" }
+            }
+          />{" "}
+        </button>
+      </div>
+
+      <div className="writeMobile">
+        <input
+          placeholder="Message..."
+          value={newMsg}
+          onChange={handleChange}
+        />
+        <button
+          className="submit"
+          disabled={msgSubmitted}
+          onClick={handleClick}
+        >
+          {" "}
+          <SendIcon
+            style={
+              msgSubmitted === false ? { color: "gray" } : { color: "green" }
+            }
+          />{" "}
+        </button>
+      </div>
+    </div>
   );
 };
 

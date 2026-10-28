@@ -1,49 +1,49 @@
 @import "../../style.scss";
 
 .user-icon {
-    @include themify($themes) {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: themed("bg");
-        padding: 15px;
-        border-radius: 10px;
-        -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
-        -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
-        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
-        box-sizing: border-box;
-        
-        .profilePic {
-            width: 12vw;
-            height: 12vw;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: auto;
+  @include themify($themes) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: themed("bg");
+    padding: 15px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
+    -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
+    box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
 
-            @include mobile {
-                width: 10vw;
-                height: 10vw;
-            }
-            @include tablet {
-                width: 10vw;
-                height: 10vw;
-            }
-        }
+    .profilePic {
+      width: 12vw;
+      height: 12vw;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: auto;
 
-        span {
-            font-weight: lighter;
-            margin: 2px;
-        }
+      @include mobile {
+        width: 10vw;
+        height: 10vw;
+      }
+      @include tablet {
+        width: 10vw;
+        height: 10vw;
+      }
+    }
 
-        button {
-            background-color: #6D1D1D;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 13px;
-            margin: 5px 0px;
-            border: none;
-        }
+    span {
+      font-weight: lighter;
+      margin: 2px;
+    }
+
+    button {
+      background-color: #6d1d1d;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 13px;
+      margin: 5px 0px;
+      border: none;
+    }
   }
 }

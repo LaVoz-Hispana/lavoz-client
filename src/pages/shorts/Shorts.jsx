@@ -1,7 +1,7 @@
-import Posts from "../../components/posts/Posts"
-import ShareShort from "../../components/shorts/ShareShort"
+import Posts from "../../components/posts/Posts";
+import ShareShort from "../../components/shorts/ShareShort";
 import Short from "../../components/shorts/Short";
-import "./shorts.scss"
+import "./shorts.scss";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { makeRequest } from "../../axios";
@@ -20,25 +20,32 @@ const Shorts = () => {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["shorts", currentUser?.id || "anonymous"],
-    queryFn: () => makeRequest.get("/posts/shorts").then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/posts/shorts").then((res) => {
+        return res.data;
+      }),
   });
 
   return (
     <div className="shorts">
-        <div className="background">
-            <h1 className="title">{t('sections.shorts')}</h1>
-            <span>{t('shorts.desc')}</span>
-        </div>
-        <div className="news-container">
-          <ShareShort categ={null}/>
-            { isLoading || error || !data ? "loading" :
-              <div className="shorts-grid">
-                {data.map((short) => <Short short={short}/>)}
-              </div>
-            }
-        </div>
+      <div className="background">
+        <h1 className="title">{t("sections.shorts")}</h1>
+        <span>{t("shorts.desc")}</span>
+      </div>
+      <div className="news-container">
+        <ShareShort categ={null} />
+        {isLoading || error || !data ? (
+          "loading"
+        ) : (
+          <div className="shorts-grid">
+            {data.map((short) => (
+              <Short short={short} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Shorts;

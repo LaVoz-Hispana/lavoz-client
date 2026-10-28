@@ -1,9 +1,12 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { resumeApplicationEnglish, resumeApplicationSpanish } from './resumeApplicationStrings';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import {
+  resumeApplicationEnglish,
+  resumeApplicationSpanish,
+} from "./resumeApplicationStrings";
 
-import Backend from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from "i18next-http-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
@@ -18,13 +21,13 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    fallbackLng: 'en',
-    supportedLngs: ['en', 'es'],
-    load: 'languageOnly',
+    fallbackLng: "en",
+    supportedLngs: ["en", "es"],
+    load: "languageOnly",
     debug: true,
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
     },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
@@ -33,19 +36,51 @@ i18n
       en: {
         translation: {
           resumeApplications: resumeApplicationEnglish,
-          profileContent: { title: "Profile content", posts: "Posts", completed: "Completed Projects", open: "Open Projects", noCompleted: "No completed projects yet.", completedWith: "Completed with {{name}}", reviewInEscrow: "View escrow and manage your review", reviewCount_one: "review", reviewCount_other: "reviews" },
-          reviews: { title: "Review your collaboration", with: "Your review of {{name}}", rating: "Your rating", comment: "Your review (optional)", outOfFive: "{{rating}} out of 5", submit: "Submit review", save: "Save review", saved: "Review saved.", loadError: "Unable to load your review.", saveError: "Unable to save your review. Please try again.", completedOnly: "Reviews are available after the escrow is completed." },
+          profileContent: {
+            title: "Profile content",
+            posts: "Posts",
+            completed: "Completed Projects",
+            open: "Open Projects",
+            noCompleted: "No completed projects yet.",
+            completedWith: "Completed with {{name}}",
+            reviewInEscrow: "View escrow and manage your review",
+            reviewCount_one: "review",
+            reviewCount_other: "reviews",
+          },
+          reviews: {
+            title: "Review your collaboration",
+            with: "Your review of {{name}}",
+            rating: "Your rating",
+            comment: "Your review (optional)",
+            outOfFive: "{{rating}} out of 5",
+            submit: "Submit review",
+            save: "Save review",
+            saved: "Review saved.",
+            loadError: "Unable to load your review.",
+            saveError: "Unable to save your review. Please try again.",
+            completedOnly:
+              "Reviews are available after the escrow is completed.",
+          },
           privacy: {
-            loadingProfile: "Loading profile…", signInToView: "Sign in to view this profile.",
-            privateProfile: "This profile is private.", profileUnavailable: "This profile is unavailable.",
+            loadingProfile: "Loading profile…",
+            signInToView: "Sign in to view this profile.",
+            privateProfile: "This profile is private.",
+            profileUnavailable: "This profile is unavailable.",
             ownProfileOnly: "You can only view your own profile.",
           },
           notificationPreferences: {
-            title: "Email notifications", marketplace: "Escrow and milestone updates",
-            language: "Email language", enabled: "Send me email updates", disabled: "No email updates",
-            loading: "Loading email preferences…", loadError: "Could not load email preferences.",
-            retry: "Try again", save: "Save email preferences", saving: "Saving…",
-            saved: "Email preferences saved.", saveError: "Could not save email preferences. Please try again.",
+            title: "Email notifications",
+            marketplace: "Escrow and milestone updates",
+            language: "Email language",
+            enabled: "Send me email updates",
+            disabled: "No email updates",
+            loading: "Loading email preferences…",
+            loadError: "Could not load email preferences.",
+            retry: "Try again",
+            save: "Save email preferences",
+            saving: "Saving…",
+            saved: "Email preferences saved.",
+            saveError: "Could not save email preferences. Please try again.",
           },
           reactions: {
             reactions: "Reactions",
@@ -54,14 +89,14 @@ i18n
             applause: "Applause",
             laughing: "Laughing",
             wow: "Wow",
-            highfive: "High Five!"
+            highfive: "High Five!",
           },
           story: {
             upload: "Upload a Story",
             desc: "Stories are visible for 24 hours before they disappear!",
             choose: "Choose image",
             error: "Stories must be image only (no .mp4, .mp3, .mov files)",
-            post: "Post"
+            post: "Post",
           },
           categories: {
             all: "All",
@@ -100,7 +135,8 @@ i18n
             flag: "Add TAMU flag",
             post: "Post",
             uploading: "Uploading...",
-            error: "Videos must be shorter than 60 seconds. Audio must be shorter than 60 seconds.",
+            error:
+              "Videos must be shorter than 60 seconds. Audio must be shorter than 60 seconds.",
             ten: "You can only select up to 10 files.",
             addMore: "Add more +",
             guest: "Howdy! To upload posts, please sign in or make an account.",
@@ -108,7 +144,8 @@ i18n
             confirmationHeading: "Upload was successful!",
             confirmationText: "Thank you for your contribution.",
             processingHeading: "Processing",
-            processingText: "Thank you for your patience. This process may take up to 1 minute.",
+            processingText:
+              "Thank you for your patience. This process may take up to 1 minute.",
             submitMore: "Share another",
           },
           sections: {
@@ -117,7 +154,7 @@ i18n
             discover: "Discover",
             friends: "Friends",
             postAd: "Post an Ad",
-            shorts : "Shorts",
+            shorts: "Shorts",
           },
           common: {
             back: "Back",
@@ -128,7 +165,7 @@ i18n
             share: "Share",
             write: "Write a comment...",
             send: "Send",
-            rate: "rate this comment"
+            rate: "rate this comment",
           },
           shorts: {
             desc: "Share short videos to have a laugh and stay updated.",
@@ -178,7 +215,7 @@ i18n
             follow: "Follow",
             followers: "Followers",
             all: "All Users",
-            search: "Search"
+            search: "Search",
           },
           tamu: {
             tamu: "Texas A&M University",
@@ -202,11 +239,14 @@ i18n
             location: "Location:",
           },
           otherPages: {
-            greatThings: "Share and discover fun content to connect with other users.",
+            greatThings:
+              "Share and discover fun content to connect with other users.",
             news: "Stay up-to-date with the latest news.",
             filterNews: "Filter News by Category",
-            market: "Post advertisements, buy and sell goods, and find great deals near you!",
-            postAd: "Post an ad for your business to appear in other users' social feed."
+            market:
+              "Post advertisements, buy and sell goods, and find great deals near you!",
+            postAd:
+              "Post an ad for your business to appear in other users' social feed.",
           },
           jobs: {
             desc: "Find a job or post a job opening for your business.",
@@ -231,7 +271,7 @@ i18n
             office: "Office",
             sales: "Sales",
             delete: "delete job",
-            error: "* indicates a required field"
+            error: "* indicates a required field",
           },
           notifs: {
             comment: "commented on your post.",
@@ -263,7 +303,7 @@ i18n
             url: "URL",
             upcoming: "Upcoming Events",
             error: "Please fill in the following fields: ",
-            category: "Category"
+            category: "Category",
           },
           login: {
             login: "Login",
@@ -272,16 +312,18 @@ i18n
             register: "Register",
             username: "Username",
             invalid: "Invalid username or password",
-            error: "Can't login!"
+            error: "Can't login!",
           },
           register: {
             desc: "Poststation connects Brazos Valley students with local businesses, non-profits, and residents for project-based work.",
             do: "Do you have an account?",
             question: "What type of account?",
             student: "Student",
-            studentDesc: "Texas A&M or Blinn College student looking for real-world project experience.",
+            studentDesc:
+              "Texas A&M or Blinn College student looking for real-world project experience.",
             local: "Project Provider",
-            localDesc: "Individual, company, or organization offering projects to students.",
+            localDesc:
+              "Individual, company, or organization offering projects to students.",
             terms: "Note: By clicking `Register` below, you agree to the ",
             privacy: "Privacy Policy",
             use: "Terms of Use.",
@@ -294,41 +336,59 @@ i18n
             servicesUnavailable: "Services are unavailable right now.",
             confirm: "Confirm password",
             error: "All fields are required.",
-            password: "Password must contain at least one lowercase letter, one uppercase letter, one digit, and be between 8 and 24 characters long.",
+            password:
+              "Password must contain at least one lowercase letter, one uppercase letter, one digit, and be between 8 and 24 characters long.",
             match: "Passwords don't match.",
             email: "Invalid email address.",
-            exists: "An account with this email already exists."
+            exists: "An account with this email already exists.",
           },
           provider: {
-            showPassword: "Show password", hidePassword: "Hide password",
+            showPassword: "Show password",
+            hidePassword: "Hide password",
             details: "Project Provider details",
             type: "Provider type",
             selectType: "Select a provider type",
             contactPerson: "Contact person",
-            contactPersonPlaceholder: "Full name of the person responsible for this account",
+            contactPersonPlaceholder:
+              "Full name of the person responsible for this account",
             companyName: "Company name",
             companyNamePlaceholder: "Legal or commonly used company name",
             organizationName: "Organization name",
-            organizationNamePlaceholder: "School, nonprofit, community group, or organization name",
+            organizationNamePlaceholder:
+              "School, nonprofit, community group, or organization name",
             contactLabel: "Contact: {{name}}",
-            requiredSetup: "Provider details are required before you can post a project.",
+            requiredSetup:
+              "Provider details are required before you can post a project.",
             saving: "Saving…",
-            completeProfile: "Complete your Project Provider profile before posting a project.",
-            types: { individual: "Individual", company: "Company", organization: "Organization" },
-            descriptions: { individual: "A person offering a project on their own behalf.", company: "A commercial business offering a project.", organization: "A nonprofit, school, community group, government entity, or other noncommercial organization." },
+            completeProfile:
+              "Complete your Project Provider profile before posting a project.",
+            types: {
+              individual: "Individual",
+              company: "Company",
+              organization: "Organization",
+            },
+            descriptions: {
+              individual: "A person offering a project on their own behalf.",
+              company: "A commercial business offering a project.",
+              organization:
+                "A nonprofit, school, community group, government entity, or other noncommercial organization.",
+            },
             errors: {
-              provider_type_required: "Choose Individual, Company, or Organization.",
+              provider_type_required:
+                "Choose Individual, Company, or Organization.",
               contact_person_required: "Contact person name is required.",
               company_name_required: "Company name is required.",
               organization_name_required: "Organization name is required.",
-              provider_field_too_long: "Contact names must be at most 150 characters and entity names at most 200.",
-              provider_fields_conflict: "Only enter the entity name for the selected provider type.",
+              provider_field_too_long:
+                "Contact names must be at most 150 characters and entity names at most 200.",
+              provider_fields_conflict:
+                "Only enter the entity name for the selected provider type.",
               typeRequired: "Choose Individual, Company, or Organization.",
               contactRequired: "Contact person name is required.",
               companyRequired: "Company name is required.",
               organizationRequired: "Organization name is required.",
-              saveFailed: "Unable to save provider details. Please try again."
-            }
+              saveFailed: "Unable to save provider details. Please try again.",
+            },
           },
           admin: {
             dashboard: "Admin Dashboard",
@@ -355,10 +415,15 @@ i18n
             noEscrows: "No escrows found.",
           },
           escrow: {
-            milestones: "Milestones", activity: "Activity", toggleActivity: "Toggle activity feed", noMilestones: "No milestones yet.", milestoneLoadError: "Unable to load milestones.",
+            milestones: "Milestones",
+            activity: "Activity",
+            toggleActivity: "Toggle activity feed",
+            noMilestones: "No milestones yet.",
+            milestoneLoadError: "Unable to load milestones.",
             accept: "Accept Invitation",
             decline: "Decline",
-            pendingMsg: "You have been invited to this project. Accept to begin work.",
+            pendingMsg:
+              "You have been invited to this project. Accept to begin work.",
             invite: "Invite to Project",
             inviteTitle: "Invite Student",
             selectProject: "Select one of your open projects",
@@ -419,7 +484,8 @@ i18n
             categoriesSelected: "{{count}} categories selected",
             scrollCategoriesLeft: "Scroll categories left",
             scrollCategoriesRight: "Scroll categories right",
-            loading: "Loading…", loadError: "Unable to load students.",
+            loading: "Loading…",
+            loadError: "Unable to load students.",
             noStudents: "No students found.",
             noServices: "No services listed yet.",
             noServicesInCategory: "No services in this category yet.",
@@ -427,12 +493,20 @@ i18n
             editService: "Edit Service",
             viewProfile: "View Profile",
             deleteService: "Delete Service",
-            deleteConfirm: "Are you sure you want to delete this service? This cannot be undone.",
+            deleteConfirm:
+              "Are you sure you want to delete this service? This cannot be undone.",
           },
           projects: {
             browse: "Browse Projects",
-            all: "All", loading: "Loading…", loadError: "Unable to load projects.", notFound: "Project not found.",
-            viewProviderProjects: "View projects", clearProvider: "Show all providers", providerFilter: "Projects by {{name}}", closeConfirm: "Close this project? Pending applications will be rejected.",
+            all: "All",
+            loading: "Loading…",
+            loadError: "Unable to load projects.",
+            notFound: "Project not found.",
+            viewProviderProjects: "View projects",
+            clearProvider: "Show all providers",
+            providerFilter: "Projects by {{name}}",
+            closeConfirm:
+              "Close this project? Pending applications will be rejected.",
             locals: "Project Providers",
             projects: "Projects",
             post: "Post a Project",
@@ -463,7 +537,8 @@ i18n
             noProjects: "No open projects yet.",
             closeProject: "Close Project",
             deleteProject: "Delete Project",
-            deleteConfirm: "Are you sure you want to delete this project? This cannot be undone.",
+            deleteConfirm:
+              "Are you sure you want to delete this project? This cannot be undone.",
             bcsLocalProjects: "Provider Projects",
             bcsLocals: "Project Providers",
             noLocals: "No project providers found.",
@@ -471,7 +546,8 @@ i18n
             viewAll: "View all",
           },
           home: {
-            marketplaceTitle: "Aggieland's Student and Project Provider Marketplace",
+            marketplaceTitle:
+              "Aggieland's Student and Project Provider Marketplace",
             newPost: "New Post",
             exploreMarketplace: "Explore Local Activity",
             activitySubtitle: "Projects and services from the community",
@@ -492,7 +568,8 @@ i18n
             servicesError: "Unable to load services.",
             categoriesError: "Service categories are unavailable right now.",
             retry: "Try again",
-            sponsorSupport: "Thanks to our sponsors for helping students turn skills into real-world opportunities.",
+            sponsorSupport:
+              "Thanks to our sponsors for helping students turn skills into real-world opportunities.",
           },
           projectPost: {
             createPost: "Create Post",
@@ -533,11 +610,12 @@ i18n
             sureReject: "Are you sure you want to reject this ad?",
             back: "Go Back",
             approve: "Approve",
-            reject: "Reject"
+            reject: "Reject",
           },
           resetPassword: {
             forgot: "Forgot Password?",
-            enterEmail: "Enter your email and we will send you a secure password reset token.",
+            enterEmail:
+              "Enter your email and we will send you a secure password reset token.",
             sendReset: "Send Token",
             emailVerification: "Email Verification",
             enterCode: "Enter the code we sent to your email",
@@ -546,28 +624,62 @@ i18n
             resendCodeIn: "Resend code in ",
             resendCode: "Resend code",
             resetPassword: "Reset Your Password",
-            enterPassword: "Enter your new password below to securely reset your password.",
-            change: "Change Password"
+            enterPassword:
+              "Enter your new password below to securely reset your password.",
+            change: "Change Password",
           },
-        }
+        },
       },
 
       es: {
         translation: {
           resumeApplications: resumeApplicationSpanish,
-          profileContent: { title: "Contenido del perfil", posts: "Publicaciones", completed: "Proyectos completados", open: "Proyectos abiertos", noCompleted: "Aún no hay proyectos completados.", completedWith: "Completado con {{name}}", reviewInEscrow: "Ver escrow y administrar tu reseña", reviewCount_one: "reseña", reviewCount_other: "reseñas" },
-          reviews: { title: "Evalúa tu colaboración", with: "Tu reseña de {{name}}", rating: "Tu calificación", comment: "Tu reseña (opcional)", outOfFive: "{{rating}} de 5", submit: "Enviar reseña", save: "Guardar reseña", saved: "Reseña guardada.", loadError: "No se pudo cargar tu reseña.", saveError: "No se pudo guardar tu reseña. Inténtalo de nuevo.", completedOnly: "Las reseñas están disponibles al completar el escrow." },
+          profileContent: {
+            title: "Contenido del perfil",
+            posts: "Publicaciones",
+            completed: "Proyectos completados",
+            open: "Proyectos abiertos",
+            noCompleted: "Aún no hay proyectos completados.",
+            completedWith: "Completado con {{name}}",
+            reviewInEscrow: "Ver escrow y administrar tu reseña",
+            reviewCount_one: "reseña",
+            reviewCount_other: "reseñas",
+          },
+          reviews: {
+            title: "Evalúa tu colaboración",
+            with: "Tu reseña de {{name}}",
+            rating: "Tu calificación",
+            comment: "Tu reseña (opcional)",
+            outOfFive: "{{rating}} de 5",
+            submit: "Enviar reseña",
+            save: "Guardar reseña",
+            saved: "Reseña guardada.",
+            loadError: "No se pudo cargar tu reseña.",
+            saveError: "No se pudo guardar tu reseña. Inténtalo de nuevo.",
+            completedOnly:
+              "Las reseñas están disponibles al completar el escrow.",
+          },
           privacy: {
-            loadingProfile: "Cargando perfil…", signInToView: "Inicia sesión para ver este perfil.",
-            privateProfile: "Este perfil es privado.", profileUnavailable: "Este perfil no está disponible.",
+            loadingProfile: "Cargando perfil…",
+            signInToView: "Inicia sesión para ver este perfil.",
+            privateProfile: "Este perfil es privado.",
+            profileUnavailable: "Este perfil no está disponible.",
             ownProfileOnly: "Solo puedes ver tu propio perfil.",
           },
           notificationPreferences: {
-            title: "Notificaciones por correo", marketplace: "Actualizaciones de escrows e hitos",
-            language: "Idioma del correo", enabled: "Recibir actualizaciones por correo", disabled: "No recibir actualizaciones por correo",
-            loading: "Cargando preferencias de correo…", loadError: "No se pudieron cargar las preferencias de correo.",
-            retry: "Intentar de nuevo", save: "Guardar preferencias de correo", saving: "Guardando…",
-            saved: "Preferencias de correo guardadas.", saveError: "No se pudieron guardar las preferencias. Inténtalo de nuevo.",
+            title: "Notificaciones por correo",
+            marketplace: "Actualizaciones de escrows e hitos",
+            language: "Idioma del correo",
+            enabled: "Recibir actualizaciones por correo",
+            disabled: "No recibir actualizaciones por correo",
+            loading: "Cargando preferencias de correo…",
+            loadError: "No se pudieron cargar las preferencias de correo.",
+            retry: "Intentar de nuevo",
+            save: "Guardar preferencias de correo",
+            saving: "Guardando…",
+            saved: "Preferencias de correo guardadas.",
+            saveError:
+              "No se pudieron guardar las preferencias. Inténtalo de nuevo.",
           },
           reactions: {
             reactions: "Reacciónes",
@@ -576,14 +688,15 @@ i18n
             applause: "Aplausos",
             laughing: "Jaja",
             wow: "Wow",
-            highfive: "¡Chócala!"
+            highfive: "¡Chócala!",
           },
           story: {
             upload: "Subir Historia",
             desc: "Se puede ver las historias para 24 horas hasta que se desaparezcan.",
             choose: "Seleccionar una imagen",
-            error: "Sólo están autorizados los ficheros con formato PNG/JPG/JPEG.",
-            post: "Subir"
+            error:
+              "Sólo están autorizados los ficheros con formato PNG/JPG/JPEG.",
+            post: "Subir",
           },
           categories: {
             all: "Todos",
@@ -621,7 +734,8 @@ i18n
             post: "Subir",
             uploading: "Subiendo...",
             pleaseSelect: "Hay que seleccionar la categoría",
-            error: "Sólo están autorizados los videos menos que 60 segundos y los audios menos que 60 segundos.",
+            error:
+              "Sólo están autorizados los videos menos que 60 segundos y los audios menos que 60 segundos.",
             ten: "Sólo se puede elegir 10 fotos, videos, o audios.",
             addMore: "Agregar más +",
             guest: "Howdy! Por favor registra una cuenta para subir posts.",
@@ -629,8 +743,9 @@ i18n
             confirmationHeading: "Subida realizada correctamente!",
             confirmationText: "Gracias por tu publicación.",
             processingHeading: "Procesando",
-            processingText: "Gracias por tu pacienca. Este proceso puede tardar hasta 1 minuto.",
-            submitMore: "Subir otro"
+            processingText:
+              "Gracias por tu pacienca. Este proceso puede tardar hasta 1 minuto.",
+            submitMore: "Subir otro",
           },
           sections: {
             topPosts: "Los Posts más Gustados",
@@ -649,7 +764,7 @@ i18n
             share: "Compartir",
             write: "Escribir nuevo comentario...",
             send: "Subir",
-            rate: "calificar este comentario"
+            rate: "calificar este comentario",
           },
           update: {
             welcome: "¡Bienvenidos a Poststation!",
@@ -693,7 +808,7 @@ i18n
             follow: "Seguir",
             followers: "Seguidores",
             all: "Todos los Usuarios",
-            search: "Buscar"
+            search: "Buscar",
           },
           tamu: {
             tamu: "Universidad Texas A&M",
@@ -705,7 +820,8 @@ i18n
           },
           meals: {
             title: "Comidas Aggie",
-            tagline: "Ofertas semanales para estudiantes en Bryan-College Station",
+            tagline:
+              "Ofertas semanales para estudiantes en Bryan-College Station",
             time: "Horario:",
             location: "Lugar:",
           },
@@ -717,11 +833,14 @@ i18n
             location: "Lugar:",
           },
           otherPages: {
-            greatThings: "Compartir contenido divertido y conectar con otros usuarios.",
+            greatThings:
+              "Compartir contenido divertido y conectar con otros usuarios.",
             news: "Mantente al día de lo que pasa en tu comunidad.",
             filterNews: "Filtrar las Noticias por Categoría",
-            market: "Subir anuncios, vender y comprar cosas, y encontrar gangas locales!",
-            postAd: "Subir un anuncio que aparezca en el inicio de otros usuarios."
+            market:
+              "Subir anuncios, vender y comprar cosas, y encontrar gangas locales!",
+            postAd:
+              "Subir un anuncio que aparezca en el inicio de otros usuarios.",
           },
           jobs: {
             desc: "Encontrar trabajo o subir trabajos disponibles en tu negocio.",
@@ -746,7 +865,7 @@ i18n
             professionals: "Profesionales",
             temporary: "Temporales",
             delete: "Quitar trabajo",
-            error: "El asterisco (*) significa que el campo es obligatorio."
+            error: "El asterisco (*) significa que el campo es obligatorio.",
           },
           notifs: {
             comment: "comentó en tu post.",
@@ -778,7 +897,7 @@ i18n
             url: "URL",
             upcoming: "Eventos que Vienen",
             error: "Por favor, rellene los siguientes campos: ",
-            categ: "Categoría"
+            categ: "Categoría",
           },
           login: {
             login: "Acceso",
@@ -787,16 +906,18 @@ i18n
             register: "Registrar",
             username: "Nombre de usuario",
             invalid: "El nombre de usuario o la contraseña está mal",
-            error: "No se puede hacer el login!"
+            error: "No se puede hacer el login!",
           },
           register: {
             desc: "Poststation conecta a estudiantes del Valle Brazos con negocios locales, organizaciones sin fines de lucro y residentes para trabajo por proyectos.",
             do: "¿Ya tienes cuenta?",
             question: "¿Qué tipo de cuenta?",
             student: "Estudiante",
-            studentDesc: "Estudiante de Texas A&M o Blinn College que busca experiencia en proyectos reales.",
+            studentDesc:
+              "Estudiante de Texas A&M o Blinn College que busca experiencia en proyectos reales.",
             local: "Proveedor de Proyectos",
-            localDesc: "Persona, empresa u organización que ofrece proyectos a estudiantes.",
+            localDesc:
+              "Persona, empresa u organización que ofrece proyectos a estudiantes.",
             terms: "Aviso: Cuando haces click a `Registrar`, aceptas ",
             privacy: "la Política de Privacidad ",
             use: "los Términos y Condiciones de Uso",
@@ -806,44 +927,69 @@ i18n
             services: "Servicios",
             skills: "Habilidades",
             selectServices: "Seleccionar servicios",
-            servicesUnavailable: "Los servicios no están disponibles en este momento.",
+            servicesUnavailable:
+              "Los servicios no están disponibles en este momento.",
             confirm: "Confirmar la contraseña",
             error: "Se requiere que llenes todos los campos.",
-            password: "La contraseña necesita contener al menos 1 letra minúscula, 1 letra mayúscula, 1 dígito y tener entre 8 y 24 caracteres.",
+            password:
+              "La contraseña necesita contener al menos 1 letra minúscula, 1 letra mayúscula, 1 dígito y tener entre 8 y 24 caracteres.",
             match: "Las contraseñas no coinciden.",
             email: "Dirección de correo electrónico esta mál.",
-            exists: "Ya existe una cuenta con este correo electrónico."
+            exists: "Ya existe una cuenta con este correo electrónico.",
           },
           provider: {
-            showPassword: "Mostrar contraseña", hidePassword: "Ocultar contraseña",
+            showPassword: "Mostrar contraseña",
+            hidePassword: "Ocultar contraseña",
             details: "Datos del Proveedor de Proyectos",
             type: "Tipo de proveedor",
             selectType: "Selecciona un tipo de proveedor",
             contactPerson: "Persona de contacto",
-            contactPersonPlaceholder: "Nombre completo de la persona responsable de esta cuenta",
+            contactPersonPlaceholder:
+              "Nombre completo de la persona responsable de esta cuenta",
             companyName: "Nombre de la empresa",
             companyNamePlaceholder: "Nombre legal o de uso común de la empresa",
             organizationName: "Nombre de la organización",
-            organizationNamePlaceholder: "Nombre de la escuela, organización comunitaria o sin fines de lucro",
+            organizationNamePlaceholder:
+              "Nombre de la escuela, organización comunitaria o sin fines de lucro",
             contactLabel: "Contacto: {{name}}",
-            requiredSetup: "Los datos del proveedor son obligatorios antes de publicar un proyecto.",
+            requiredSetup:
+              "Los datos del proveedor son obligatorios antes de publicar un proyecto.",
             saving: "Guardando…",
-            completeProfile: "Completa tu perfil de Proveedor de Proyectos antes de publicar un proyecto.",
-            types: { individual: "Persona", company: "Empresa", organization: "Organización" },
-            descriptions: { individual: "Una persona que ofrece un proyecto a título personal.", company: "Una empresa comercial que ofrece un proyecto.", organization: "Una organización sin fines de lucro, escuela, grupo comunitario, entidad gubernamental u otra organización no comercial." },
+            completeProfile:
+              "Completa tu perfil de Proveedor de Proyectos antes de publicar un proyecto.",
+            types: {
+              individual: "Persona",
+              company: "Empresa",
+              organization: "Organización",
+            },
+            descriptions: {
+              individual:
+                "Una persona que ofrece un proyecto a título personal.",
+              company: "Una empresa comercial que ofrece un proyecto.",
+              organization:
+                "Una organización sin fines de lucro, escuela, grupo comunitario, entidad gubernamental u otra organización no comercial.",
+            },
             errors: {
-              provider_type_required: "Selecciona Persona, Empresa u Organización.",
-              contact_person_required: "El nombre de la persona de contacto es obligatorio.",
+              provider_type_required:
+                "Selecciona Persona, Empresa u Organización.",
+              contact_person_required:
+                "El nombre de la persona de contacto es obligatorio.",
               company_name_required: "El nombre de la empresa es obligatorio.",
-              organization_name_required: "El nombre de la organización es obligatorio.",
-              provider_field_too_long: "El nombre de contacto admite hasta 150 caracteres y el de la entidad hasta 200.",
-              provider_fields_conflict: "Introduce solo el nombre de la entidad del tipo de proveedor seleccionado.",
+              organization_name_required:
+                "El nombre de la organización es obligatorio.",
+              provider_field_too_long:
+                "El nombre de contacto admite hasta 150 caracteres y el de la entidad hasta 200.",
+              provider_fields_conflict:
+                "Introduce solo el nombre de la entidad del tipo de proveedor seleccionado.",
               typeRequired: "Selecciona Persona, Empresa u Organización.",
-              contactRequired: "El nombre de la persona de contacto es obligatorio.",
+              contactRequired:
+                "El nombre de la persona de contacto es obligatorio.",
               companyRequired: "El nombre de la empresa es obligatorio.",
-              organizationRequired: "El nombre de la organización es obligatorio.",
-              saveFailed: "No se pudieron guardar los datos del proveedor. Inténtalo de nuevo."
-            }
+              organizationRequired:
+                "El nombre de la organización es obligatorio.",
+              saveFailed:
+                "No se pudieron guardar los datos del proveedor. Inténtalo de nuevo.",
+            },
           },
           admin: {
             dashboard: "Panel de Administración",
@@ -870,14 +1016,20 @@ i18n
             noEscrows: "No se encontraron escrows.",
           },
           escrow: {
-            milestones: "Hitos", activity: "Actividad", toggleActivity: "Mostrar u ocultar la actividad", noMilestones: "Aún no hay hitos.", milestoneLoadError: "No se pudieron cargar los hitos.",
+            milestones: "Hitos",
+            activity: "Actividad",
+            toggleActivity: "Mostrar u ocultar la actividad",
+            noMilestones: "Aún no hay hitos.",
+            milestoneLoadError: "No se pudieron cargar los hitos.",
             accept: "Aceptar Invitación",
             decline: "Rechazar",
-            pendingMsg: "Has sido invitado a este proyecto. Acepta para comenzar el trabajo.",
+            pendingMsg:
+              "Has sido invitado a este proyecto. Acepta para comenzar el trabajo.",
             invite: "Invitar a Proyecto",
             inviteTitle: "Invitar Estudiante",
             selectProject: "Selecciona uno de tus proyectos abiertos",
-            noProjects: "No tienes proyectos abiertos. Crea un proyecto primero.",
+            noProjects:
+              "No tienes proyectos abiertos. Crea un proyecto primero.",
             inviteSuccess: "¡Invitación enviada! Escrow creado.",
             inviteError: "Error al crear el escrow.",
             confirm: "Enviar Invitación",
@@ -934,7 +1086,8 @@ i18n
             categoriesSelected: "{{count}} categorías seleccionadas",
             scrollCategoriesLeft: "Desplazar categorías a la izquierda",
             scrollCategoriesRight: "Desplazar categorías a la derecha",
-            loading: "Cargando…", loadError: "No se pudieron cargar los estudiantes.",
+            loading: "Cargando…",
+            loadError: "No se pudieron cargar los estudiantes.",
             noStudents: "No se encontraron estudiantes.",
             noServices: "No hay servicios publicados aún.",
             noServicesInCategory: "Aún no hay servicios en esta categoría.",
@@ -942,12 +1095,20 @@ i18n
             editService: "Editar Servicio",
             viewProfile: "Ver Perfil",
             deleteService: "Eliminar Servicio",
-            deleteConfirm: "¿Estás seguro de que deseas eliminar este servicio? Esta acción no se puede deshacer.",
+            deleteConfirm:
+              "¿Estás seguro de que deseas eliminar este servicio? Esta acción no se puede deshacer.",
           },
           projects: {
             browse: "Ver Proyectos",
-            all: "Todos", loading: "Cargando…", loadError: "No se pudieron cargar los proyectos.", notFound: "No se encontró el proyecto.",
-            viewProviderProjects: "Ver proyectos", clearProvider: "Mostrar todos los proveedores", providerFilter: "Proyectos de {{name}}", closeConfirm: "¿Cerrar este proyecto? Se rechazarán las solicitudes pendientes.",
+            all: "Todos",
+            loading: "Cargando…",
+            loadError: "No se pudieron cargar los proyectos.",
+            notFound: "No se encontró el proyecto.",
+            viewProviderProjects: "Ver proyectos",
+            clearProvider: "Mostrar todos los proveedores",
+            providerFilter: "Proyectos de {{name}}",
+            closeConfirm:
+              "¿Cerrar este proyecto? Se rechazarán las solicitudes pendientes.",
             locals: "Proveedores de Proyectos",
             projects: "Proyectos",
             post: "Publicar Proyecto",
@@ -965,10 +1126,12 @@ i18n
             deliverables: "Entregables",
             category: "Categoría",
             selectCategory: "Seleccionar una categoría",
-            categoriesUnavailable: "Las categorías no están disponibles en este momento.",
+            categoriesUnavailable:
+              "Las categorías no están disponibles en este momento.",
             titleField: "Título del proyecto*",
             descField: "Descripción*",
-            skillsPlaceholder: "ej. Diseño gráfico, Python (separados por coma)",
+            skillsPlaceholder:
+              "ej. Diseño gráfico, Python (separados por coma)",
             addSkill: "Agregar una habilidad requerida",
             timelinePlaceholder: "ej. 2 semanas, antes del 15 de mayo",
             deliverablesPlaceholder: "¿Qué debe entregar el estudiante?",
@@ -978,15 +1141,18 @@ i18n
             noProjects: "Aún no hay proyectos abiertos.",
             closeProject: "Cerrar Proyecto",
             deleteProject: "Eliminar Proyecto",
-            deleteConfirm: "¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.",
+            deleteConfirm:
+              "¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.",
             bcsLocalProjects: "Proyectos de Proveedores",
             bcsLocals: "Proveedores de Proyectos",
             noLocals: "No se encontraron proveedores de proyectos.",
-            providerLoadError: "No se pudieron cargar los proveedores de proyectos.",
+            providerLoadError:
+              "No se pudieron cargar los proveedores de proyectos.",
             viewAll: "Ver todo",
           },
           home: {
-            marketplaceTitle: "Mercado de Estudiantes y Proveedores de Proyectos de Aggieland",
+            marketplaceTitle:
+              "Mercado de Estudiantes y Proveedores de Proyectos de Aggieland",
             newPost: "Nueva Publicación",
             exploreMarketplace: "Explora la actividad local",
             activitySubtitle: "Proyectos y servicios de la comunidad",
@@ -1000,14 +1166,18 @@ i18n
             viewAllServices: "Ver todos los servicios",
             filterProjects: "Filtrar proyectos por estado",
             allProjects: "Todos los proyectos",
-            noMatchingProjects: "No hay proyectos que coincidan con este filtro.",
-            noMatchingActivity: "No hay actividad local que coincida con estos filtros.",
+            noMatchingProjects:
+              "No hay proyectos que coincidan con este filtro.",
+            noMatchingActivity:
+              "No hay actividad local que coincida con estos filtros.",
             loadingMarketplace: "Cargando…",
             projectsError: "No se pudieron cargar los proyectos.",
             servicesError: "No se pudieron cargar los servicios.",
-            categoriesError: "Las categorías de servicios no están disponibles en este momento.",
+            categoriesError:
+              "Las categorías de servicios no están disponibles en este momento.",
             retry: "Intentar de nuevo",
-            sponsorSupport: "Gracias a nuestros patrocinadores por ayudar a estudiantes a convertir sus habilidades en oportunidades reales.",
+            sponsorSupport:
+              "Gracias a nuestros patrocinadores por ayudar a estudiantes a convertir sus habilidades en oportunidades reales.",
           },
           projectPost: {
             createPost: "Crear Publicación",
@@ -1020,7 +1190,8 @@ i18n
             activityFeed: "Actividad del Proyecto",
             referenceProject: "Referenciar proyecto",
             noProjectReference: "Sin proyecto",
-            noProjectPosts: "Aún no hay publicaciones que hagan referencia a este proyecto.",
+            noProjectPosts:
+              "Aún no hay publicaciones que hagan referencia a este proyecto.",
             referencedProject: "Proyecto referenciado",
             tagCollaborator: "Etiquetar colaborador",
             with: "con",
@@ -1048,32 +1219,34 @@ i18n
             sureReject: "¿Quieres rechazar este anuncio?",
             back: "Volver atrás",
             approve: "Aprobar",
-            reject: "Rechazar"
+            reject: "Rechazar",
           },
           resetPassword: {
             forgot: "¿Olvidaste tu contraseña?",
-            enterEmail: "Escribe tu correo electronico y te vamos a enviar un código seguro para cambiar tu contraseña ",
+            enterEmail:
+              "Escribe tu correo electronico y te vamos a enviar un código seguro para cambiar tu contraseña ",
             sendReset: "Enviar Código",
             emailVerification: "Verificación de Email",
-            enterCode: "Escribe el código que te enviamos a tu correo electrónico",
+            enterCode:
+              "Escribe el código que te enviamos a tu correo electrónico",
             verify: "Verificar",
             didntReceive: "¿No recibiste el código?",
             resendCodeIn: "Reenviar código en",
             resendCode: "Reenviar código",
             resetPassword: "Cambiar tu Contraseña",
             enterPassword: "Escribe tu nueva contraseña para cambiarlo.",
-            change: "Cambiar Contraseña"
-          }
+            change: "Cambiar Contraseña",
+          },
         },
         shorts: {
           desc: "Subir y ver videos cortos para reírse y quedarse actualizada hoy en dia.",
           post: "Subir un video más corto que 30 segundos.",
           caption: "Escribir título...",
-          guest: "Howdy! Para subir videos cortos, por favor hacer el login o abra una cuenta.",
+          guest:
+            "Howdy! Para subir videos cortos, por favor hacer el login o abra una cuenta.",
         },
-      }
-    }
+      },
+    },
   });
-
 
 export default i18n;

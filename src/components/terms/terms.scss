@@ -1,79 +1,77 @@
 @import "../../style.scss";
 
 .terms {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+
+  @include mobile {
+    bottom: 20;
+    left: 20;
+  }
+
+  .wrapper {
+    overflow: scroll;
+    margin: 30px 0px;
+    width: 40%;
+    height: 70%;
+    background-color: #fff;
+    padding: 50px;
     z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+    box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+    position: relative;
+    color: black;
 
     @include mobile {
-      bottom: 20;
-      left: 20;
+      width: 100%;
+      height: 100%;
+      padding: 10px;
     }
 
-    .wrapper {
-      overflow: scroll;
-      margin: 30px 0px;
-      width: 40%;
-      height: 70%;
-      background-color: #fff;
-      padding: 50px;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-      -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-      box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-      position: relative;
+    @include tablet {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    ul {
+      margin: 0px 20px;
+      font-size: 12px;
+    }
+
+    h1 {
       color: black;
-      
+
       @include mobile {
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-      }
-
-      @include tablet {
-        width: 100%;
-        height: 100%;
-        padding: 20px;
-      }
-
-      p {
-        font-size: 14px;
-      }
-
-      ul {
-        margin: 0px 20px;
-        font-size: 12px;
-      }
-
-      h1 {
-        color: black;
-      
-        @include mobile {
-         font-size: 20px;
-        }
-      
-      }
-
-      .close {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        border: none;
-        background-color: transparent;
-        padding: 5px;
-        cursor: pointer;
-        color: white;
-
+        font-size: 20px;
       }
     }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      border: none;
+      background-color: transparent;
+      padding: 5px;
+      cursor: pointer;
+      color: white;
+    }
+  }
 }

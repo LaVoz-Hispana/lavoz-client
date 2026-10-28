@@ -2,7 +2,7 @@
 
 .login {
   min-height: 100vh;
-  background-color: #6D1D1D;
+  background-color: #6d1d1d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,7 +15,7 @@
     transition: all 0.3s ease-in !important;
   }
   button:hover {
-    background-color: #4C1313 !important;
+    background-color: #4c1313 !important;
     color: white !important;
   }
 
@@ -47,7 +47,7 @@
       width: fit-content;
     }
     button:hover {
-      background-color: #4C1313 !important;
+      background-color: #4c1313 !important;
       color: white !important;
     }
   }
@@ -86,10 +86,11 @@
 
     .left {
       @media screen and (max-width: 1200px) {
-        display: none; 
+        display: none;
       }
       flex: 1;
-      background: linear-gradient(rgba(58, 15, 15, 0.65), rgba(58, 15, 15, 0.65)),
+      background:
+        linear-gradient(rgba(58, 15, 15, 0.65), rgba(58, 15, 15, 0.65)),
         url("https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600")
           center;
       background-size: cover;
@@ -107,20 +108,19 @@
       span {
         font-size: 14px;
       }
-      
+
       button {
         width: 50%;
         padding: 10px;
         border: none;
         background-color: white;
-        color: #4C1313;
+        color: #4c1313;
         font-weight: bold;
         cursor: pointer;
       }
     }
 
     .right {
-
       flex: 1;
       padding: 50px;
       display: flex;
@@ -129,14 +129,14 @@
       justify-content: center;
 
       h1 {
-      color: #555;
+        color: #555;
       }
-      
+
       form {
         display: flex;
         flex-direction: column;
         gap: 30px;
-        
+
         input {
           border: none;
           border-bottom: 1px solid lightgray;
@@ -149,14 +149,12 @@
           left: 90%;
           top: 25%;
           color: #555;
-          
         }
-        
-        
+
         button {
           padding: 10px;
           border: none;
-          background-color: #BB7E7E;
+          background-color: #bb7e7e;
           color: white;
           font-weight: bold;
           cursor: pointer;
@@ -168,13 +166,13 @@
 
   .mobile {
     @media screen and (min-width: 1201px) {
-      display: none; 
+      display: none;
     }
   }
-  
+
   .pc {
     @media screen and (max-width: 1200px) {
-      display: none; 
+      display: none;
     }
   }
 }

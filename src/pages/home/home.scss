@@ -8,19 +8,25 @@
 
     /* Hero banner */
     .home-hero {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       color: white;
       text-align: center;
       padding: 40px 30px;
 
-      @include mobile { padding: 20px 16px; }
+      @include mobile {
+        padding: 20px 16px;
+      }
 
       h1 {
         font-size: 36px;
         font-weight: bold;
         margin: 0 0 8px;
-        @include mobile { font-size: 28px; }
-        @include tablet { font-size: 36px; }
+        @include mobile {
+          font-size: 28px;
+        }
+        @include tablet {
+          font-size: 36px;
+        }
       }
 
       p {
@@ -44,10 +50,12 @@
       color: themed("textColorSoft");
 
       a {
-        color: #6D1D1D;
+        color: #6d1d1d;
         font-weight: 600;
         text-decoration: none;
-        &:hover { text-decoration: underline; }
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 
@@ -90,9 +98,11 @@
 
         a {
           font-size: 13px;
-          color: #6D1D1D;
+          color: #6d1d1d;
           text-decoration: none;
-          &:hover { text-decoration: underline; }
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
 
@@ -121,7 +131,7 @@
         }
 
         a {
-          color: #6D1D1D;
+          color: #6d1d1d;
           font-size: 13px;
           text-decoration: none;
         }
@@ -147,8 +157,12 @@
         gap: 12px;
         flex-wrap: wrap;
 
-        h2 { line-height: 1.35; }
-        a { flex-shrink: 0; }
+        h2 {
+          line-height: 1.35;
+        }
+        a {
+          flex-shrink: 0;
+        }
       }
 
       .marketplace-heading {
@@ -167,9 +181,13 @@
         }
       }
 
-      button, select { font: inherit; }
+      button,
+      select {
+        font: inherit;
+      }
 
-      button:focus-visible, select:focus-visible {
+      button:focus-visible,
+      select:focus-visible {
         outline: 2px solid themed("textColor");
         outline-offset: 3px;
       }
@@ -189,7 +207,7 @@
           color: themed("textColorSoft");
           font-size: 12px;
           font-weight: 700;
-          letter-spacing: .04em;
+          letter-spacing: 0.04em;
           text-transform: uppercase;
         }
       }
@@ -212,14 +230,27 @@
           font-size: 13px;
           cursor: pointer;
 
-          &.all { --status-color: #6D1D1D; --status-text: #6D1D1D; }
-          &.open { --status-color: #2ecc71; --status-text: #218c4e; }
-          &.in_escrow { --status-color: #2980b9; --status-text: #2980b9; }
-          &.closed { --status-color: #888; --status-text: #666; }
+          &.all {
+            --status-color: #6d1d1d;
+            --status-text: #6d1d1d;
+          }
+          &.open {
+            --status-color: #2ecc71;
+            --status-text: #218c4e;
+          }
+          &.in_escrow {
+            --status-color: #2980b9;
+            --status-text: #2980b9;
+          }
+          &.closed {
+            --status-color: #888;
+            --status-text: #666;
+          }
           border-color: var(--status-color);
           color: var(--status-text);
 
-          &:hover, &[aria-pressed="true"] {
+          &:hover,
+          &[aria-pressed="true"] {
             background: var(--status-color);
             border-color: var(--status-color);
             color: white;
@@ -245,7 +276,7 @@
             color: themed("textColorSoft");
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: .04em;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
           }
         }
@@ -295,29 +326,48 @@
         background: #fff;
         box-shadow: 0 2px 6px #00000012;
         cursor: pointer;
-        transition: transform 150ms ease, box-shadow 150ms ease, border-width 150ms ease;
+        transition:
+          transform 150ms ease,
+          box-shadow 150ms ease,
+          border-width 150ms ease;
         scroll-snap-align: start;
 
-        &.bubble-color-1 { --bubble-color: #4aa957; }
-        &.bubble-color-2 { --bubble-color: #3289bd; }
-        &.bubble-color-3 { --bubble-color: #d9435d; }
-        &.bubble-color-4 { --bubble-color: #8c62b6; }
+        &.bubble-color-1 {
+          --bubble-color: #4aa957;
+        }
+        &.bubble-color-2 {
+          --bubble-color: #3289bd;
+        }
+        &.bubble-color-3 {
+          --bubble-color: #d9435d;
+        }
+        &.bubble-color-4 {
+          --bubble-color: #8c62b6;
+        }
 
-        svg { width: 45%; height: 45%; }
+        svg {
+          width: 45%;
+          height: 45%;
+        }
 
         &[aria-pressed="true"] {
           border-width: 3px;
-          color: #6D1D1D;
-          box-shadow: 0 0 0 3px color-mix(in srgb, var(--bubble-color) 18%, transparent);
+          color: #6d1d1d;
+          box-shadow: 0 0 0 3px
+            color-mix(in srgb, var(--bubble-color) 18%, transparent);
         }
 
-        &:hover, &:focus-visible {
+        &:hover,
+        &:focus-visible {
           z-index: 2;
-          color: #6D1D1D;
+          color: #6d1d1d;
           transform: translateY(-2px);
           box-shadow: 0 4px 10px #0000001c;
 
-          .bubble-tooltip { opacity: 1; visibility: visible; }
+          .bubble-tooltip {
+            opacity: 1;
+            visibility: visible;
+          }
         }
 
         .bubble-tooltip {
@@ -342,12 +392,17 @@
 
         @media (prefers-reduced-motion: reduce) {
           transition: none;
-          &:hover, &:focus-visible { transform: none; }
+          &:hover,
+          &:focus-visible {
+            transform: none;
+          }
         }
       }
 
       @include mobile {
-        .marketplace-heading { align-items: center; }
+        .marketplace-heading {
+          align-items: center;
+        }
       }
 
       .home-projects-state button {
@@ -422,7 +477,9 @@
           gap: 8px;
           border-radius: 8px;
           animation: sponsor-slide-in 0.45s ease-out;
-          transition: transform 0.15s ease, opacity 0.15s ease;
+          transition:
+            transform 0.15s ease,
+            opacity 0.15s ease;
 
           &:hover,
           &:focus-visible {
@@ -431,7 +488,7 @@
           }
 
           &:focus-visible {
-            outline: 2px solid #6D1D1D;
+            outline: 2px solid #6d1d1d;
             outline-offset: 4px;
           }
 
@@ -452,7 +509,7 @@
             letter-spacing: 0.8px;
             text-transform: uppercase;
             color: white;
-            background: #6D1D1D;
+            background: #6d1d1d;
 
             &.principle {
               background: #1f4d7a;
@@ -480,7 +537,9 @@
           background: themed("bgSoft");
           cursor: pointer;
 
-          &:hover { color: #6D1D1D; }
+          &:hover {
+            color: #6d1d1d;
+          }
         }
       }
 
@@ -499,13 +558,25 @@
       }
 
       @keyframes sponsor-slide-in {
-        from { opacity: 0; transform: translateX(12px); }
-        to { opacity: 1; transform: translateX(0); }
+        from {
+          opacity: 0;
+          transform: translateX(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       @keyframes sponsor-grid-in {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       @include mobile {
@@ -564,8 +635,12 @@
         color: inherit;
         transition: background 0.15s;
 
-        &:last-child { border-bottom: none; }
-        &:hover { background-color: themed("bgSoft"); }
+        &:last-child {
+          border-bottom: none;
+        }
+        &:hover {
+          background-color: themed("bgSoft");
+        }
 
         .escrow-title {
           flex: 1;
@@ -607,8 +682,12 @@
         color: inherit;
         gap: 12px;
 
-        &:last-child { border-bottom: none; }
-        &:hover { background-color: themed("bgSoft"); }
+        &:last-child {
+          border-bottom: none;
+        }
+        &:hover {
+          background-color: themed("bgSoft");
+        }
 
         .project-row-info {
           display: flex;
@@ -667,11 +746,11 @@
           width: 100%;
         }
 
-        &:hover img { opacity: 0.85; }
+        &:hover img {
+          opacity: 0.85;
+        }
       }
     }
-
-
 
     /* Project activity feed */
     .activity-feed-section {
@@ -699,12 +778,14 @@
         gap: 6px;
         transition: box-shadow 0.2s;
 
-        &:hover { box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.25); }
+        &:hover {
+          box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.25);
+        }
 
         .stat-value {
           font-size: 36px;
           font-weight: bold;
-          color: #6D1D1D;
+          color: #6d1d1d;
         }
 
         .stat-label {

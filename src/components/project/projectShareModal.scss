@@ -102,14 +102,14 @@
         white-space: nowrap;
 
         &:hover {
-          border-color: #6D1D1D;
-          color: #6D1D1D;
+          border-color: #6d1d1d;
+          color: #6d1d1d;
         }
 
         &.active {
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           color: white;
-          border-color: #6D1D1D;
+          border-color: #6d1d1d;
         }
       }
     }
@@ -172,7 +172,7 @@
         position: absolute;
         top: 2px;
         right: 2px;
-        background: rgba(255,255,255,0.8);
+        background: rgba(255, 255, 255, 0.8);
         border: none;
         cursor: pointer;
         padding: 0;
@@ -211,7 +211,7 @@
       }
 
       .post-btn {
-        background-color: #6D1D1D;
+        background-color: #6d1d1d;
         color: white;
         border: none;
         border-radius: 6px;

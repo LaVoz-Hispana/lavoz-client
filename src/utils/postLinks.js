@@ -6,10 +6,8 @@ export const URL_PATTERN = `${URL_START_PATTERN}(?:(?!${URL_BOUNDARY_PATTERN})[^
 
 export const createUrlRegex = () => new RegExp(`(${URL_PATTERN})`, "gi");
 
-export const createPostTextRegex = () => new RegExp(
-  `\\[([^\\]]+)\\]\\((${URL_PATTERN})\\)|(${URL_PATTERN})`,
-  "gi"
-);
+export const createPostTextRegex = () =>
+  new RegExp(`\\[([^\\]]+)\\]\\((${URL_PATTERN})\\)|(${URL_PATTERN})`, "gi");
 
 export const ensureAbsoluteUrl = (url) => {
   if (!url.match(/^(https?:\/\/|www\.)/i)) {
@@ -33,7 +31,8 @@ export const trimTrailingPunctuation = (value) => {
   return { trimmed, suffix };
 };
 
-export const getDisplayUrl = (url) => url
-  .replace(/^https?:\/\/(www\.)?/i, "")
-  .replace(/^www\./i, "")
-  .replace(/\/$/, "");
+export const getDisplayUrl = (url) =>
+  url
+    .replace(/^https?:\/\/(www\.)?/i, "")
+    .replace(/^www\./i, "")
+    .replace(/\/$/, "");

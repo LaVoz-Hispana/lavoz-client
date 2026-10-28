@@ -34,8 +34,13 @@
           resize: vertical;
           width: 100%;
 
-          &::placeholder { color: themed("textColorSoft"); }
-          &:focus { outline: none; border-bottom-color: #6D1D1D; }
+          &::placeholder {
+            color: themed("textColorSoft");
+          }
+          &:focus {
+            outline: none;
+            border-bottom-color: #6d1d1d;
+          }
         }
 
         .field-label {
@@ -81,20 +86,28 @@
             display: flex;
             gap: 8px;
 
-            input { flex: 1; }
+            input {
+              flex: 1;
+            }
             button {
               padding: 5px 10px;
               border: none;
               border-radius: 3px;
-              background-color: #6D1D1D;
+              background-color: #6d1d1d;
               color: white;
               cursor: pointer;
             }
           }
         }
 
-        .error-msg  { color: red;   font-size: 12px; }
-        .success-msg { color: green; font-size: 12px; }
+        .error-msg {
+          color: red;
+          font-size: 12px;
+        }
+        .success-msg {
+          color: green;
+          font-size: 12px;
+        }
 
         .footer {
           display: flex;
@@ -104,14 +117,19 @@
           button {
             padding: 5px 14px;
             border-radius: 3px;
-            background-color: #6D1D1D;
+            background-color: #6d1d1d;
             color: white;
             border: none;
             font-size: 14px;
             cursor: pointer;
 
-            &:hover { background-color: #8a2424; }
-            &:disabled { opacity: 0.6; cursor: not-allowed; }
+            &:hover {
+              background-color: #8a2424;
+            }
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
           }
         }
       }

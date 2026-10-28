@@ -22,7 +22,6 @@
       display: block;
     }
 
-    
     .stars {
       display: flex;
       margin-top: 5px;
@@ -33,7 +32,6 @@
       align-items: center;
     }
 
-    
     .emotion {
       display: flex;
       align-items: center;
@@ -41,8 +39,8 @@
       margin-left: 10px;
     }
 
-    p{
-      color:themed("textColorSoft");
+    p {
+      color: themed("textColorSoft");
     }
 
     button {
@@ -57,20 +55,20 @@
       gap: 20px;
 
       .comment-info {
-        flex:3;
+        flex: 3;
         display: flex;
         flex-direction: column;
         gap: 3px;
         flex-wrap: wrap;
         align-items: flex-start;
         justify-content: flex-start;
-      
+
         span {
           font-weight: 500;
         }
 
-        p{
-          color:themed("textColorSoft");
+        p {
+          color: themed("textColorSoft");
         }
 
         button {
@@ -80,9 +78,9 @@
           margin-left: 15px;
         }
       }
-      
-      .date{
-        flex:1;
+
+      .date {
+        flex: 1;
         justify-content: flex-end;
         color: gray;
         font-size: 12px;
@@ -100,12 +98,10 @@
         margin-left: 10px;
         display: flex;
       }
-
-      
     }
   }
-  
-  .floating {  
+
+  .floating {
     animation: createBox;
     animation-duration: 1.5s;
     animation-iteration-count: 1;
@@ -113,11 +109,17 @@
   }
 
   @keyframes createBox {
-    0% { transform: scale(1); translate: translate(0, 0px); }
-    50%  { transform: scale(2.25); 
+    0% {
+      transform: scale(1);
+      translate: translate(0, 0px);
+    }
+    50% {
+      transform: scale(2.25);
       translate: translate(0, 15px);
     }
-    100%   { transform: scale(1); translate: translate(0, -0px); }    
+    100% {
+      transform: scale(1);
+      translate: translate(0, -0px);
+    }
   }
-
 }

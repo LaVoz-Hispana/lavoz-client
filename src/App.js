@@ -20,7 +20,7 @@ import "./style.scss";
 import { useContext, useEffect } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
-import './i18n';
+import "./i18n";
 import ForgotPassword from "./pages/forgotPassword/forgotPassword";
 import OTPInput from "./pages/forgotPassword/OTPInput";
 import ResetPassword from "./pages/forgotPassword/ResetPassword";
@@ -42,12 +42,12 @@ function App() {
   // console.log("App loaded — Env BASE URL:", process.env.REACT_APP_NETWORK_ADDR);
 
   const { currentUser } = useContext(AuthContext);
-  
+
   const { darkMode } = useContext(DarkModeContext);
 
   const NavigationWrapper = () => {
     const navigate = useNavigate();
-    
+
     useEffect(() => {
       setNavigate(navigate);
     }, [navigate]);
@@ -60,15 +60,21 @@ function App() {
     const isHome = location.pathname === "/";
 
     return (
-      <div className={`theme-${darkMode ? "dark" : "light"}`} style={{height: '100%'}}>
-          <Navbar style={{height: '5%'}} />
-          <div style={{ display: "flex", height: '95%', width: '100%' }}>
-            <LeftBar/>
-            <div className="mainSection" style={{ width: "100%", margin: 0, flex: 10 }}>
-              <Outlet />
-            </div>
-            <RightBar />
+      <div
+        className={`theme-${darkMode ? "dark" : "light"}`}
+        style={{ height: "100%" }}
+      >
+        <Navbar style={{ height: "5%" }} />
+        <div style={{ display: "flex", height: "95%", width: "100%" }}>
+          <LeftBar />
+          <div
+            className="mainSection"
+            style={{ width: "100%", margin: 0, flex: 10 }}
+          >
+            <Outlet />
           </div>
+          <RightBar />
+        </div>
       </div>
     );
   };
@@ -81,16 +87,15 @@ function App() {
     return children;
   };
 
-  function ResetRoute({children}) {
+  function ResetRoute({ children }) {
     const { valid } = useContext(RecoveryContext);
-    return valid === true ? children : <Navigate to="/forgotPassword"/>
+    return valid === true ? children : <Navigate to="/forgotPassword" />;
   }
 
-  function OTPRoute({children}) {
+  function OTPRoute({ children }) {
     const { email } = useContext(RecoveryContext);
-    return email != null ? children: <Navigate to="/otp"/>
+    return email != null ? children : <Navigate to="/otp" />;
   }
-
 
   const router = createBrowserRouter([
     {
@@ -107,7 +112,7 @@ function App() {
         },
         {
           path: "/guest",
-          element: <Guest/>
+          element: <Guest />,
         },
         {
           path: "/projects",
@@ -141,7 +146,11 @@ function App() {
         },
         {
           path: "/applications",
-          element: <RoleGuard roles={["student"]}><MyApplications /></RoleGuard>,
+          element: (
+            <RoleGuard roles={["student"]}>
+              <MyApplications />
+            </RoleGuard>
+          ),
         },
         {
           path: "/escrows/:id",
@@ -175,31 +184,31 @@ function App() {
     },
     {
       path: "/forgotPassword",
-      element: <ForgotPassword/>
+      element: <ForgotPassword />,
     },
     {
       path: "/otp",
       element: (
         <OTPRoute>
-          <OTPInput/>
+          <OTPInput />
         </OTPRoute>
-      )
+      ),
     },
     {
       path: "/resetPassword",
       element: (
         <ResetRoute>
-          <ResetPassword/>
+          <ResetPassword />
         </ResetRoute>
-      )
-    }
+      ),
+    },
   ]);
 
   return (
     <div>
-      <RouterProvider router={router}  style={{maxWidth: "100vw"}}/>
+      <RouterProvider router={router} style={{ maxWidth: "100vw" }} />
     </div>
   );
 }
 
-export default (App);
+export default App;

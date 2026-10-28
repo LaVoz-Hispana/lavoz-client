@@ -12,14 +12,14 @@ import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
-import PaidIcon from '@mui/icons-material/Paid';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import PaidIcon from "@mui/icons-material/Paid";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
 import { useTranslation } from "react-i18next";
 import InsertLink from "@mui/icons-material/InsertLink";
 import { isAdmin } from "../../utils/admin";
@@ -35,7 +35,7 @@ const Job = ({ job }) => {
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".heic"];
     return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
   };
-  
+
   const isVideo = (url) => {
     if (url === null) return false;
     const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
@@ -60,8 +60,8 @@ const Job = ({ job }) => {
     } catch (err) {
       console.log(err);
     }
-  }
-  
+  };
+
   const handleDelete = async (e) => {
     e.preventDefault();
     if (!currentUser) return;
@@ -85,69 +85,100 @@ const Job = ({ job }) => {
     }
     // If it starts with http:// or https://, return as is.
     return url;
-  };
+  }
 
   return (
     <div className="job">
       <div className="container">
         <div className="top">
-            <h3>{job.name}</h3>
-            <div className="user">
+          <h3>{job.name}</h3>
+          <div className="user">
             <div className="userInfo">
-                <img src={job.profilePic || DefaultAvatar} alt="" />
-                <div className="details">
-                {job.profileVisible !== false && job.userId ? <ProfileLink
+              <img src={job.profilePic || DefaultAvatar} alt="" />
+              <div className="details">
+                {job.profileVisible !== false && job.userId ? (
+                  <ProfileLink
                     to={`/profile/${job.userId}`}
                     style={{ textDecoration: "none", color: "inherit" }}
-                >
+                  >
                     <span className="name">{job.username}</span>
-                </ProfileLink> : <span className="name">{job.username}</span>}
-                </div>
+                  </ProfileLink>
+                ) : (
+                  <span className="name">{job.username}</span>
+                )}
+              </div>
             </div>
-            </div>
-            <div className = "center">
-              {!currentUser? <div/> : job.userId === currentUser.id && 
+          </div>
+          <div className="center">
+            {!currentUser ? (
+              <div />
+            ) : (
+              job.userId === currentUser.id && (
                 <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
-              }
-              {!currentUser ? <div/> : menuOpen && (job.userId === currentUser.id || isAdmin(currentUser)) && (
-                <button className="delete" onClick={handleDelete}>delete job</button>
-              )}
-            </div>
+              )
+            )}
+            {!currentUser ? (
+              <div />
+            ) : (
+              menuOpen &&
+              (job.userId === currentUser.id || isAdmin(currentUser)) && (
+                <button className="delete" onClick={handleDelete}>
+                  delete job
+                </button>
+              )
+            )}
+          </div>
         </div>
-        
+
         <div className="content">
-          {job.url && job.url != "" &&
+          {job.url && job.url != "" && (
             <div className="row">
-                <InsertLink/>
-                <span>
-                  <a className="link" href={ensureAbsoluteUrl(job.url)} target="_blank" rel="noopener noreferrer" style={{fontSize: 14}}>{job.url}</a>
-                </span>
+              <InsertLink />
+              <span>
+                <a
+                  className="link"
+                  href={ensureAbsoluteUrl(job.url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 14 }}
+                >
+                  {job.url}
+                </a>
+              </span>
             </div>
-          }
+          )}
+          <div className="row">
+            <PaidIcon />
+            <span>{job.pay}</span>
+          </div>
+          <div className="row">
+            <CalendarMonthIcon />
+            <span>{job.schedule}</span>
+          </div>
+          <div className="row">
+            <LocationOnIcon />
+            <span>{job.location}</span>
+          </div>
+          <div className="row">
+            <EmailIcon />
+            <span className="contact">
+              {t("jobs.contact")}
+              <a
+                className="link"
+                href={`mailto:${job.contact}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {job.contact}
+              </a>
+            </span>
+          </div>
+          {job.description && (
             <div className="row">
-                <PaidIcon/>
-                <span>{job.pay}</span>
+              <span>{job.description}</span>
             </div>
-            <div className="row">
-                <CalendarMonthIcon/>
-                <span>{job.schedule}</span>
-            </div>
-            <div className="row">
-                <LocationOnIcon/>
-                <span>{job.location}</span>
-            </div>
-            <div className="row">
-                <EmailIcon/>
-                <span className="contact">
-                  {t('jobs.contact')}  
-                  <a className="link" href={`mailto:${job.contact}`} target="_blank" rel="noopener noreferrer">{job.contact}</a>
-                </span>
-            </div>
-            {job.description && 
-            <div className="row">
-                <span>{job.description}</span>
-            </div>}
-          {isImage(job.img) && <img src={job.img}/>}
+          )}
+          {isImage(job.img) && <img src={job.img} />}
           {isVideo(job.img) && (
             <video controls>
               <source src={job.img} type="video/mp4" />

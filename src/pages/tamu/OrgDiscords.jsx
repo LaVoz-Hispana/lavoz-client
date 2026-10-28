@@ -24,7 +24,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 1,
       name: "TAMU Computer Science Club",
       organization: "Computer Science Club",
-      description: "Official Discord for CS students. Programming help, project collaboration, internship discussions, and tech talks.",
+      description:
+        "Official Discord for CS students. Programming help, project collaboration, internship discussions, and tech talks.",
       category: "Academic",
       subCategory: "Computer Science",
       members: 1247,
@@ -36,7 +37,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 2,
       name: "Aggie Gaming Community",
       organization: "Gaming Club",
-      description: "Connect with fellow Aggie gamers! Organize tournaments, find teammates, and discuss the latest games.",
+      description:
+        "Connect with fellow Aggie gamers! Organize tournaments, find teammates, and discuss the latest games.",
       category: "Gaming",
       subCategory: "Video Games",
       members: 892,
@@ -48,7 +50,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 3,
       name: "TAMU Engineering Society",
       organization: "Engineering Society",
-      description: "For all engineering majors! Share resources, discuss projects, career advice, and networking opportunities.",
+      description:
+        "For all engineering majors! Share resources, discuss projects, career advice, and networking opportunities.",
       category: "Academic",
       subCategory: "Engineering",
       members: 1563,
@@ -60,7 +63,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 4,
       name: "Aggie Art Collective",
       organization: "Art Club",
-      description: "Creative space for artists at TAMU. Share artwork, get feedback, find collaboration partners, and art events.",
+      description:
+        "Creative space for artists at TAMU. Share artwork, get feedback, find collaboration partners, and art events.",
       category: "Arts",
       subCategory: "Visual Arts",
       members: 445,
@@ -72,7 +76,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 5,
       name: "Business Students Network",
       organization: "Business Student Council",
-      description: "Mays Business School students! Networking, career opportunities, study groups, and business case competitions.",
+      description:
+        "Mays Business School students! Networking, career opportunities, study groups, and business case competitions.",
       category: "Academic",
       subCategory: "Business",
       members: 967,
@@ -84,7 +89,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 6,
       name: "TAMU Volunteer Corps",
       organization: "Student Volunteer Services",
-      description: "Find volunteer opportunities around Bryan-College Station. Make a difference in the community!",
+      description:
+        "Find volunteer opportunities around Bryan-College Station. Make a difference in the community!",
       category: "Service",
       subCategory: "Community Service",
       members: 634,
@@ -96,7 +102,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 7,
       name: "Aggie Music Society",
       organization: "Music Club",
-      description: "For musicians and music lovers! Share performances, find bandmates, discuss music theory, and jam sessions.",
+      description:
+        "For musicians and music lovers! Share performances, find bandmates, discuss music theory, and jam sessions.",
       category: "Arts",
       subCategory: "Music",
       members: 378,
@@ -108,7 +115,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 8,
       name: "TAMU Fitness & Wellness",
       organization: "Recreation Sports",
-      description: "Fitness enthusiasts unite! Workout partners, nutrition tips, fitness challenges, and wellness discussions.",
+      description:
+        "Fitness enthusiasts unite! Workout partners, nutrition tips, fitness challenges, and wellness discussions.",
       category: "Health",
       subCategory: "Fitness",
       members: 756,
@@ -120,7 +128,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 9,
       name: "International Students TAMU",
       organization: "International Student Services",
-      description: "Supporting international students at TAMU. Cultural exchange, visa help, events, and making friends!",
+      description:
+        "Supporting international students at TAMU. Cultural exchange, visa help, events, and making friends!",
       category: "Cultural",
       subCategory: "International",
       members: 1124,
@@ -132,7 +141,8 @@ const OrgDiscords = ({ onBack }) => {
       id: 10,
       name: "Pre-Med Aggies",
       organization: "Pre-Medical Society",
-      description: "Pre-medical students support network. MCAT prep, application help, volunteering opportunities, and mentorship.",
+      description:
+        "Pre-medical students support network. MCAT prep, application help, volunteering opportunities, and mentorship.",
       category: "Academic",
       subCategory: "Pre-Professional",
       members: 823,
@@ -157,8 +167,13 @@ const OrgDiscords = ({ onBack }) => {
       server.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       server.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
       server.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      server.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === "" || selectedCategory === "All" || server.category === selectedCategory;
+      server.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    const matchesCategory =
+      selectedCategory === "" ||
+      selectedCategory === "All" ||
+      server.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -194,7 +209,10 @@ const OrgDiscords = ({ onBack }) => {
                 />
               </div>
 
-              <button className={`filter-btn ${showFilters ? "active" : ""}`} onClick={() => setShowFilters(!showFilters)}>
+              <button
+                className={`filter-btn ${showFilters ? "active" : ""}`}
+                onClick={() => setShowFilters(!showFilters)}
+              >
                 <FilterListIcon /> {t("orgDiscords.filters")}
               </button>
             </div>
@@ -231,13 +249,20 @@ const OrgDiscords = ({ onBack }) => {
                       <div className="server-info">
                         <div className="server-category">
                           <CategoryIcon className="category-icon" />
-                          <span className="category-name">{server.category}</span>
-                          {server.isOfficial && <span className="official-badge">{t("orgDiscords.official")}</span>}
+                          <span className="category-name">
+                            {server.category}
+                          </span>
+                          {server.isOfficial && (
+                            <span className="official-badge">
+                              {t("orgDiscords.official")}
+                            </span>
+                          )}
                         </div>
                         <div className="server-members">
                           <GroupIcon className="members-icon" />
                           <span>
-                            {server.members.toLocaleString()} {t("orgDiscords.members")}
+                            {server.members.toLocaleString()}{" "}
+                            {t("orgDiscords.members")}
                           </span>
                         </div>
                       </div>
@@ -256,7 +281,10 @@ const OrgDiscords = ({ onBack }) => {
                     </div>
 
                     <div className="server-actions">
-                      <button className="join-btn" onClick={() => handleJoinServer(server.inviteCode)}>
+                      <button
+                        className="join-btn"
+                        onClick={() => handleJoinServer(server.inviteCode)}
+                      >
                         <ChatIcon /> {t("orgDiscords.joinServer")}
                       </button>
                     </div>

@@ -11,14 +11,14 @@ import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import TextareaAutosize from "react-textarea-autosize";
 
 const POST_TYPES = [
-  { id: "launch",          labelKey: "projectPost.launch" },
-  { id: "description",     labelKey: "projectPost.description" },
-  { id: "work_in_progress",labelKey: "projectPost.workInProgress" },
+  { id: "launch", labelKey: "projectPost.launch" },
+  { id: "description", labelKey: "projectPost.description" },
+  { id: "work_in_progress", labelKey: "projectPost.workInProgress" },
   { id: "progress_update", labelKey: "projectPost.progressUpdate" },
-  { id: "achievement",     labelKey: "projectPost.achievement" },
-  { id: "collaboration",   labelKey: "projectPost.collaboration" },
-  { id: "general",         labelKey: "projectPost.general" },
-  { id: "final_results",   labelKey: "projectPost.finalResults" },
+  { id: "achievement", labelKey: "projectPost.achievement" },
+  { id: "collaboration", labelKey: "projectPost.collaboration" },
+  { id: "general", labelKey: "projectPost.general" },
+  { id: "final_results", labelKey: "projectPost.finalResults" },
 ];
 
 const ProjectShareModal = ({ projectId, projectTitle, onClose }) => {
@@ -48,7 +48,7 @@ const ProjectShareModal = ({ projectId, projectTitle, onClose }) => {
         formData.append("file", file);
         const res = await makeRequest.post("/uploadPost", formData);
         return res.data;
-      })
+      }),
     );
     return results;
   };
@@ -64,11 +64,24 @@ const ProjectShareModal = ({ projectId, projectTitle, onClose }) => {
     setIsSubmitting(true);
     setError(null);
 
-    const imgUrls = [null, null, null, null, null, null, null, null, null, null];
+    const imgUrls = [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ];
     if (files.length > 0) {
       try {
         const uploaded = await upload(files);
-        uploaded.forEach((url, i) => { if (url) imgUrls[i] = url; });
+        uploaded.forEach((url, i) => {
+          if (url) imgUrls[i] = url;
+        });
       } catch (err) {
         setError(t("projectPost.uploadError"));
         setIsSubmitting(false);
@@ -78,9 +91,16 @@ const ProjectShareModal = ({ projectId, projectTitle, onClose }) => {
 
     mutation.mutate({
       desc,
-      img0: imgUrls[0], img1: imgUrls[1], img2: imgUrls[2], img3: imgUrls[3],
-      img4: imgUrls[4], img5: imgUrls[5], img6: imgUrls[6], img7: imgUrls[7],
-      img8: imgUrls[8], img9: imgUrls[9],
+      img0: imgUrls[0],
+      img1: imgUrls[1],
+      img2: imgUrls[2],
+      img3: imgUrls[3],
+      img4: imgUrls[4],
+      img5: imgUrls[5],
+      img6: imgUrls[6],
+      img7: imgUrls[7],
+      img8: imgUrls[8],
+      img9: imgUrls[9],
       category: "project_update",
       hasFlag: false,
       article: null,
@@ -159,8 +179,14 @@ const ProjectShareModal = ({ projectId, projectTitle, onClose }) => {
                 ) : (
                   <video src={URL.createObjectURL(f) + "#t=0.001"} />
                 )}
-                <button className="remove-file" onClick={() => removeFile(i)} type="button">
-                  <DisabledByDefault style={{ color: "gray", fontSize: "small" }} />
+                <button
+                  className="remove-file"
+                  onClick={() => removeFile(i)}
+                  type="button"
+                >
+                  <DisabledByDefault
+                    style={{ color: "gray", fontSize: "small" }}
+                  />
                 </button>
               </div>
             ))}

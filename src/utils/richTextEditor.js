@@ -1,5 +1,6 @@
 const getContainingEditorLink = (root, node) => {
-  const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+  const element =
+    node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
   const link = element?.closest?.("a.editor-link");
   return link && root.contains(link) ? link : null;
 };
@@ -24,12 +25,16 @@ const isCaretAtEndOf = (container, offset, ancestor) => {
 };
 
 export const getEditorLinkValue = (link) => {
-  const rawUrl = link.dataset.rawUrl || link.getAttribute("href") || link.textContent || "";
+  const rawUrl =
+    link.dataset.rawUrl || link.getAttribute("href") || link.textContent || "";
   const originalDisplayUrl = link.dataset.displayUrl;
 
   // Older rendered links do not carry editing metadata, so retain their
   // original serialization behavior until they are rendered again.
-  if (originalDisplayUrl === undefined || link.textContent === originalDisplayUrl) {
+  if (
+    originalDisplayUrl === undefined ||
+    link.textContent === originalDisplayUrl
+  ) {
     return rawUrl;
   }
 
@@ -51,7 +56,11 @@ export const serializeEditorContent = (root) => {
   return serializeNode(root).replace(/\r\n/g, "\n");
 };
 
-export const insertTextAtCaret = (root, text, { exitLinkAtEnd = false } = {}) => {
+export const insertTextAtCaret = (
+  root,
+  text,
+  { exitLinkAtEnd = false } = {},
+) => {
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0) return false;
 

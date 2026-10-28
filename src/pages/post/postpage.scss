@@ -1,18 +1,18 @@
 @import "../../style.scss";
 
 .postpage {
-    @include themify($themes) {
-        padding: 50px 70px;
-        background-color: themed("bgSoft");
-        display: flex;
-        flex-direction: column;
-        min-height: 80vh;
+  @include themify($themes) {
+    padding: 50px 70px;
+    background-color: themed("bgSoft");
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
 
-        @include mobile {
-            padding: 10px;
-        }
-        @include tablet{
-            padding: 20px;
-        }
+    @include mobile {
+      padding: 10px;
     }
+    @include tablet {
+      padding: 20px;
+    }
+  }
 }

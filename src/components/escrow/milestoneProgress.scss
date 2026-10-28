@@ -14,7 +14,9 @@
       font-size: 13px;
       font-weight: 600;
 
-      &::before { content: "✓"; }
+      &::before {
+        content: "✓";
+      }
     }
 
     .progress-label {
@@ -24,7 +26,9 @@
       color: rgba(255, 255, 255, 0.8);
       margin-bottom: 6px;
 
-      .pct { font-weight: 600; }
+      .pct {
+        font-weight: 600;
+      }
     }
 
     .progress-track {

@@ -7,8 +7,13 @@
     box-shadow: 0 0 25px -10px rgba(0, 0, 0, 0.38);
     padding: 24px;
 
-    h2, p { margin-top: 0; }
-    p { color: themed("textColorSoft"); }
+    h2,
+    p {
+      margin-top: 0;
+    }
+    p {
+      color: themed("textColorSoft");
+    }
 
     .sponsor-section-editor {
       display: grid;
@@ -61,8 +66,12 @@
       }
     }
 
-    form { display: grid; gap: 12px; }
-    input, textarea {
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    input,
+    textarea {
       padding: 10px 12px;
       border: 1px solid themed("border");
       border-radius: 8px;
@@ -89,16 +98,34 @@
         font: inherit;
       }
     }
-    textarea { resize: vertical; min-height: 96px; }
-    button { border: 0; border-radius: 8px; padding: 10px 14px; background: #6D1D1D; color: white; cursor: pointer; width: fit-content; }
-    button:disabled { opacity: .6; cursor: default; }
+    textarea {
+      resize: vertical;
+      min-height: 96px;
+    }
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #6d1d1d;
+      color: white;
+      cursor: pointer;
+      width: fit-content;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
     @include mobile {
       button {
         width: 100%;
       }
     }
 
-    .sponsor-manager-list { display: grid; gap: 10px; margin-top: 24px; }
+    .sponsor-manager-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
     article {
       display: flex;
       align-items: center;
@@ -113,10 +140,26 @@
       flex: 1;
       min-width: 0;
     }
-    article img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; flex: 0 0 auto; }
+    article img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex: 0 0 auto;
+    }
     .sponsor-row-content,
-    .sponsor-edit-form { display: grid; gap: 4px; flex: 1; min-width: 0; }
-    article a { color: #6D1D1D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sponsor-edit-form {
+      display: grid;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+    article a {
+      color: #6d1d1d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .sponsor-type-badge {
       display: inline-flex;
       align-items: center;
@@ -129,8 +172,12 @@
       text-transform: uppercase;
       color: white;
 
-      &.regular { background: #6D1D1D; }
-      &.principle { background: #1f4d7a; }
+      &.regular {
+        background: #6d1d1d;
+      }
+      &.principle {
+        background: #1f4d7a;
+      }
     }
     .sponsor-row-actions {
       display: flex;
@@ -155,7 +202,9 @@
       color: themed("textColor");
       border: 1px solid themed("border");
     }
-    article button { background: #7b2720; }
+    article button {
+      background: #7b2720;
+    }
     @include mobile {
       article {
         align-items: flex-start;

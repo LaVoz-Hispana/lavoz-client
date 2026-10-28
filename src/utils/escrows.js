@@ -17,15 +17,21 @@ export const getMyEscrows = () =>
 
 // ── Milestones ────────────────────────────────────────────────────────────────
 
-export const createMilestone = (escrowId, { title, description, dueDate, order }) =>
+export const createMilestone = (
+  escrowId,
+  { title, description, dueDate, order },
+) =>
   makeRequest
-    .post(`/escrows/${escrowId}/milestones`, { title, description, dueDate, order })
+    .post(`/escrows/${escrowId}/milestones`, {
+      title,
+      description,
+      dueDate,
+      order,
+    })
     .then((res) => res.data);
 
 export const getMilestones = (escrowId) =>
-  makeRequest
-    .get(`/escrows/${escrowId}/milestones`)
-    .then((res) => res.data);
+  makeRequest.get(`/escrows/${escrowId}/milestones`).then((res) => res.data);
 
 // Partial update — only provided fields are overwritten. Only allowed while escrow is pending.
 export const updateMilestone = (escrowId, milestoneId, fields) =>
@@ -50,12 +56,18 @@ export const approveMilestone = (escrowId, milestoneId) =>
 // Resets milestone → revision_requested, escrow → active.
 export const requestMilestoneChanges = (escrowId, milestoneId, { note }) =>
   makeRequest
-    .put(`/escrows/${escrowId}/milestones/${milestoneId}/request-changes`, { note })
+    .put(`/escrows/${escrowId}/milestones/${milestoneId}/request-changes`, {
+      note,
+    })
     .then((res) => res.data);
 
 // ── Artifact submission (milestone-scoped) ────────────────────────────────────
 
-export const submitArtifact = (escrowId, milestoneId, { fileUrl, description }) => {
+export const submitArtifact = (
+  escrowId,
+  milestoneId,
+  { fileUrl, description },
+) => {
   const body = { description };
   if (fileUrl) body.fileUrl = fileUrl;
   return makeRequest

@@ -9,14 +9,18 @@
     min-height: 100%;
 
     .header {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       padding: 50px 30px;
       display: flex;
       align-items: center;
       justify-content: center;
 
-      @include mobile { padding: 10px 5px; }
-      @include tablet { padding: 10px; }
+      @include mobile {
+        padding: 10px 5px;
+      }
+      @include tablet {
+        padding: 10px;
+      }
 
       h1 {
         font-weight: bold;
@@ -25,16 +29,24 @@
         text-align: center;
         margin: 0;
 
-        @include mobile { font-size: 20px; }
-        @include tablet { font-size: 30px; }
+        @include mobile {
+          font-size: 20px;
+        }
+        @include tablet {
+          font-size: 30px;
+        }
       }
     }
 
     .content {
       padding: 10px 50px;
 
-      @include mobile { padding: 10px; }
-      @include tablet { padding: 20px; }
+      @include mobile {
+        padding: 10px;
+      }
+      @include tablet {
+        padding: 20px;
+      }
     }
 
     .tabs {
@@ -51,12 +63,14 @@
         cursor: pointer;
         width: 160px;
 
-        &:hover { background-color: themed("bg"); }
+        &:hover {
+          background-color: themed("bg");
+        }
 
         &.selected {
-          color: #6D1D1D;
+          color: #6d1d1d;
           font-weight: bold;
-          border-bottom: 2px solid #6D1D1D;
+          border-bottom: 2px solid #6d1d1d;
         }
       }
     }
@@ -73,8 +87,13 @@
         color: themed("textColor");
         font-size: 14px;
 
-        &::placeholder { color: themed("textColorSoft"); }
-        &:focus { outline: none; border-bottom-color: #6D1D1D; }
+        &::placeholder {
+          color: themed("textColorSoft");
+        }
+        &:focus {
+          outline: none;
+          border-bottom-color: #6d1d1d;
+        }
       }
     }
 
@@ -103,13 +122,15 @@
           width: 100%;
           padding: 5px 0;
           border-radius: 5px;
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           color: white;
           border: none;
           font-size: 12px;
           cursor: pointer;
 
-          &:hover { background-color: #8a2424; }
+          &:hover {
+            background-color: #8a2424;
+          }
         }
       }
 
@@ -135,7 +156,10 @@
           border-radius: 50%;
           object-fit: cover;
 
-          @include mobile { width: 60px; height: 60px; }
+          @include mobile {
+            width: 60px;
+            height: 60px;
+          }
         }
 
         .name {
@@ -206,10 +230,15 @@
         padding: 4px 2px 12px;
         overflow-x: auto;
         scrollbar-width: thin;
-        scrollbar-color: #6D1D1D transparent;
+        scrollbar-color: #6d1d1d transparent;
 
-        &::-webkit-scrollbar { height: 6px; }
-        &::-webkit-scrollbar-thumb { background-color: #6D1D1D; border-radius: 99px; }
+        &::-webkit-scrollbar {
+          height: 6px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: #6d1d1d;
+          border-radius: 99px;
+        }
       }
 
       .carousel-scroll-control {
@@ -221,7 +250,7 @@
         justify-content: center;
         width: 42px;
         border: none;
-        color: #6D1D1D;
+        color: #6d1d1d;
         opacity: 0.58;
         cursor: pointer;
         z-index: 1;
@@ -263,11 +292,14 @@
         color: themed("textColor");
         font-size: 12px;
         cursor: pointer;
-        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        transition:
+          background-color 0.2s,
+          border-color 0.2s,
+          color 0.2s;
 
         &:hover {
           background-color: themed("bgSoft");
-          color: #6D1D1D;
+          color: #6d1d1d;
         }
 
         svg {
@@ -284,8 +316,8 @@
         }
 
         &.selected {
-          border-color: #6D1D1D;
-          background-color: #6D1D1D;
+          border-color: #6d1d1d;
+          background-color: #6d1d1d;
           color: white;
           font-weight: 600;
         }
@@ -293,7 +325,7 @@
     }
 
     .focused-service .service-card {
-      outline: 2px solid #6D1D1D;
+      outline: 2px solid #6d1d1d;
       outline-offset: 3px;
     }
   }

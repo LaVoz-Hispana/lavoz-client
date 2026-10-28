@@ -44,7 +44,9 @@
       background-color: themed("bg");
       transition: background-color 0.1s;
 
-      &:hover { background-color: themed("bgSoft"); }
+      &:hover {
+        background-color: themed("bgSoft");
+      }
 
       // ── Avatar ───────────────────────────────────────────────────────────────
       .event-avatar {
@@ -99,9 +101,18 @@
             padding: 1px 7px;
             border-radius: 20px;
 
-            &[data-role="local"]   { background-color: rgba(109,29,29,0.12); color: #6D1D1D; }
-            &[data-role="student"] { background-color: rgba(41,128,185,0.12); color: #2980b9; }
-            &[data-role="admin"]   { background-color: rgba(142,68,173,0.12); color: #8e44ad; }
+            &[data-role="local"] {
+              background-color: rgba(109, 29, 29, 0.12);
+              color: #6d1d1d;
+            }
+            &[data-role="student"] {
+              background-color: rgba(41, 128, 185, 0.12);
+              color: #2980b9;
+            }
+            &[data-role="admin"] {
+              background-color: rgba(142, 68, 173, 0.12);
+              color: #8e44ad;
+            }
           }
 
           .event-type {
@@ -170,14 +181,23 @@
         background-color: themed("border");
         animation: sk-pulse 1.4s infinite;
 
-        &.sk-line--short { width: 40%; }
-        &.sk-line--long  { width: 75%; }
+        &.sk-line--short {
+          width: 40%;
+        }
+        &.sk-line--long {
+          width: 75%;
+        }
       }
     }
 
     @keyframes sk-pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.4; }
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
     }
   }
 }

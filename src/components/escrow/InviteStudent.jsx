@@ -18,11 +18,16 @@ const InviteStudent = ({ studentId, studentUsername, onClose }) => {
     queryFn: () => makeRequest.get("/projects/mine").then((res) => res.data),
   });
 
-  const openProjects = projects ? projects.filter((p) => p.status === "open") : [];
+  const openProjects = projects
+    ? projects.filter((p) => p.status === "open")
+    : [];
 
   const mutation = useMutation({
     mutationFn: () =>
-      makeRequest.post("/escrows/invite", { studentId, projectId: selectedProject }),
+      makeRequest.post("/escrows/invite", {
+        studentId,
+        projectId: selectedProject,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["escrows", "me"] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -34,7 +39,11 @@ const InviteStudent = ({ studentId, studentUsername, onClose }) => {
     onError: (err) => {
       const data = err?.response?.data;
       setServerError(
-        data?.code ? featureError(err, t) : typeof data === "string" ? data : data?.message || data?.error || t("escrow.inviteError")
+        data?.code
+          ? featureError(err, t)
+          : typeof data === "string"
+            ? data
+            : data?.message || data?.error || t("escrow.inviteError"),
       );
     },
   });
@@ -64,7 +73,10 @@ const InviteStudent = ({ studentId, studentUsername, onClose }) => {
             <label>{t("escrow.selectProject")}</label>
             <select
               value={selectedProject}
-              onChange={(e) => { setSelectedProject(e.target.value); setServerError(null); }}
+              onChange={(e) => {
+                setSelectedProject(e.target.value);
+                setServerError(null);
+              }}
               required
             >
               <option value="">—</option>
@@ -76,10 +88,15 @@ const InviteStudent = ({ studentId, studentUsername, onClose }) => {
             </select>
 
             {serverError && <span className="error-msg">{serverError}</span>}
-            {success && <span className="success-msg">{t("escrow.inviteSuccess")}</span>}
+            {success && (
+              <span className="success-msg">{t("escrow.inviteSuccess")}</span>
+            )}
 
             <div className="footer">
-              <button type="submit" disabled={!selectedProject || mutation.isPending}>
+              <button
+                type="submit"
+                disabled={!selectedProject || mutation.isPending}
+              >
                 {mutation.isPending ? "..." : t("escrow.confirm")}
               </button>
             </div>

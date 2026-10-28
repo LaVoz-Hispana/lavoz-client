@@ -35,9 +35,12 @@ const RightBar = () => {
     queryFn: () => makeRequest.get("/services").then((r) => r.data),
   });
 
-  const openProjects     = projects?.filter((p) => p.status !== "closed").slice(0, 5) ?? [];
-  const students         = users?.filter((u) => u.account_type === "student").slice(0, 5) ?? [];
-  const locals           = users?.filter((u) => u.account_type === "local").slice(0, 5) ?? [];
+  const openProjects =
+    projects?.filter((p) => p.status !== "closed").slice(0, 5) ?? [];
+  const students =
+    users?.filter((u) => u.account_type === "student").slice(0, 5) ?? [];
+  const locals =
+    users?.filter((u) => u.account_type === "local").slice(0, 5) ?? [];
   const featuredServices = services?.slice(0, 5) ?? [];
 
   const sections = [
@@ -50,8 +53,18 @@ const RightBar = () => {
         <ProfileLink key={u.id} to={`/profile/${u.id}`} className="rb-row">
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
-            <span className="rb-title">{u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
-            <span className="rb-subtitle">{u.skills ? u.skills.split(",")[0].trim() : u.university || "Student"}</span>
+            <span className="rb-title">
+              {u.username}{" "}
+              <RatingBadge
+                rating={u.averageRating}
+                reviewCount={u.reviewCount}
+              />
+            </span>
+            <span className="rb-subtitle">
+              {u.skills
+                ? u.skills.split(",")[0].trim()
+                : u.university || "Student"}
+            </span>
           </div>
         </ProfileLink>
       )),
@@ -62,10 +75,20 @@ const RightBar = () => {
       label: t("talent.studentServices"),
       to: "/talent?tab=services",
       rows: featuredServices.map((s) => (
-        <Link key={s.id} to={`/talent?tab=services&service=${s.id}`} className="rb-row">
+        <Link
+          key={s.id}
+          to={`/talent?tab=services&service=${s.id}`}
+          className="rb-row"
+        >
           <div className="rb-row-info">
             <span className="rb-title">{s.title}</span>
-            <span className="rb-subtitle">{s.username} <RatingBadge rating={s.averageRating} reviewCount={s.reviewCount} /></span>
+            <span className="rb-subtitle">
+              {s.username}{" "}
+              <RatingBadge
+                rating={s.averageRating}
+                reviewCount={s.reviewCount}
+              />
+            </span>
           </div>
         </Link>
       )),
@@ -76,11 +99,27 @@ const RightBar = () => {
       label: t("projects.bcsLocals"),
       to: "/projects",
       rows: locals.map((u) => (
-        <Link key={u.id} to={`/projects?tab=projects&provider=${u.id}`} className="rb-row">
+        <Link
+          key={u.id}
+          to={`/projects?tab=projects&provider=${u.id}`}
+          className="rb-row"
+        >
           <img src={u.profilePic} alt="" />
           <div className="rb-row-info">
-            <span className="rb-title">{u.providerDisplayName || u.username} <RatingBadge rating={u.averageRating} reviewCount={u.reviewCount} /></span>
-            <span className="rb-subtitle"><ProviderBadge providerType={u.provider_type} label={u.providerTypeLabel} /> {u.city || t("register.local")}</span>
+            <span className="rb-title">
+              {u.providerDisplayName || u.username}{" "}
+              <RatingBadge
+                rating={u.averageRating}
+                reviewCount={u.reviewCount}
+              />
+            </span>
+            <span className="rb-subtitle">
+              <ProviderBadge
+                providerType={u.provider_type}
+                label={u.providerTypeLabel}
+              />{" "}
+              {u.city || t("register.local")}
+            </span>
           </div>
         </Link>
       )),
@@ -94,7 +133,18 @@ const RightBar = () => {
         <Link key={p.id} to={`/projects/${p.id}`} className="rb-row">
           <div className="rb-row-info">
             <span className="rb-title">{p.title}</span>
-            <span className="rb-subtitle">{p.providerDisplayName || p.username} <ProviderBadge providerType={p.provider_type} label={p.providerTypeLabel} /> <RatingBadge rating={p.averageRating} reviewCount={p.reviewCount} />{p.timeline ? ` · ${p.timeline}` : ""}</span>
+            <span className="rb-subtitle">
+              {p.providerDisplayName || p.username}{" "}
+              <ProviderBadge
+                providerType={p.provider_type}
+                label={p.providerTypeLabel}
+              />{" "}
+              <RatingBadge
+                rating={p.averageRating}
+                reviewCount={p.reviewCount}
+              />
+              {p.timeline ? ` · ${p.timeline}` : ""}
+            </span>
           </div>
         </Link>
       )),
@@ -105,7 +155,9 @@ const RightBar = () => {
   const isFullMode = isHome && homeOpen;
 
   return (
-    <div className={`rightBar ${isFullMode ? "rightBar--full" : "rightBar--slim"}`}>
+    <div
+      className={`rightBar ${isFullMode ? "rightBar--full" : "rightBar--slim"}`}
+    >
       {/* scrollable section list */}
       <div className="rb-scroll">
         <div className="rb-menu">
@@ -128,12 +180,16 @@ const RightBar = () => {
 
       {/* collapse / expand toggle — home only, pinned to bottom */}
       {isHome && (
-        <button className="rb-toggle-bottom" onClick={() => setHomeOpen(!homeOpen)}>
+        <button
+          className="rb-toggle-bottom"
+          onClick={() => setHomeOpen(!homeOpen)}
+        >
           <div className="rb-section-icon">
-            {isFullMode
-              ? <KeyboardDoubleArrowRightIcon />
-              : <KeyboardDoubleArrowLeftIcon />
-            }
+            {isFullMode ? (
+              <KeyboardDoubleArrowRightIcon />
+            ) : (
+              <KeyboardDoubleArrowLeftIcon />
+            )}
           </div>
           {/* <span className="rb-toggle-label">
             {isFullMode ? "Collapse" : "Expand"}

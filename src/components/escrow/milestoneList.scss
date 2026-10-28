@@ -34,8 +34,12 @@
     }
 
     @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     .list-error {
@@ -55,11 +59,13 @@
       color: themed("textColorSoft");
       font-size: 13px;
       cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
+      transition:
+        border-color 0.15s,
+        color 0.15s;
 
       &:hover {
-        border-color: #6D1D1D;
-        color: #6D1D1D;
+        border-color: #6d1d1d;
+        color: #6d1d1d;
       }
     }
   }

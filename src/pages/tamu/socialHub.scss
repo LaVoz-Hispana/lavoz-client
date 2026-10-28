@@ -60,7 +60,7 @@
             padding: 30px;
             border: none;
             border-radius: 15px;
-            background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+            background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -69,7 +69,7 @@
             &:hover {
               transform: translateY(-5px);
               box-shadow: 0 10px 25px rgba(109, 29, 29, 0.4);
-              background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+              background: linear-gradient(135deg, #8b2f2f 0%, #6d1d1d 100%);
             }
 
             h3 {
@@ -180,7 +180,7 @@
           align-items: center;
           gap: 8px;
           padding: 12px 25px;
-          background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+          background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
           color: white;
           border: none;
           border-radius: 25px;
@@ -191,7 +191,7 @@
           white-space: nowrap;
 
           &:hover {
-            background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+            background: linear-gradient(135deg, #8b2f2f 0%, #6d1d1d 100%);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
           }
@@ -302,11 +302,15 @@
                 }
 
                 &.submit-btn {
-                  background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+                  background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
                   color: white;
 
                   &:hover {
-                    background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+                    background: linear-gradient(
+                      135deg,
+                      #8b2f2f 0%,
+                      #6d1d1d 100%
+                    );
                     transform: translateY(-2px);
                     box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
                   }
@@ -351,7 +355,7 @@
               gap: 8px;
 
               .subject-icon {
-                color: #6D1D1D;
+                color: #6d1d1d;
               }
 
               .course-code {
@@ -398,7 +402,7 @@
 
               .detail-icon {
                 font-size: 18px;
-                color: #6D1D1D;
+                color: #6d1d1d;
               }
 
               &:last-child {
@@ -411,7 +415,7 @@
             .join-btn {
               width: 100%;
               padding: 12px 20px;
-              background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+              background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
               color: white;
               border: none;
               border-radius: 8px;
@@ -421,7 +425,7 @@
               transition: all 0.3s ease;
 
               &:hover:not(:disabled) {
-                background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+                background: linear-gradient(135deg, #8b2f2f 0%, #6d1d1d 100%);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
               }
@@ -548,7 +552,7 @@
           align-items: center;
           gap: 8px;
           padding: 12px 25px;
-          background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+          background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
           color: white;
           border: none;
           border-radius: 25px;
@@ -559,7 +563,7 @@
           white-space: nowrap;
 
           &:hover {
-            background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+            background: linear-gradient(135deg, #8b2f2f 0%, #6d1d1d 100%);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
           }
@@ -652,7 +656,7 @@
               input[type="checkbox"] {
                 width: 18px;
                 height: 18px;
-                accent-color: #6D1D1D;
+                accent-color: #6d1d1d;
               }
 
               textarea {
@@ -688,11 +692,15 @@
                 }
 
                 &.submit-btn {
-                  background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+                  background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
                   color: white;
 
                   &:hover {
-                    background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+                    background: linear-gradient(
+                      135deg,
+                      #8b2f2f 0%,
+                      #6d1d1d 100%
+                    );
                     transform: translateY(-2px);
                     box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
                   }
@@ -737,7 +745,7 @@
               gap: 8px;
 
               .sport-icon {
-                color: #6D1D1D;
+                color: #6d1d1d;
               }
 
               .sport-name {
@@ -747,7 +755,7 @@
               }
 
               .competitive-icon {
-                color: #FFD700;
+                color: #ffd700;
                 font-size: 20px;
               }
             }
@@ -780,7 +788,7 @@
             font-size: 14px;
 
             .skill-icon {
-              color: #6D1D1D;
+              color: #6d1d1d;
               font-size: 16px;
             }
           }
@@ -803,7 +811,7 @@
 
               .detail-icon {
                 font-size: 18px;
-                color: #6D1D1D;
+                color: #6d1d1d;
               }
 
               &:last-child {
@@ -816,7 +824,7 @@
             .join-btn {
               width: 100%;
               padding: 12px 20px;
-              background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+              background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
               color: white;
               border: none;
               border-radius: 8px;
@@ -826,7 +834,7 @@
               transition: all 0.3s ease;
 
               &:hover:not(:disabled) {
-                background: linear-gradient(135deg, #8B2F2F 0%, #6D1D1D 100%);
+                background: linear-gradient(135deg, #8b2f2f 0%, #6d1d1d 100%);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(109, 29, 29, 0.3);
               }
@@ -986,9 +994,9 @@
             }
 
             &.active {
-              background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+              background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
               color: white;
-              border-color: #6D1D1D;
+              border-color: #6d1d1d;
 
               .category-icon {
                 color: white;
@@ -1034,7 +1042,7 @@
                 gap: 8px;
 
                 .category-icon {
-                  color: #6D1D1D;
+                  color: #6d1d1d;
                   font-size: 18px;
                 }
 
@@ -1045,7 +1053,7 @@
                 }
 
                 .official-badge {
-                  background: linear-gradient(135deg, #6D1D1D 0%, #8B2F2F 100%);
+                  background: linear-gradient(135deg, #6d1d1d 0%, #8b2f2f 100%);
                   color: white;
                   padding: 2px 8px;
                   border-radius: 12px;
@@ -1114,7 +1122,7 @@
               justify-content: center;
               gap: 8px;
               padding: 12px 20px;
-              background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+              background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
               color: white;
               border: none;
               border-radius: 8px;
@@ -1124,7 +1132,7 @@
               transition: all 0.3s ease;
 
               &:hover {
-                background: linear-gradient(135deg, #4752C4 0%, #5865F2 100%);
+                background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
               }

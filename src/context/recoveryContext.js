@@ -7,7 +7,7 @@ export const RecoveryContextProvider = ({ children }) => {
   const [email, setEmail] = useState(null);
   const [otp, setOTP] = useState(null);
   const [valid, setValid] = useState(
-    JSON.parse(localStorage.getItem("valid")) || false
+    JSON.parse(localStorage.getItem("valid")) || false,
   );
 
   const verifyOTP = (OTPinput) => {
@@ -17,7 +17,7 @@ export const RecoveryContextProvider = ({ children }) => {
       return 0;
     }
     return 1;
-  }
+  };
 
   useEffect(() => {
     localStorage.setItem("valid", JSON.stringify(valid));
@@ -26,7 +26,7 @@ export const RecoveryContextProvider = ({ children }) => {
   return (
     <RecoveryContext.Provider
       value={{ valid, setOTP, setEmail, email, verifyOTP, setValid }}
-    >  
+    >
       {children}
     </RecoveryContext.Provider>
   );

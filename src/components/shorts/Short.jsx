@@ -36,8 +36,8 @@ const Short = ({ short }) => {
     } catch (err) {
       console.log(err);
     }
-  }
-  
+  };
+
   const handleDelete = async (e) => {
     e.preventDefault();
     if (!currentUser) return;
@@ -52,41 +52,55 @@ const Short = ({ short }) => {
 
   return (
     <div className="short">
-        <div className="container">
-            <div className="deleteMenu">
-              {currentUser && menuOpen && (short.userId === currentUser.id || isAdmin(currentUser)) && (
-                <button onClick={handleDelete}>delete</button>
-              )}
-              <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
-            </div>
-            <div className="content">
-              <div className="centered">
-                <video controls>
-                    <source src={short.videoURL + "#t=0.001"} className="video" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-              </div>
-            </div>
-            
-            <div className="userInfo">
-                <img src={short.profilePic || DefaultAvatar} alt="" />
-                <div className="details">
-                    {short.profileVisible !== false && short.userId ? <ProfileLink
-                        to={`/profile/${short.userId}`}
-                        style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                        <span className="name">{short.username}</span>
-                    </ProfileLink> : <span className="name">{short.username}</span>}
-                    <span className="date">{moment(short.createdAt).fromNow()}</span>
-                </div>
-            </div>
-
-            <p>{short.desc}</p>
-
-            <div>
-              <ShortReactions shortId={short.id} shortUserId={short.userId} currentUser={currentUser}/>
-            </div>
+      <div className="container">
+        <div className="deleteMenu">
+          {currentUser &&
+            menuOpen &&
+            (short.userId === currentUser.id || isAdmin(currentUser)) && (
+              <button onClick={handleDelete}>delete</button>
+            )}
+          <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
         </div>
+        <div className="content">
+          <div className="centered">
+            <video controls>
+              <source
+                src={short.videoURL + "#t=0.001"}
+                className="video"
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        <div className="userInfo">
+          <img src={short.profilePic || DefaultAvatar} alt="" />
+          <div className="details">
+            {short.profileVisible !== false && short.userId ? (
+              <ProfileLink
+                to={`/profile/${short.userId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <span className="name">{short.username}</span>
+              </ProfileLink>
+            ) : (
+              <span className="name">{short.username}</span>
+            )}
+            <span className="date">{moment(short.createdAt).fromNow()}</span>
+          </div>
+        </div>
+
+        <p>{short.desc}</p>
+
+        <div>
+          <ShortReactions
+            shortId={short.id}
+            shortUserId={short.userId}
+            currentUser={currentUser}
+          />
+        </div>
+      </div>
     </div>
   );
 };

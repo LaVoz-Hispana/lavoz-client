@@ -8,8 +8,12 @@
     flex-direction: column;
     gap: 16px;
 
-    @include mobile { margin: 12px; }
-    @include tablet { margin: 16px; }
+    @include mobile {
+      margin: 12px;
+    }
+    @include tablet {
+      margin: 16px;
+    }
 
     h2 {
       font-size: 12px;

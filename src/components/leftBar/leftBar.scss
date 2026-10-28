@@ -85,7 +85,9 @@
     overflow: scroll;
     background-color: themed("bg");
     color: themed("textColor");
-    transition: transform 0.5s ease-in-out, width 0.35s ease;
+    transition:
+      transform 0.5s ease-in-out,
+      width 0.35s ease;
     padding-right: 50px;
 
     @include mobile {
@@ -119,7 +121,7 @@
     .toggle {
       position: absolute;
       right: 10px;
-      bottom: 10px; 
+      bottom: 10px;
       z-index: 999;
 
       @include mobile {
@@ -145,7 +147,6 @@
         padding: 2px 5px;
       }
     }
-    
 
     .container {
       padding: 20px;
@@ -157,10 +158,10 @@
         background-color: themed("border");
       }
 
-        .menu {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
+      .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
 
         span {
           font-size: 12px;
@@ -190,7 +191,9 @@
 
           img {
             width: 30px;
-            transition: transform 0.2s ease, filter 0.2s ease;
+            transition:
+              transform 0.2s ease,
+              filter 0.2s ease;
           }
 
           span {
@@ -217,7 +220,6 @@
         .categoryLabel {
           padding-left: 20px;
           font-size: 12px;
-          
         }
 
         .subcategoryLabel {
@@ -225,10 +227,9 @@
           font-size: 12px;
           font-weight: lighter;
         }
-        
       }
 
-        .submenu {
+      .submenu {
         display: flex;
         flex-direction: column;
         gap: 15px;
@@ -261,7 +262,9 @@
 
           img {
             width: 30px;
-            transition: transform 0.2s ease, filter 0.2s ease;
+            transition:
+              transform 0.2s ease,
+              filter 0.2s ease;
           }
 
           span {
@@ -290,7 +293,6 @@
           font-size: 13px;
           font-weight: lighter;
         }
-        
       }
     }
   }

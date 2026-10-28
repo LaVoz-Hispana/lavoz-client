@@ -15,22 +15,46 @@ const ProjectDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const { isLoading, error, data: project } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: project,
+  } = useQuery({
     queryKey: ["project", id],
     queryFn: () => makeRequest.get(`/projects/${id}`).then((res) => res.data),
   });
 
   const skills = project?.skills
-    ? project.skills.split(",").map((s) => s.trim()).filter(Boolean)
+    ? project.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
     : [];
 
-  if (isLoading) return <div className="project-detail"><span className="state" role="status">{t("projects.loading")}</span></div>;
-  if (error || !project) return <div className="project-detail"><span className="state" role="alert">{t("projects.notFound")}</span></div>;
+  if (isLoading)
+    return (
+      <div className="project-detail">
+        <span className="state" role="status">
+          {t("projects.loading")}
+        </span>
+      </div>
+    );
+  if (error || !project)
+    return (
+      <div className="project-detail">
+        <span className="state" role="alert">
+          {t("projects.notFound")}
+        </span>
+      </div>
+    );
 
   return (
     <div className="project-detail">
       <div className="back-row">
-        <Link to="/projects" style={{ textDecoration: "none", color: "inherit" }}>
+        <Link
+          to="/projects"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
           <ArrowBackIcon fontSize="small" />
           <span>{t("projects.back")}</span>
         </Link>
@@ -39,18 +63,26 @@ const ProjectDetail = () => {
       <div className="card">
         <div className="card-header">
           <span className={`status-badge ${project.status}`}>
-            {project.status === "open" ? t("projects.open")
-              : project.status === "in_escrow" ? t("projects.inEscrow")
-              : t("projects.closed")}
+            {project.status === "open"
+              ? t("projects.open")
+              : project.status === "in_escrow"
+                ? t("projects.inEscrow")
+                : t("projects.closed")}
           </span>
           <h1>{project.title}</h1>
           <div className="posted-by">
             <img src={project.profilePic} alt="" />
             <span>{t("projects.postedBy")}: </span>
-            <ProfileLink to={`/profile/${project.userId}`} style={{ textDecoration: "none" }}>
+            <ProfileLink
+              to={`/profile/${project.userId}`}
+              style={{ textDecoration: "none" }}
+            >
               {project.providerDisplayName || project.username}
             </ProfileLink>
-            <ProviderBadge providerType={project.provider_type} label={project.providerTypeLabel} />
+            <ProviderBadge
+              providerType={project.provider_type}
+              label={project.providerTypeLabel}
+            />
           </div>
         </div>
 
@@ -63,7 +95,9 @@ const ProjectDetail = () => {
             <h3>{t("projects.skillsNeeded")}</h3>
             <div className="skills-list">
               {skills.map((skill, i) => (
-                <span key={i} className="skill-tag">{skill}</span>
+                <span key={i} className="skill-tag">
+                  {skill}
+                </span>
               ))}
             </div>
           </div>

@@ -3,15 +3,24 @@ import { useState } from "react";
 
 const empty = { title: "", description: "", dueDate: "" };
 
-const MilestoneForm = ({ initialValues = {}, onSubmit, onCancel, isPending }) => {
+const MilestoneForm = ({
+  initialValues = {},
+  onSubmit,
+  onCancel,
+  isPending,
+}) => {
   const [values, setValues] = useState({ ...empty, ...initialValues });
   const [error, setError] = useState(null);
 
-  const set = (field) => (e) => setValues((v) => ({ ...v, [field]: e.target.value }));
+  const set = (field) => (e) =>
+    setValues((v) => ({ ...v, [field]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!values.title.trim()) { setError("Title is required."); return; }
+    if (!values.title.trim()) {
+      setError("Title is required.");
+      return;
+    }
     setError(null);
     onSubmit({
       title: values.title.trim(),
@@ -55,13 +64,27 @@ const MilestoneForm = ({ initialValues = {}, onSubmit, onCancel, isPending }) =>
         />
       </div>
 
-      {error && <span className="form-error" role="alert">{error}</span>}
+      {error && (
+        <span className="form-error" role="alert">
+          {error}
+        </span>
+      )}
 
       <div className="form-actions">
-        <button type="submit" className="btn-primary" disabled={isPending} aria-label="Save milestone">
+        <button
+          type="submit"
+          className="btn-primary"
+          disabled={isPending}
+          aria-label="Save milestone"
+        >
           {isPending ? "Saving…" : "Save"}
         </button>
-        <button type="button" className="btn-ghost" onClick={onCancel} aria-label="Cancel">
+        <button
+          type="button"
+          className="btn-ghost"
+          onClick={onCancel}
+          aria-label="Cancel"
+        >
           Cancel
         </button>
       </div>

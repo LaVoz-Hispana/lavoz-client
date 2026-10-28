@@ -9,8 +9,8 @@ import { AuthContext } from "../../context/authContext";
 import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { isAdmin } from "../../utils/admin";
 
 const LeftBar = () => {
@@ -33,7 +33,10 @@ const LeftBar = () => {
     <>
       {currentUser && (
         <div className="row">
-          <ProfileLink to={`/profile/${currentUser.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <ProfileLink
+            to={`/profile/${currentUser.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <div className="user">
               <img src={currentUser.profilePic} alt="" />
               <span>{currentUser.username}</span>
@@ -45,42 +48,60 @@ const LeftBar = () => {
       <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
         <div className={`item${isActivePath("/", true) ? " active" : ""}`}>
           <img src={Groups} alt="" />
-          <span>{t('sections.home')}</span>
+          <span>{t("sections.home")}</span>
         </div>
       </Link>
 
       {/* Publish Project — locals only */}
-      {currentUser?.account_type === 'local' && (
-        <Link to="/projects?tab=projects" style={{ textDecoration: "none", color: "inherit" }}>
-          <div className={`item publish-item${isActivePath("/projects") && new URLSearchParams(location.search).get("tab") === "projects" ? " active" : ""}`}>
+      {currentUser?.account_type === "local" && (
+        <Link
+          to="/projects?tab=projects"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div
+            className={`item publish-item${isActivePath("/projects") && new URLSearchParams(location.search).get("tab") === "projects" ? " active" : ""}`}
+          >
             <PostAddIcon style={{ width: 20, height: 20 }} />
             <span>Publish Project</span>
           </div>
         </Link>
       )}
 
-      {currentUser?.account_type === 'student' && (
-        <Link to="/applications" style={{ textDecoration: "none", color: "inherit" }}>
-          <div className={`item${isActivePath("/applications") ? " active" : ""}`}>
+      {currentUser?.account_type === "student" && (
+        <Link
+          to="/applications"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div
+            className={`item${isActivePath("/applications") ? " active" : ""}`}
+          >
             <PostAddIcon style={{ width: 20, height: 20 }} />
-            <span>{t('resumeApplications.myApplications')}</span>
+            <span>{t("resumeApplications.myApplications")}</span>
           </div>
         </Link>
       )}
 
       {/* My Escrows — logged-in student + local, or guest preview */}
-      {(!currentUser || currentUser.account_type !== 'admin') && (
-        <Link to={authLink("/escrows")} style={{ textDecoration: "none", color: "inherit" }}>
-          <div className={`item${isActivePath("/escrows") ? " active" : ""}${!currentUser ? " guest-item" : ""}`}>
+      {(!currentUser || currentUser.account_type !== "admin") && (
+        <Link
+          to={authLink("/escrows")}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div
+            className={`item${isActivePath("/escrows") ? " active" : ""}${!currentUser ? " guest-item" : ""}`}
+          >
             <HandshakeOutlinedIcon style={{ width: 20, height: 20 }} />
-            <span>{t('escrow.myEscrows')}</span>
+            <span>{t("escrow.myEscrows")}</span>
           </div>
         </Link>
       )}
 
       {/* Messages — logged-in users only */}
       {currentUser && (
-        <Link to="/messages" style={{ textDecoration: "none", color: "inherit" }}>
+        <Link
+          to="/messages"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
           <div className={`item${isActivePath("/messages") ? " active" : ""}`}>
             <MessageOutlinedIcon style={{ width: 20, height: 20 }} />
             <span>Messages</span>
@@ -93,7 +114,7 @@ const LeftBar = () => {
         <Link to="/admin" style={{ textDecoration: "none", color: "inherit" }}>
           <div className={`item${isActivePath("/admin") ? " active" : ""}`}>
             <AdminPanelSettingsOutlinedIcon style={{ width: 20, height: 20 }} />
-            <span>{t('admin.dashboard')}</span>
+            <span>{t("admin.dashboard")}</span>
           </div>
         </Link>
       )}
@@ -101,18 +122,37 @@ const LeftBar = () => {
   );
 
   return (
-    <div className='soft'>
-      {!sidebarOpen && <KeyboardDoubleArrowRightIcon className="toggle-closed pc" onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray", cursor: "pointer" }} />}
-      {sidebarOpen && <KeyboardDoubleArrowRightIcon className="toggle-closed mobile" onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray", cursor: "pointer" }} />}
+    <div className="soft">
+      {!sidebarOpen && (
+        <KeyboardDoubleArrowRightIcon
+          className="toggle-closed pc"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{ color: "gray", cursor: "pointer" }}
+        />
+      )}
+      {sidebarOpen && (
+        <KeyboardDoubleArrowRightIcon
+          className="toggle-closed mobile"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{ color: "gray", cursor: "pointer" }}
+        />
+      )}
 
       <div className={`pc leftBar ${sidebarOpen ? "open" : "closed"}`}>
         <div className="container">
-          <div className='menu'>
+          <div className="menu">
             <div className="toggle">
-              {sidebarOpen
-                ? <KeyboardDoubleArrowLeftIcon onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray", cursor: "pointer" }} />
-                : <KeyboardDoubleArrowRightIcon onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray" }} />
-              }
+              {sidebarOpen ? (
+                <KeyboardDoubleArrowLeftIcon
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{ color: "gray", cursor: "pointer" }}
+                />
+              ) : (
+                <KeyboardDoubleArrowRightIcon
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{ color: "gray" }}
+                />
+              )}
             </div>
             <NavItems />
           </div>
@@ -121,12 +161,19 @@ const LeftBar = () => {
 
       <div className={`mobile leftBar ${sidebarOpen ? "closed" : "open"}`}>
         <div className="container">
-          <div className='menu'>
+          <div className="menu">
             <div className="toggle">
-              {sidebarOpen
-                ? <KeyboardDoubleArrowRightIcon onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray", cursor: "pointer" }} />
-                : <KeyboardDoubleArrowLeftIcon onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: "gray" }} />
-              }
+              {sidebarOpen ? (
+                <KeyboardDoubleArrowRightIcon
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{ color: "gray", cursor: "pointer" }}
+                />
+              ) : (
+                <KeyboardDoubleArrowLeftIcon
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{ color: "gray" }}
+                />
+              )}
             </div>
             <NavItems />
           </div>

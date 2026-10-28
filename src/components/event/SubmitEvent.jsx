@@ -5,11 +5,11 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { Dropdown } from 'react-nested-dropdown';
-import 'react-nested-dropdown/dist/styles.css';
+import { Dropdown } from "react-nested-dropdown";
+import "react-nested-dropdown/dist/styles.css";
 import { useTranslation } from "react-i18next";
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 // Utility: get current time in HH:MM format
 const getCurrentTime = () => {
@@ -31,7 +31,7 @@ const SubmitEvent = ({ categ }) => {
     date: new Date().toISOString().split("T")[0],
     time: getCurrentTime(),
     description: "",
-    url: ""
+    url: "",
   });
 
   const { currentUser } = useContext(AuthContext);
@@ -41,46 +41,55 @@ const SubmitEvent = ({ categ }) => {
     mutationFn: (newEvent) => makeRequest.post("/posts/event", newEvent),
     onSuccess: () => {
       queryClient.invalidateQueries(["events"]);
-    }
+    },
   });
 
   const items = [
-    { label: t('categories.general'), onSelect: () => setCategory("general") },
-    { label: t('categories.jobs'), onSelect: () => setCategory("jobs") },
-    { label: t('categories.events'), onSelect: () => setCategory("events") },
+    { label: t("categories.general"), onSelect: () => setCategory("general") },
+    { label: t("categories.jobs"), onSelect: () => setCategory("jobs") },
+    { label: t("categories.events"), onSelect: () => setCategory("events") },
     {
-      label: t('categories.articles'),
+      label: t("categories.articles"),
       items: [
-        { label: t('categories.local'), onSelect: () => setCategory("local") },
-        { label: t('categories.us'), onSelect: () => setCategory("usa") },
-        { label: t('categories.latam'), onSelect: () => setCategory("latam") },
-        { label: t('categories.global'), onSelect: () => setCategory("global") },
+        { label: t("categories.local"), onSelect: () => setCategory("local") },
+        { label: t("categories.us"), onSelect: () => setCategory("usa") },
+        { label: t("categories.latam"), onSelect: () => setCategory("latam") },
+        {
+          label: t("categories.global"),
+          onSelect: () => setCategory("global"),
+        },
       ],
     },
     {
-      label: t('categories.tamu'),
+      label: t("categories.tamu"),
       items: [
-        { label: t('categories.tamu'), onSelect: () => setCategory("tamu") },
-        { label: t('categories.games'), onSelect: () => setCategory("games") },
-        { label: t('categories.advice'), onSelect: () => setCategory("advice") },
-        { label: t('categories.fans'), onSelect: () => setCategory("fans") },
+        { label: t("categories.tamu"), onSelect: () => setCategory("tamu") },
+        { label: t("categories.games"), onSelect: () => setCategory("games") },
+        {
+          label: t("categories.advice"),
+          onSelect: () => setCategory("advice"),
+        },
+        { label: t("categories.fans"), onSelect: () => setCategory("fans") },
       ],
     },
-    { label: t('categories.greatThings'), onSelect: () => setCategory("greatThings") },
+    {
+      label: t("categories.greatThings"),
+      onSelect: () => setCategory("greatThings"),
+    },
   ];
 
   const newsOptions = [
-    { label: t('categories.local'), onSelect: () => setCategory("local") },
-    { label: t('categories.us'), onSelect: () => setCategory("usa") },
-    { label: t('categories.latam'), onSelect: () => setCategory("latam") },
-    { label: t('categories.global'), onSelect: () => setCategory("global") },
+    { label: t("categories.local"), onSelect: () => setCategory("local") },
+    { label: t("categories.us"), onSelect: () => setCategory("usa") },
+    { label: t("categories.latam"), onSelect: () => setCategory("latam") },
+    { label: t("categories.global"), onSelect: () => setCategory("global") },
   ];
 
   const tamuOptions = [
-    { label: t('categories.tamu'), onSelect: () => setCategory("tamu") },
-    { label: t('categories.games'), onSelect: () => setCategory("games") },
-    { label: t('categories.advice'), onSelect: () => setCategory("advice") },
-    { label: t('categories.fans'), onSelect: () => setCategory("fans") },
+    { label: t("categories.tamu"), onSelect: () => setCategory("tamu") },
+    { label: t("categories.games"), onSelect: () => setCategory("games") },
+    { label: t("categories.advice"), onSelect: () => setCategory("advice") },
+    { label: t("categories.fans"), onSelect: () => setCategory("fans") },
   ];
 
   const upload = async (file) => {
@@ -113,7 +122,16 @@ const SubmitEvent = ({ categ }) => {
     // Destructure only valid keys from texts
     const { name, location, date, time, description, url } = texts;
 
-    mutation.mutate({ name, location, date, time, description, img: imgUrl, url, category });
+    mutation.mutate({
+      name,
+      location,
+      date,
+      time,
+      description,
+      img: imgUrl,
+      url,
+      category,
+    });
 
     // Clear state after success
     setError("");
@@ -125,7 +143,7 @@ const SubmitEvent = ({ categ }) => {
       date: new Date().toISOString().split("T")[0],
       time: getCurrentTime(),
       description: "",
-      url: ""
+      url: "",
     });
   };
 
@@ -162,12 +180,46 @@ const SubmitEvent = ({ categ }) => {
             <h2>{t("events.submit")}</h2>
           </div>
           <form>
-            <input type="text" value={texts.name} name="name" onChange={handleChange} placeholder={t("events.name")} />
-            <input type="date" value={texts.date} name="date" onChange={handleChange} />
-            <input type="time" value={texts.time} name="time" onChange={handleChange} />
-            <input type="text" value={texts.location} name="location" onChange={handleChange} placeholder={t("events.location")} />
-            <input type="text" value={texts.description} name="description" onChange={handleChange} placeholder={t("events.description")} />
-            <input type="text" value={texts.url} name="url" onChange={handleChange} placeholder={t("events.url")} />
+            <input
+              type="text"
+              value={texts.name}
+              name="name"
+              onChange={handleChange}
+              placeholder={t("events.name")}
+            />
+            <input
+              type="date"
+              value={texts.date}
+              name="date"
+              onChange={handleChange}
+            />
+            <input
+              type="time"
+              value={texts.time}
+              name="time"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              value={texts.location}
+              name="location"
+              onChange={handleChange}
+              placeholder={t("events.location")}
+            />
+            <input
+              type="text"
+              value={texts.description}
+              name="description"
+              onChange={handleChange}
+              placeholder={t("events.description")}
+            />
+            <input
+              type="text"
+              value={texts.url}
+              name="url"
+              onChange={handleChange}
+              placeholder={t("events.url")}
+            />
           </form>
 
           <div className="middle">
@@ -177,7 +229,11 @@ const SubmitEvent = ({ categ }) => {
                   <DisabledByDefault style={{ color: "gray" }} />
                 </button>
                 {file.type.startsWith("image/") ? (
-                  <img className="file" alt="" src={URL.createObjectURL(file)} />
+                  <img
+                    className="file"
+                    alt=""
+                    src={URL.createObjectURL(file)}
+                  />
                 ) : (
                   <video className="file" controls poster={poster}>
                     <source src={URL.createObjectURL(file)} type="video/mp4" />
@@ -196,7 +252,7 @@ const SubmitEvent = ({ categ }) => {
                 <img src={Friend} />
                 {categ ? (
                   <span>{categ}</span>
-                ) : pathname === '/tamu' ? (
+                ) : pathname === "/tamu" ? (
                   <Dropdown items={tamuOptions}>
                     {({ onClick }) => (
                       <button onClick={onClick} className="category-label">
@@ -204,7 +260,7 @@ const SubmitEvent = ({ categ }) => {
                       </button>
                     )}
                   </Dropdown>
-                ) : pathname === '/news' ? (
+                ) : pathname === "/news" ? (
                   <Dropdown items={newsOptions}>
                     {({ onClick }) => (
                       <button onClick={onClick} className="category-label">
@@ -251,4 +307,3 @@ const SubmitEvent = ({ categ }) => {
 };
 
 export default SubmitEvent;
-

@@ -23,10 +23,9 @@ const SharedHome = ({ t, isGuest, role, currentUser }) => {
     queryKey: ["sponsor-section"],
     queryFn: () => makeRequest.get("/sponsors/section").then((r) => r.data),
   });
-  const sponsorSupportCopy =
-    i18n.language?.startsWith("es")
-      ? sponsorSection?.contentEs || t("home.sponsorSupport")
-      : sponsorSection?.contentEn || t("home.sponsorSupport");
+  const sponsorSupportCopy = i18n.language?.startsWith("es")
+    ? sponsorSection?.contentEs || t("home.sponsorSupport")
+    : sponsorSection?.contentEn || t("home.sponsorSupport");
 
   return (
     <div className="home-content">
@@ -70,7 +69,12 @@ const Home = () => {
         <p>Helping students build real-world experience</p>
       </div>
 
-      <SharedHome t={t} isGuest={isGuest} role={role} currentUser={currentUser} />
+      <SharedHome
+        t={t}
+        isGuest={isGuest}
+        role={role}
+        currentUser={currentUser}
+      />
     </div>
   );
 };

@@ -62,8 +62,8 @@ describe("rich-text editor caret insertion", () => {
       editor.appendChild(document.createTextNode(separator));
 
       expect(serializeEditorContent(editor)).toBe(
-        `https://www.thebryancarwash.com${separator}`
+        `https://www.thebryancarwash.com${separator}`,
       );
-    }
+    },
   );
 });

@@ -38,7 +38,7 @@ describe("LanguageContextProvider", () => {
       <LanguageContextProvider>
         <LanguageControls />
         <SecondTranslatedComponent />
-      </LanguageContextProvider>
+      </LanguageContextProvider>,
     );
 
     expect(screen.getByTestId("language").textContent).toBe("en");
@@ -49,10 +49,26 @@ describe("LanguageContextProvider", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("language").textContent).toBe("es");
-      expect(screen.getByTestId("first-component").textContent).toBe("Cancelar");
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("first-component").textContent).toBe(
+        "Cancelar",
+      );
+    });
+    await waitFor(() => {
       expect(screen.getByTestId("second-component").textContent).toBe("Volver");
-      expect(screen.getByTestId("student-talent").textContent).toBe("Talento Estudiantil");
-      expect(screen.getByTestId("student-services").textContent).toBe("Servicios Estudiantiles");
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("student-talent").textContent).toBe(
+        "Talento Estudiantil",
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("student-services").textContent).toBe(
+        "Servicios Estudiantiles",
+      );
+    });
+    await waitFor(() => {
       expect(window.localStorage.getItem("i18nextLng")).toBe("es");
     });
   });

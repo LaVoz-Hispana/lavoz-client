@@ -26,7 +26,9 @@ const TamuNavbar = ({ currentView, setCurrentView }) => {
         {t("tamu.aggieMeals")}
       </button>
       <button
-        className={currentView === "consulting" ? "nav-button active" : "nav-button"}
+        className={
+          currentView === "consulting" ? "nav-button active" : "nav-button"
+        }
         onClick={() => setCurrentView("consulting")}
       >
         <WorkOutlineIcon />

@@ -9,14 +9,18 @@
     min-height: 100%;
 
     .header {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       padding: 50px 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
 
-      @include mobile { padding: 10px 5px; }
-      @include tablet { padding: 10px; }
+      @include mobile {
+        padding: 10px 5px;
+      }
+      @include tablet {
+        padding: 10px;
+      }
 
       h1 {
         font-weight: bold;
@@ -25,16 +29,24 @@
         text-align: center;
         margin: 0;
 
-        @include mobile { font-size: 20px; }
-        @include tablet { font-size: 30px; }
+        @include mobile {
+          font-size: 20px;
+        }
+        @include tablet {
+          font-size: 30px;
+        }
       }
     }
 
     .content {
       padding: 10px 50px;
 
-      @include mobile { padding: 10px; }
-      @include tablet { padding: 20px; }
+      @include mobile {
+        padding: 10px;
+      }
+      @include tablet {
+        padding: 20px;
+      }
     }
 
     .tabs {
@@ -51,12 +63,14 @@
         cursor: pointer;
         width: 160px;
 
-        &:hover { background-color: themed("bg"); }
+        &:hover {
+          background-color: themed("bg");
+        }
 
         &.selected {
-          color: #6D1D1D;
+          color: #6d1d1d;
           font-weight: bold;
-          border-bottom: 2px solid #6D1D1D;
+          border-bottom: 2px solid #6d1d1d;
         }
       }
     }
@@ -89,7 +103,10 @@
           border-radius: 50%;
           object-fit: cover;
 
-          @include mobile { width: 60px; height: 60px; }
+          @include mobile {
+            width: 60px;
+            height: 60px;
+          }
         }
 
         .name {
@@ -132,37 +149,57 @@
         transition: all 0.15s ease;
 
         &.all {
-          border-color: #6D1D1D;
-          color: #6D1D1D;
-          &:hover { background-color: #6D1D1D; color: white; }
+          border-color: #6d1d1d;
+          color: #6d1d1d;
+          &:hover {
+            background-color: #6d1d1d;
+            color: white;
+          }
         }
 
         &.open {
           border-color: #2ecc71;
           color: #218c4e;
-          &:hover { background-color: #2ecc71; color: white; }
+          &:hover {
+            background-color: #2ecc71;
+            color: white;
+          }
         }
 
         &.in_escrow {
           border-color: #2980b9;
           color: #2980b9;
-          &:hover { background-color: #2980b9; color: white; }
+          &:hover {
+            background-color: #2980b9;
+            color: white;
+          }
         }
 
         &.closed {
           border-color: #888;
           color: #666;
-          &:hover { background-color: #888; color: white; }
+          &:hover {
+            background-color: #888;
+            color: white;
+          }
         }
 
         &.active {
           color: white;
           border-color: transparent;
 
-          &.all       { background-color: #6D1D1D; }
-          &.open      { background-color: #2ecc71; }
-          &.in_escrow { background-color: #2980b9; }
-          &.closed    { background-color: #888; }
+          &.all {
+            background-color: #6d1d1d;
+          }
+          &.open {
+            background-color: #2ecc71;
+          }
+          &.in_escrow {
+            background-color: #2980b9;
+          }
+          &.closed {
+            background-color: #888;
+          }
         }
       }
     }

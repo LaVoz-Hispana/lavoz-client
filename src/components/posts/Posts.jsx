@@ -1,4 +1,3 @@
-
 import Post from "../post/Post";
 import "./posts.scss";
 import { useQuery } from "@tanstack/react-query";
@@ -6,11 +5,14 @@ import { makeRequest } from "../../axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
-const Posts = ({userId, categories}) => {
+const Posts = ({ userId, categories }) => {
   const { currentUser } = useContext(AuthContext);
   const { isLoading, error, data } = useQuery({
     queryKey: ["posts", currentUser?.id || "anonymous", userId],
-    queryFn: () => makeRequest.get("/posts?userId="+userId).then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/posts?userId=" + userId).then((res) => {
+        return res.data;
+      }),
   });
 
   let filteredData;
@@ -26,14 +28,19 @@ const Posts = ({userId, categories}) => {
     }
   }
 
-  return(
+  return (
     <div className="grid">
-      { error ? "Something went wrong!" : 
-        isLoading ? "loading" : 
-        !filteredData ? <div/> :
-        userId != null && filteredData.length === 0 ? <p className="profile-empty posts-empty">No posts yet.</p> :
-        filteredData.map((post) => (<Post post={post} key={post.id} />))
-      }
+      {error ? (
+        "Something went wrong!"
+      ) : isLoading ? (
+        "loading"
+      ) : !filteredData ? (
+        <div />
+      ) : userId != null && filteredData.length === 0 ? (
+        <p className="profile-empty posts-empty">No posts yet.</p>
+      ) : (
+        filteredData.map((post) => <Post post={post} key={post.id} />)
+      )}
     </div>
   );
 };

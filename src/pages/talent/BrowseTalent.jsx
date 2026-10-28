@@ -20,31 +20,47 @@ const BrowseTalent = () => {
   const { currentUser } = useContext(AuthContext);
   const [searchParams] = useSearchParams();
   const [tab, setTab] = useState(
-    searchParams.get("tab") === "services" ? "services" : "students"
+    searchParams.get("tab") === "services" ? "services" : "students",
   );
   const [search, setSearch] = useState("");
-  const [selectedServiceCategories, setSelectedServiceCategories] = useState([]);
+  const [selectedServiceCategories, setSelectedServiceCategories] = useState(
+    [],
+  );
   const [inviteTarget, setInviteTarget] = useState(null); // { id, username }
   const [canScrollCategoriesLeft, setCanScrollCategoriesLeft] = useState(false);
-  const [canScrollCategoriesRight, setCanScrollCategoriesRight] = useState(false);
+  const [canScrollCategoriesRight, setCanScrollCategoriesRight] =
+    useState(false);
   const categoryCarouselRef = useRef(null);
   const focusedServiceId = searchParams.get("service");
 
-  const canBrowseStudents = currentUser?.account_type === "local" || isAdmin(currentUser);
+  const canBrowseStudents =
+    currentUser?.account_type === "local" || isAdmin(currentUser);
 
   useEffect(() => {
-    setTab(searchParams.get("tab") === "services" || !canBrowseStudents ? "services" : "students");
+    setTab(
+      searchParams.get("tab") === "services" || !canBrowseStudents
+        ? "services"
+        : "students",
+    );
   }, [searchParams, canBrowseStudents]);
 
   const isLocal = currentUser?.account_type === "local";
 
-  const { isLoading: usersLoading, error: usersError, data: users } = useQuery({
+  const {
+    isLoading: usersLoading,
+    error: usersError,
+    data: users,
+  } = useQuery({
     queryKey: ["talentUsers", currentUser?.id],
     queryFn: () => makeRequest.get("/users/").then((res) => res.data),
     enabled: canBrowseStudents,
   });
 
-  const { isLoading: servicesLoading, error: servicesError, data: services } = useQuery({
+  const {
+    isLoading: servicesLoading,
+    error: servicesError,
+    data: services,
+  } = useQuery({
     queryKey: ["services", currentUser?.id || "anonymous"],
     queryFn: () => makeRequest.get("/services").then((res) => res.data),
   });
@@ -56,7 +72,9 @@ const BrowseTalent = () => {
 
   useEffect(() => {
     if (tab !== "services" || !focusedServiceId || !services) return;
-    document.getElementById(`service-${focusedServiceId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    document
+      .getElementById(`service-${focusedServiceId}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [focusedServiceId, services, tab]);
 
   useEffect(() => {
@@ -67,7 +85,8 @@ const BrowseTalent = () => {
       const edgeTolerance = 1;
       setCanScrollCategoriesLeft(carousel.scrollLeft > edgeTolerance);
       setCanScrollCategoriesRight(
-        carousel.scrollLeft + carousel.clientWidth < carousel.scrollWidth - edgeTolerance
+        carousel.scrollLeft + carousel.clientWidth <
+          carousel.scrollWidth - edgeTolerance,
       );
     };
 
@@ -93,17 +112,24 @@ const BrowseTalent = () => {
   });
 
   const skills = (user) =>
-    user.skills ? user.skills.split(",").map((s) => s.trim()).filter(Boolean) : [];
+    user.skills
+      ? user.skills
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
 
   const filteredServices = services?.filter(
-    (service) => selectedServiceCategories.length === 0 || selectedServiceCategories.includes(service.categorySlug)
+    (service) =>
+      selectedServiceCategories.length === 0 ||
+      selectedServiceCategories.includes(service.categorySlug),
   );
 
   const toggleServiceCategory = (categorySlug) => {
     setSelectedServiceCategories((selected) =>
       selected.includes(categorySlug)
         ? selected.filter((slug) => slug !== categorySlug)
-        : [...selected, categorySlug]
+        : [...selected, categorySlug],
     );
   };
 
@@ -118,167 +144,223 @@ const BrowseTalent = () => {
 
   return (
     <>
-    <div className="browse-talent">
-      <div className="header">
-        <h1>{t("talent.browse")}</h1>
-      </div>
-
-      <div className="content">
-        <div className="tabs">
-          {canBrowseStudents && <button
-            className={tab === "students" ? "tab selected" : "tab"}
-            onClick={() => setTab("students")}
-          >
-            {t("talent.students")}
-          </button>}
-          <button
-            className={tab === "services" ? "tab selected" : "tab"}
-            onClick={() => setTab("services")}
-          >
-            {t("talent.services")}
-          </button>
+      <div className="browse-talent">
+        <div className="header">
+          <h1>{t("talent.browse")}</h1>
         </div>
 
-        {canBrowseStudents && tab === "students" && (
-          <>
-            <div className="search-bar">
-              <input
-                type="text"
-                placeholder={t("talent.searchPlaceholder")}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-
-            {usersLoading && <span className="state">{t("talent.loading")}</span>}
-            {usersError && <span className="state">{t("talent.loadError")}</span>}
-            {!usersLoading && filtered.length === 0 && (
-              <span className="state">{t("talent.noStudents")}</span>
+        <div className="content">
+          <div className="tabs">
+            {canBrowseStudents && (
+              <button
+                className={tab === "students" ? "tab selected" : "tab"}
+                onClick={() => setTab("students")}
+              >
+                {t("talent.students")}
+              </button>
             )}
+            <button
+              className={tab === "services" ? "tab selected" : "tab"}
+              onClick={() => setTab("services")}
+            >
+              {t("talent.services")}
+            </button>
+          </div>
 
-            <div className="student-grid">
-              {filtered.map((user) => (
-                <div key={user.id} className="student-card-wrapper">
-                  <ProfileLink
-                    to={`/profile/${user.id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <div className="student-card">
-                      <img className="profilePic" src={user.profilePic} alt="" />
-                      <span className="name">{user.username} <RatingBadge rating={user.averageRating} reviewCount={user.reviewCount} /></span>
-                      {(user.university || user.major) && (
-                        <span className="subtitle">
-                          {[user.university, user.major].filter(Boolean).join(" · ")}
-                        </span>
-                      )}
-                      {skills(user).length > 0 && (
-                        <div className="skills-list">
-                          {skills(user).slice(0, 3).map((skill, i) => (
-                            <span key={i} className="skill-tag">{skill}</span>
-                          ))}
-                          {skills(user).length > 3 && (
-                            <span className="skill-tag more">+{skills(user).length - 3}</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </ProfileLink>
-                  {isLocal && (
-                    <button
-                      className="invite-btn"
-                      onClick={() => setInviteTarget({ id: user.id, username: user.username })}
-                    >
-                      {t("escrow.invite")}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {tab === "services" && (
-          <>
-            <div className="service-category-carousel-wrap">
-              {canScrollCategoriesLeft && (
-                <button
-                  type="button"
-                  className="carousel-scroll-control left"
-                  onClick={() => scrollServiceCategories(-1)}
-                  aria-label={t("talent.scrollCategoriesLeft")}
-                >
-                  <ChevronLeftIcon />
-                </button>
-              )}
-              <div ref={categoryCarouselRef} className="service-category-carousel" aria-label={t("talent.filterServices")}>
-                <button
-                  type="button"
-                  className={selectedServiceCategories.length === 0 ? "category-carousel-item selected" : "category-carousel-item"}
-                  aria-pressed={selectedServiceCategories.length === 0}
-                  onClick={() => setSelectedServiceCategories([])}
-                >
-                  <CategoryIcon />
-                  <span>{t("talent.allCategories")}</span>
-                </button>
-                {serviceCategories.map((category) => {
-                  const ServiceCategoryIcon = serviceCategoryIcons[category.slug] || CategoryIcon;
-                  const selected = selectedServiceCategories.includes(category.slug);
-
-                  return (
-                    <button
-                      type="button"
-                      key={category.id}
-                      className={selected ? "category-carousel-item selected" : "category-carousel-item"}
-                      aria-pressed={selected}
-                      onClick={() => toggleServiceCategory(category.slug)}
-                    >
-                      <ServiceCategoryIcon />
-                      <span>{category.name}</span>
-                    </button>
-                  );
-              })}
+          {canBrowseStudents && tab === "students" && (
+            <>
+              <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder={t("talent.searchPlaceholder")}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
-              {canScrollCategoriesRight && (
-                <button
-                  type="button"
-                  className="carousel-scroll-control right"
-                  onClick={() => scrollServiceCategories(1)}
-                  aria-label={t("talent.scrollCategoriesRight")}
-                >
-                  <ChevronRightIcon />
-                </button>
-              )}
-            </div>
-            {servicesLoading && <span className="state">{t("talent.loading")}</span>}
-            {servicesError && <span className="state">Failed to load services.</span>}
-            {!servicesLoading && (!filteredServices || filteredServices.length === 0) && (
-              <span className="state">
-                {selectedServiceCategories.length > 0 ? t("talent.noServicesInCategory") : t("talent.noServices")}
-              </span>
-            )}
-            <div className="service-feed">
-              {filteredServices && filteredServices.map((service) => (
-                <div
-                  key={service.id}
-                  id={`service-${service.id}`}
-                  className={String(service.id) === focusedServiceId ? "focused-service" : ""}
-                >
-                  <ServiceCard service={service} />
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
 
-    {inviteTarget && (
-      <InviteStudent
-        studentId={inviteTarget.id}
-        studentUsername={inviteTarget.username}
-        onClose={() => setInviteTarget(null)}
-      />
-    )}
+              {usersLoading && (
+                <span className="state">{t("talent.loading")}</span>
+              )}
+              {usersError && (
+                <span className="state">{t("talent.loadError")}</span>
+              )}
+              {!usersLoading && filtered.length === 0 && (
+                <span className="state">{t("talent.noStudents")}</span>
+              )}
+
+              <div className="student-grid">
+                {filtered.map((user) => (
+                  <div key={user.id} className="student-card-wrapper">
+                    <ProfileLink
+                      to={`/profile/${user.id}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="student-card">
+                        <img
+                          className="profilePic"
+                          src={user.profilePic}
+                          alt=""
+                        />
+                        <span className="name">
+                          {user.username}{" "}
+                          <RatingBadge
+                            rating={user.averageRating}
+                            reviewCount={user.reviewCount}
+                          />
+                        </span>
+                        {(user.university || user.major) && (
+                          <span className="subtitle">
+                            {[user.university, user.major]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </span>
+                        )}
+                        {skills(user).length > 0 && (
+                          <div className="skills-list">
+                            {skills(user)
+                              .slice(0, 3)
+                              .map((skill, i) => (
+                                <span key={i} className="skill-tag">
+                                  {skill}
+                                </span>
+                              ))}
+                            {skills(user).length > 3 && (
+                              <span className="skill-tag more">
+                                +{skills(user).length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </ProfileLink>
+                    {isLocal && (
+                      <button
+                        className="invite-btn"
+                        onClick={() =>
+                          setInviteTarget({
+                            id: user.id,
+                            username: user.username,
+                          })
+                        }
+                      >
+                        {t("escrow.invite")}
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {tab === "services" && (
+            <>
+              <div className="service-category-carousel-wrap">
+                {canScrollCategoriesLeft && (
+                  <button
+                    type="button"
+                    className="carousel-scroll-control left"
+                    onClick={() => scrollServiceCategories(-1)}
+                    aria-label={t("talent.scrollCategoriesLeft")}
+                  >
+                    <ChevronLeftIcon />
+                  </button>
+                )}
+                <div
+                  ref={categoryCarouselRef}
+                  className="service-category-carousel"
+                  aria-label={t("talent.filterServices")}
+                >
+                  <button
+                    type="button"
+                    className={
+                      selectedServiceCategories.length === 0
+                        ? "category-carousel-item selected"
+                        : "category-carousel-item"
+                    }
+                    aria-pressed={selectedServiceCategories.length === 0}
+                    onClick={() => setSelectedServiceCategories([])}
+                  >
+                    <CategoryIcon />
+                    <span>{t("talent.allCategories")}</span>
+                  </button>
+                  {serviceCategories.map((category) => {
+                    const ServiceCategoryIcon =
+                      serviceCategoryIcons[category.slug] || CategoryIcon;
+                    const selected = selectedServiceCategories.includes(
+                      category.slug,
+                    );
+
+                    return (
+                      <button
+                        type="button"
+                        key={category.id}
+                        className={
+                          selected
+                            ? "category-carousel-item selected"
+                            : "category-carousel-item"
+                        }
+                        aria-pressed={selected}
+                        onClick={() => toggleServiceCategory(category.slug)}
+                      >
+                        <ServiceCategoryIcon />
+                        <span>{category.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {canScrollCategoriesRight && (
+                  <button
+                    type="button"
+                    className="carousel-scroll-control right"
+                    onClick={() => scrollServiceCategories(1)}
+                    aria-label={t("talent.scrollCategoriesRight")}
+                  >
+                    <ChevronRightIcon />
+                  </button>
+                )}
+              </div>
+              {servicesLoading && (
+                <span className="state">{t("talent.loading")}</span>
+              )}
+              {servicesError && (
+                <span className="state">Failed to load services.</span>
+              )}
+              {!servicesLoading &&
+                (!filteredServices || filteredServices.length === 0) && (
+                  <span className="state">
+                    {selectedServiceCategories.length > 0
+                      ? t("talent.noServicesInCategory")
+                      : t("talent.noServices")}
+                  </span>
+                )}
+              <div className="service-feed">
+                {filteredServices &&
+                  filteredServices.map((service) => (
+                    <div
+                      key={service.id}
+                      id={`service-${service.id}`}
+                      className={
+                        String(service.id) === focusedServiceId
+                          ? "focused-service"
+                          : ""
+                      }
+                    >
+                      <ServiceCard service={service} />
+                    </div>
+                  ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {inviteTarget && (
+        <InviteStudent
+          studentId={inviteTarget.id}
+          studentUsername={inviteTarget.username}
+          onClose={() => setInviteTarget(null)}
+        />
+      )}
     </>
   );
 };

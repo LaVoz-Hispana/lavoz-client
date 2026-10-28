@@ -23,7 +23,9 @@
         font-size: 15px;
         color: themed("textColor");
 
-        &:hover { text-decoration: underline; }
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 
@@ -37,104 +39,104 @@
       padding: 15px;
       display: flex;
       flex-direction: column;
-        .convo {
-          display: flex;
-          flex-direction: column;
-        }
-        .date {
-          align-self: center;
-          justify-self: center;
-          font-size: 14px;
-          color: gray;
-        }
-        .small {
-          font-size: 12px;
-          align-self: flex-end;
-        }
-        .row {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-end;
-        }
-        .username {
-          text-align: center;
-          margin-bottom: 10px;
-          font-weight: bold;
-          font-size: 3vh;
-        }
-        img {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          aspect-ratio: 1.0;
-          object-fit: cover;
-          border: 1px #6D1D1D solid;
-          box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-        }
+      .convo {
+        display: flex;
+        flex-direction: column;
+      }
+      .date {
+        align-self: center;
+        justify-self: center;
+        font-size: 14px;
+        color: gray;
+      }
+      .small {
+        font-size: 12px;
+        align-self: flex-end;
+      }
+      .row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+      }
+      .username {
+        text-align: center;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 3vh;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border: 1px #6d1d1d solid;
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+      }
 
-        .msg-to {
-          /* Basic styling for the container */
-            position: relative;
-            margin: 15px 10px;
-            -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            background-color: #6D1D1D;
-            padding: 8px 10px;
-            border-radius: 10px;
-            color: #ffffff;
-            width: 200px; /* Set the width as per your requirement */
-            margin-left: auto; /* Align to the right side */
-            white-space: normal;  /* Allows the text to wrap */
-            word-wrap: break-word; /* Ensures long words do not overflow the container */
-            overflow-wrap: break-word;
-          }
+      .msg-to {
+        /* Basic styling for the container */
+        position: relative;
+        margin: 15px 10px;
+        -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        background-color: #6d1d1d;
+        padding: 8px 10px;
+        border-radius: 10px;
+        color: #ffffff;
+        width: 200px; /* Set the width as per your requirement */
+        margin-left: auto; /* Align to the right side */
+        white-space: normal; /* Allows the text to wrap */
+        word-wrap: break-word; /* Ensures long words do not overflow the container */
+        overflow-wrap: break-word;
+      }
 
-        /* Creating the triangle shape */
-        .msg-to::before {
-          content: '';
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          margin-left: 40%; /* Adjust this value to move the triangle horizontally */
-          border-width: 5px;
-          border-style: solid;
-          border-color: #6D1D1D transparent transparent transparent;
-        }
+      /* Creating the triangle shape */
+      .msg-to::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: 40%; /* Adjust this value to move the triangle horizontally */
+        border-width: 5px;
+        border-style: solid;
+        border-color: #6d1d1d transparent transparent transparent;
+      }
 
-        .msg-from {
-          /* Basic styling for the container */
-            justify-self: flex-end;
-            position: relative;
-            margin-right: auto;
-            -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-            margin: 15px 10px;
-            background-color: slategray;
-            padding: 8px 10px;
-            border-radius: 10px;
-            color: #ffffff;
-            width: 200px; /* Set the width as per your requirement */
-            white-space: normal;  /* Allows the text to wrap */
-            word-wrap: break-word; /* Ensures long words do not overflow the container */
-            overflow-wrap: break-word;
-        }
+      .msg-from {
+        /* Basic styling for the container */
+        justify-self: flex-end;
+        position: relative;
+        margin-right: auto;
+        -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        margin: 15px 10px;
+        background-color: slategray;
+        padding: 8px 10px;
+        border-radius: 10px;
+        color: #ffffff;
+        width: 200px; /* Set the width as per your requirement */
+        white-space: normal; /* Allows the text to wrap */
+        word-wrap: break-word; /* Ensures long words do not overflow the container */
+        overflow-wrap: break-word;
+      }
 
-        /* Creating the triangle shape */
-        .msg-from::before {
-          content: '';
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          margin-left: -43%; /* Adjust this value to move the triangle horizontally */
-          border-width: 5px;
-          border-style: solid;
-          border-color: slategray transparent transparent transparent;
-        }
+      /* Creating the triangle shape */
+      .msg-from::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -43%; /* Adjust this value to move the triangle horizontally */
+        border-width: 5px;
+        border-style: solid;
+        border-color: slategray transparent transparent transparent;
+      }
     }
-    
-    .writePC{
+
+    .writePC {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -151,15 +153,15 @@
         display: none;
       }
 
-      input{
-        flex:4;
+      input {
+        flex: 4;
         padding: 10px;
         border: 1px solid themed("border");
         background-color: transparent;
         color: themed("textColor");
       }
 
-      button{
+      button {
         border: none;
         background-color: transparent;
         padding: 10px;
@@ -167,17 +169,17 @@
         border-radius: 3px;
       }
       img {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 1px #6D1D1D solid;
-          box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-          aspect-ratio: 1.0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px #6d1d1d solid;
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        aspect-ratio: 1;
       }
     }
 
-    .writeMobile{
+    .writeMobile {
       @include pc {
         display: none;
       }
@@ -192,7 +194,7 @@
       height: 18%;
       flex-wrap: wrap;
 
-      input{
+      input {
         flex: 4;
         padding: 10px;
         border: 1px solid themed("border");
@@ -201,7 +203,7 @@
         border-radius: 10px;
       }
 
-      button{
+      button {
         flex: 0.25;
         border: none;
         background-color: transparent;
@@ -211,13 +213,13 @@
         margin: 0px;
       }
       img {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 1px #6D1D1D solid;
-          box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-          aspect-ratio: 1.0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px #6d1d1d solid;
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+        aspect-ratio: 1;
       }
     }
     .section {
@@ -225,24 +227,24 @@
       padding: 10px 0px;
     }
 
-      .post img {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        justify-self: flex-end;
-        justify-content: flex-end;
-        border-radius: 0px;
-      }
-
-      button {
-        background-color: #6D1D1D;
-        border-radius: 10px;
-        color: white;
-        font-weight: bold;
-      }
+    .post img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      justify-self: flex-end;
+      justify-content: flex-end;
+      border-radius: 0px;
     }
 
-    .notif:hover {
-      box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+    button {
+      background-color: #6d1d1d;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
     }
+  }
+
+  .notif:hover {
+    box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+  }
 }

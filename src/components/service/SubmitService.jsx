@@ -25,23 +25,30 @@ const SubmitService = ({ onClose, service }) => {
 
   const { data: student } = useQuery({
     queryKey: ["user", currentUser?.id],
-    queryFn: () => makeRequest.get(`/users/find/${currentUser.id}`).then((res) => res.data),
+    queryFn: () =>
+      makeRequest.get(`/users/find/${currentUser.id}`).then((res) => res.data),
     enabled: Boolean(currentUser?.id),
   });
 
   const studentSkills = useMemo(
-    () => (student?.skills || "").split(",").map((skill) => skill.trim()).filter(Boolean),
-    [student?.skills]
+    () =>
+      (student?.skills || "")
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean),
+    [student?.skills],
   );
   const selectedCategories = useMemo(
     () => student?.serviceCategories || [],
-    [student?.serviceCategories]
+    [student?.serviceCategories],
   );
 
   useEffect(() => {
     if (!service) return;
 
-    const category = selectedCategories.find((item) => item.slug === service.categorySlug);
+    const category = selectedCategories.find(
+      (item) => item.slug === service.categorySlug,
+    );
     setTexts({
       title: service.title || "",
       description: service.description || "",
@@ -49,7 +56,10 @@ const SubmitService = ({ onClose, service }) => {
       categoryId: category ? String(category.id) : "",
     });
     setSelectedSkills(
-      (service.skills || ",").split(",").map((skill) => skill.trim()).filter(Boolean)
+      (service.skills || ",")
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean),
     );
   }, [service, selectedCategories]);
 
@@ -62,7 +72,7 @@ const SubmitService = ({ onClose, service }) => {
     setSelectedSkills((currentSkills) =>
       currentSkills.includes(skill)
         ? currentSkills.filter((selectedSkill) => selectedSkill !== skill)
-        : [...currentSkills, skill]
+        : [...currentSkills, skill],
     );
   };
 
@@ -70,7 +80,9 @@ const SubmitService = ({ onClose, service }) => {
     const skill = customSkill.trim();
     if (!skill) return;
     setSelectedSkills((currentSkills) => {
-      const existingSkill = currentSkills.find((currentSkill) => currentSkill.toLowerCase() === skill.toLowerCase());
+      const existingSkill = currentSkills.find(
+        (currentSkill) => currentSkill.toLowerCase() === skill.toLowerCase(),
+      );
       return existingSkill ? currentSkills : [...currentSkills, skill];
     });
     setCustomSkill("");
@@ -86,15 +98,19 @@ const SubmitService = ({ onClose, service }) => {
   const [serverError, setServerError] = useState(null);
 
   const mutation = useMutation({
-    mutationFn: (serviceData) => (
+    mutationFn: (serviceData) =>
       isEditing
         ? makeRequest.put(`/services/${service.id}`, serviceData)
-        : makeRequest.post("/services", serviceData)
-    ),
+        : makeRequest.post("/services", serviceData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });
       if (!isEditing) {
-        setTexts({ title: "", description: "", availability: "", categoryId: "" });
+        setTexts({
+          title: "",
+          description: "",
+          availability: "",
+          categoryId: "",
+        });
         setSelectedSkills([]);
         setCustomSkill("");
       }
@@ -108,7 +124,11 @@ const SubmitService = ({ onClose, service }) => {
     onError: (err) => {
       const data = err?.response?.data;
       setServerError(
-        typeof data === "string" ? data : data?.message || data?.error || "Something went wrong. Please try again."
+        typeof data === "string"
+          ? data
+          : data?.message ||
+              data?.error ||
+              "Something went wrong. Please try again.",
       );
     },
   });
@@ -141,7 +161,9 @@ const SubmitService = ({ onClose, service }) => {
             placeholder={t("services.descField")}
             rows={3}
           />
-          <label className="field-label" htmlFor="service-category">{t("services.category")}</label>
+          <label className="field-label" htmlFor="service-category">
+            {t("services.category")}
+          </label>
           <select
             id="service-category"
             name="categoryId"
@@ -150,7 +172,9 @@ const SubmitService = ({ onClose, service }) => {
           >
             <option value="">{t("services.selectCategory")}</option>
             {selectedCategories.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
             ))}
           </select>
           <div className="service-skills-picker">
@@ -177,12 +201,20 @@ const SubmitService = ({ onClose, service }) => {
                 onKeyDown={handleCustomSkillKeyDown}
                 placeholder={t("services.skillsPlaceholder")}
               />
-              <button type="button" onClick={addCustomSkill}>{t("update.addSkill")}</button>
+              <button type="button" onClick={addCustomSkill}>
+                {t("update.addSkill")}
+              </button>
             </div>
             {selectedSkills.length > 0 && (
               <div className="selected-service-skills">
                 {selectedSkills.map((skill) => (
-                  <button type="button" key={skill} onClick={() => toggleSkill(skill)}>{skill} ×</button>
+                  <button
+                    type="button"
+                    key={skill}
+                    onClick={() => toggleSkill(skill)}
+                  >
+                    {skill} ×
+                  </button>
                 ))}
               </div>
             )}
@@ -196,7 +228,11 @@ const SubmitService = ({ onClose, service }) => {
           />
           {error && <span className="error-msg">{t("services.error")}</span>}
           {serverError && <span className="error-msg">{serverError}</span>}
-          {submitted && <span className="success-msg">{isEditing ? t("services.updated") : t("services.posted")}</span>}
+          {submitted && (
+            <span className="success-msg">
+              {isEditing ? t("services.updated") : t("services.posted")}
+            </span>
+          )}
           <div className="footer">
             <button type="submit" disabled={mutation.isPending}>
               {isEditing ? t("services.save") : t("share.post")}

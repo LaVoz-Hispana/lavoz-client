@@ -20,15 +20,18 @@ export const useCreateMilestone = (escrowId) => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (fields) => createMilestone(escrowId, fields),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
   });
 };
 
 export const useUpdateMilestone = (escrowId) => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ milestoneId, fields }) => updateMilestone(escrowId, milestoneId, fields),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
+    mutationFn: ({ milestoneId, fields }) =>
+      updateMilestone(escrowId, milestoneId, fields),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
   });
 };
 
@@ -36,7 +39,8 @@ export const useDeleteMilestone = (escrowId) => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (milestoneId) => deleteMilestone(escrowId, milestoneId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["milestones", escrowId] }),
   });
 };
 
@@ -55,7 +59,8 @@ export const useApproveMilestone = (escrowId) => {
 export const useRequestChanges = (escrowId) => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ milestoneId, note }) => requestMilestoneChanges(escrowId, milestoneId, { note }),
+    mutationFn: ({ milestoneId, note }) =>
+      requestMilestoneChanges(escrowId, milestoneId, { note }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["milestones", escrowId] });
       qc.invalidateQueries({ queryKey: ["escrow", escrowId] });

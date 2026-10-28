@@ -35,16 +35,25 @@ const AdminDashboard = () => {
     enabled: adminSection === "admin-posts",
   });
 
-  const filteredUsers = users?.filter((u) =>
-    typeFilter === "all" ? true : u.account_type === typeFilter
-  ) ?? [];
+  const filteredUsers =
+    users?.filter((u) =>
+      typeFilter === "all" ? true : u.account_type === typeFilter,
+    ) ?? [];
 
-  const filteredEscrows = escrows?.filter((e) =>
-    statusFilter === "all" ? true : e.status === statusFilter
-  ) ?? [];
+  const filteredEscrows =
+    escrows?.filter((e) =>
+      statusFilter === "all" ? true : e.status === statusFilter,
+    ) ?? [];
 
   const USER_TYPES = ["all", "student", "local", "admin"];
-  const STATUSES   = ["all", "pending", "active", "submitted", "completed", "cancelled"];
+  const STATUSES = [
+    "all",
+    "pending",
+    "active",
+    "submitted",
+    "completed",
+    "cancelled",
+  ];
 
   return (
     <div className="admin-dashboard">
@@ -80,144 +89,163 @@ const AdminDashboard = () => {
             {!adminPostsLoading && adminPosts?.length === 0 && (
               <span className="state">No admin posts yet.</span>
             )}
-            {adminPosts?.map((post) => <Post key={post.id} post={post} />)}
+            {adminPosts?.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
           </section>
         )}
 
         {adminSection === "sponsors" && <SponsorManager />}
 
-        {adminSection === "escrow-lock" && <>
-          <EscrowLock />
-
-        <div className="tabs">
-          <button
-            className={tab === "users" ? "tab selected" : "tab"}
-            onClick={() => setTab("users")}
-          >
-            {t("admin.users")}
-          </button>
-          <button
-            className={tab === "escrows" ? "tab selected" : "tab"}
-            onClick={() => setTab("escrows")}
-          >
-            {t("admin.escrows")}
-          </button>
-        </div>
-
-        {/* ── Users Tab ── */}
-        {tab === "users" && (
+        {adminSection === "escrow-lock" && (
           <>
-            <div className="filter-row">
-              {USER_TYPES.map((type) => (
-                <button
-                  key={type}
-                  className={typeFilter === type ? "filter-btn active" : "filter-btn"}
-                  onClick={() => setTypeFilter(type)}
-                >
-                  {type === "all" ? t("admin.allTypes") : type}
-                </button>
-              ))}
+            <EscrowLock />
+
+            <div className="tabs">
+              <button
+                className={tab === "users" ? "tab selected" : "tab"}
+                onClick={() => setTab("users")}
+              >
+                {t("admin.users")}
+              </button>
+              <button
+                className={tab === "escrows" ? "tab selected" : "tab"}
+                onClick={() => setTab("escrows")}
+              >
+                {t("admin.escrows")}
+              </button>
             </div>
 
-            {usersLoading && <span className="state">Loading...</span>}
-            {!usersLoading && filteredUsers.length === 0 && (
-              <span className="state">{t("admin.noUsers")}</span>
+            {/* ── Users Tab ── */}
+            {tab === "users" && (
+              <>
+                <div className="filter-row">
+                  {USER_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      className={
+                        typeFilter === type ? "filter-btn active" : "filter-btn"
+                      }
+                      onClick={() => setTypeFilter(type)}
+                    >
+                      {type === "all" ? t("admin.allTypes") : type}
+                    </button>
+                  ))}
+                </div>
+
+                {usersLoading && <span className="state">Loading...</span>}
+                {!usersLoading && filteredUsers.length === 0 && (
+                  <span className="state">{t("admin.noUsers")}</span>
+                )}
+
+                {!usersLoading && filteredUsers.length > 0 && (
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t("admin.name")}</th>
+                          <th>{t("admin.type")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredUsers.map((u) => (
+                          <tr key={u.id}>
+                            <td>
+                              <div className="user-cell">
+                                <img src={u.profilePic} alt="" />
+                                <span>
+                                  {u.providerDisplayName || u.username}{" "}
+                                  <ProviderBadge
+                                    providerType={u.provider_type}
+                                    label={u.providerTypeLabel}
+                                  />
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`type-badge ${u.account_type}`}>
+                                {u.account_type === "local"
+                                  ? t("register.local")
+                                  : u.account_type === "student"
+                                    ? t("register.student")
+                                    : t("admin.dashboard")}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
             )}
 
-            {!usersLoading && filteredUsers.length > 0 && (
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>{t("admin.name")}</th>
-                      <th>{t("admin.type")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredUsers.map((u) => (
-                      <tr
-                        key={u.id}
-                      >
-                        <td>
-                          <div className="user-cell">
-                            <img src={u.profilePic} alt="" />
-                            <span>{u.providerDisplayName || u.username} <ProviderBadge providerType={u.provider_type} label={u.providerTypeLabel} /></span>
-                          </div>
-                        </td>
-                        <td>
-                          <span className={`type-badge ${u.account_type}`}>
-                            {u.account_type === "local" ? t("register.local") : u.account_type === "student" ? t("register.student") : t("admin.dashboard")}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </>
-        )}
+            {/* ── Escrows Tab ── */}
+            {tab === "escrows" && (
+              <>
+                <div className="filter-row">
+                  {STATUSES.map((s) => (
+                    <button
+                      key={s}
+                      className={
+                        statusFilter === s ? "filter-btn active" : "filter-btn"
+                      }
+                      onClick={() => setStatusFilter(s)}
+                    >
+                      {s === "all" ? t("admin.allStatuses") : t(`escrow.${s}`)}
+                    </button>
+                  ))}
+                </div>
 
-        {/* ── Escrows Tab ── */}
-        {tab === "escrows" && (
-          <>
-            <div className="filter-row">
-              {STATUSES.map((s) => (
-                <button
-                  key={s}
-                  className={statusFilter === s ? "filter-btn active" : "filter-btn"}
-                  onClick={() => setStatusFilter(s)}
-                >
-                  {s === "all" ? t("admin.allStatuses") : t(`escrow.${s}`)}
-                </button>
-              ))}
-            </div>
+                {escrowsLoading && <span className="state">Loading...</span>}
+                {!escrowsLoading && filteredEscrows.length === 0 && (
+                  <span className="state">{t("admin.noEscrows")}</span>
+                )}
 
-            {escrowsLoading && <span className="state">Loading...</span>}
-            {!escrowsLoading && filteredEscrows.length === 0 && (
-              <span className="state">{t("admin.noEscrows")}</span>
-            )}
-
-            {!escrowsLoading && filteredEscrows.length > 0 && (
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>{t("admin.project")}</th>
-                      <th>{t("admin.student")}</th>
-                      <th>{t("admin.local")}</th>
-                      <th>{t("admin.status")}</th>
-                      <th>{t("admin.lastUpdated")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredEscrows.map((e) => (
-                      <tr
-                        key={e.id}
-                        onClick={() => navigate(`/escrows/${e.id}`)}
-                        className="clickable"
-                      >
-                        <td>{e.projectTitle}</td>
-                        <td>{e.studentUsername}</td>
-                        <td>{e.localUsername}</td>
-                        <td>
-                          <span
-                            className="status-badge"
-                            style={{ backgroundColor: STATUS_COLORS[e.status] || "#888" }}
+                {!escrowsLoading && filteredEscrows.length > 0 && (
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{t("admin.project")}</th>
+                          <th>{t("admin.student")}</th>
+                          <th>{t("admin.local")}</th>
+                          <th>{t("admin.status")}</th>
+                          <th>{t("admin.lastUpdated")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredEscrows.map((e) => (
+                          <tr
+                            key={e.id}
+                            onClick={() => navigate(`/escrows/${e.id}`)}
+                            className="clickable"
                           >
-                            {t(`escrow.${e.status}`)}
-                          </span>
-                        </td>
-                        <td>{moment(e.updatedAt).fromNow()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                            <td>{e.projectTitle}</td>
+                            <td>{e.studentUsername}</td>
+                            <td>{e.localUsername}</td>
+                            <td>
+                              <span
+                                className="status-badge"
+                                style={{
+                                  backgroundColor:
+                                    STATUS_COLORS[e.status] || "#888",
+                                }}
+                              >
+                                {t(`escrow.${e.status}`)}
+                              </span>
+                            </td>
+                            <td>{moment(e.updatedAt).fromNow()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
-        </>}
       </div>
     </div>
   );

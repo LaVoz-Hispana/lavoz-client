@@ -5,8 +5,12 @@
 ───────────────────────────────────────── */
 .rightBar {
   @include themify($themes) {
-    @include mobile { display: none; }
-    @include tablet { display: none; }
+    @include mobile {
+      display: none;
+    }
+    @include tablet {
+      display: none;
+    }
 
     position: sticky;
     top: 50px;
@@ -38,7 +42,9 @@
       align-items: center;
       justify-content: center;
       color: themed("textColorSoft");
-      svg { font-size: 18px; }
+      svg {
+        font-size: 18px;
+      }
     }
 
     .rb-section-title {
@@ -55,10 +61,12 @@
 
     .rb-section-link {
       font-size: 11px;
-      color: #6D1D1D;
+      color: #6d1d1d;
       text-decoration: none;
       white-space: nowrap;
-      &:hover { text-decoration: underline; }
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     /* ── section body (rows) ── */
@@ -68,7 +76,10 @@
     }
 
     /* ── shared row ── */
-    .rb-list { display: flex; flex-direction: column; }
+    .rb-list {
+      display: flex;
+      flex-direction: column;
+    }
 
     .rb-row {
       display: flex;
@@ -80,8 +91,12 @@
       border-bottom: 0.5px solid themed("border");
       transition: background-color 0.12s;
 
-      &:last-child { border-bottom: none; }
-      &:hover { background-color: themed("bgSoft"); }
+      &:last-child {
+        border-bottom: none;
+      }
+      &:hover {
+        background-color: themed("bgSoft");
+      }
 
       img {
         width: 30px;
@@ -105,7 +120,9 @@
           overflow: hidden;
           text-overflow: ellipsis;
 
-          .rating-badge { font-size: 11px; }
+          .rating-badge {
+            font-size: 11px;
+          }
         }
 
         .rb-subtitle {
@@ -115,7 +132,9 @@
           overflow: hidden;
           text-overflow: ellipsis;
 
-          .rating-badge { font-size: 10px; }
+          .rating-badge {
+            font-size: 10px;
+          }
         }
       }
 
@@ -144,14 +163,18 @@
       background: none;
       cursor: pointer;
       color: themed("textColorSoft");
-      transition: color 0.15s, background-color 0.15s;
+      transition:
+        color 0.15s,
+        background-color 0.15s;
 
       &:hover {
         background-color: themed("bgSoft");
         color: themed("textColor");
       }
 
-      .rb-section-icon { color: inherit; }
+      .rb-section-icon {
+        color: inherit;
+      }
     }
 
     /* toggle label — same hide/show rules as titles, handled per-mode below */
@@ -178,8 +201,10 @@
       padding: 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 0;           /* gap handled by rb-menu */
-      &::-webkit-scrollbar { display: none; }
+      gap: 0; /* gap handled by rb-menu */
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     .rb-menu {
@@ -196,7 +221,9 @@
     }
 
     /* all bodies permanently open */
-    .rb-section-body { max-height: 1000px; }
+    .rb-section-body {
+      max-height: 1000px;
+    }
   }
 }
 
@@ -222,7 +249,9 @@
       overflow: hidden;
       padding: 14px 12px;
 
-      &::-webkit-scrollbar { display: none; }
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     /* allow vertical scroll inside rb-scroll when bar is expanded */
@@ -231,7 +260,7 @@
     }
 
     .rb-menu {
-      width: 72px;      /* matches collapsed bar so cards aren't clipped mid-card */
+      width: 72px; /* matches collapsed bar so cards aren't clipped mid-card */
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -262,7 +291,9 @@
     }
 
     /* section bodies collapsed by default */
-    .rb-section-body { max-height: 0; }
+    .rb-section-body {
+      max-height: 0;
+    }
 
     /* expand a section body only when bar is open AND that section is hovered */
     &:hover .rb-section-entry:hover .rb-section-body {
