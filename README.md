@@ -1,4 +1,3 @@
-
 # Node.js and Vercel deployment
 
 Use Node.js 24.x (`nvm use` reads `.nvmrc`). The `engines.node` setting in
@@ -6,17 +5,32 @@ Use Node.js 24.x (`nvm use` reads `.nvmrc`). The `engines.node` setting in
 
 In Vercel, select **Settings → Build and Deployment → Node.js Version → 24.x**,
 then redeploy. Use this frontend directory as the project root, the Create React
-App framework preset, `yarn build` as the build command, and `build` as the output
+App framework preset, `npm run build` as the build command, and `build` as the output
 directory. Keep existing environment variables configured.
 
-The current dependency lock is `yarn.lock` (Yarn Classic). Install with
-`yarn install --frozen-lockfile`; the older `package-lock.json` does not include
-all current dependencies. If Vercel has an npm install-command override, change
-it to `yarn install --frozen-lockfile` to use the tested dependency versions.
+Use npm and commit `package-lock.json` when dependencies change. Install with
+`npm ci`, matching GitHub Actions. Set Vercel's install command to `npm ci` as
+well, so the legacy `yarn.lock` does not select a different package manager.
 
-Verify locally with `CI=true yarn test --watchAll=false --runInBand` and
-`yarn build`. This frontend produces static browser assets; changing its Vercel
+Verify locally with `CI=true npm test -- --watchAll=false --runInBand` and
+`npm run build`. This frontend produces static browser assets; changing its Vercel
 build Node.js version does not change the separately hosted API's runtime.
+
+# Quality checks
+
+Run `npm run format` to format files, and `npm run format:check` to verify them
+without changing them. Generated assets, dependency locks, and environment files
+are excluded through `.prettierignore`.
+
+Run `npm run lint` to check source files or `npm run lint:fix` to apply ESLint's
+available automatic fixes. Lint fails on any error or more than 271 warnings.
+This is the existing warning baseline; reduce the limit as warnings are fixed.
+A total-count baseline can allow one new warning to replace a removed one, so
+review new warnings as well. The frontend keeps ESLint 8 for CRA compatibility.
+
+GitHub Actions runs installation, lint, formatting checks, tests, and a production
+build. Build warnings remain allowed by the build script's `CI=false`; the
+separate lint step enforces the warning baseline.
 
 # API connection
 

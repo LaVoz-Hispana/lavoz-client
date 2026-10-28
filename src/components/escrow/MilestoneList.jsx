@@ -14,17 +14,20 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
   const { isLoading, error, data: raw } = useMilestones(escrowId);
 
   // Sort by dueDate ascending; milestones without a date go to the end
-  const milestones = raw ? [...raw].sort((a, b) => {
-    if (!a.dueDate && !b.dueDate) return 0;
-    if (!a.dueDate) return 1;
-    if (!b.dueDate) return -1;
-    return new Date(a.dueDate) - new Date(b.dueDate);
-  }) : raw;
+  const milestones = raw
+    ? [...raw].sort((a, b) => {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return new Date(a.dueDate) - new Date(b.dueDate);
+      })
+    : raw;
   const createMutation = useCreateMilestone(escrowId);
 
   const canAdd =
     isLocal &&
-    (escrow.status === ESCROW_STATUS.PENDING || escrow.status === ESCROW_STATUS.ACTIVE);
+    (escrow.status === ESCROW_STATUS.PENDING ||
+      escrow.status === ESCROW_STATUS.ACTIVE);
 
   const handleCreate = (fields) => {
     setCreateError(null);
@@ -32,7 +35,11 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
       onSuccess: () => setAdding(false),
       onError: (err) => {
         const data = err?.response?.data;
-        setCreateError(typeof data === "string" ? data : data?.message || "Failed to create milestone.");
+        setCreateError(
+          typeof data === "string"
+            ? data
+            : data?.message || "Failed to create milestone.",
+        );
       },
     });
   };
@@ -40,7 +47,9 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
   if (isLoading) {
     return (
       <div className="milestone-list">
-        {[1, 2, 3].map((n) => <div key={n} className="skeleton-row" aria-hidden="true" />)}
+        {[1, 2, 3].map((n) => (
+          <div key={n} className="skeleton-row" aria-hidden="true" />
+        ))}
       </div>
     );
   }
@@ -72,13 +81,18 @@ const MilestoneList = ({ escrowId, escrow, isLocal, isStudent }) => {
       </div>
 
       {createError && (
-        <span className="list-error" role="alert">{createError}</span>
+        <span className="list-error" role="alert">
+          {createError}
+        </span>
       )}
 
       {adding && (
         <MilestoneForm
           onSubmit={handleCreate}
-          onCancel={() => { setAdding(false); setCreateError(null); }}
+          onCancel={() => {
+            setAdding(false);
+            setCreateError(null);
+          }}
           isPending={createMutation.isPending}
         />
       )}

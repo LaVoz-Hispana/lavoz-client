@@ -11,7 +11,7 @@
     flex-direction: column;
 
     .card-top {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       color: white;
       padding: 16px 20px;
       border-radius: 20px 20px 0 0;
@@ -33,9 +33,15 @@
         font-weight: 600;
         letter-spacing: 0.02em;
 
-        &.open { background-color: #2ecc71; }
-        &.closed { background-color: #888; }
-        &.in_escrow { background-color: #2980b9; }
+        &.open {
+          background-color: #2ecc71;
+        }
+        &.closed {
+          background-color: #888;
+        }
+        &.in_escrow {
+          background-color: #2980b9;
+        }
       }
 
       .posted-by {
@@ -56,7 +62,9 @@
 
         a {
           color: white;
-          &:hover { text-decoration: underline; }
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
@@ -119,31 +127,45 @@
         border: none;
 
         &.details-btn {
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           color: white;
-          &:hover { background-color: #8a2424; }
+          &:hover {
+            background-color: #8a2424;
+          }
         }
 
         &.close-btn {
           background-color: transparent;
           border: 1px solid themed("border");
           color: themed("textColorSoft");
-          &:hover { border-color: #6D1D1D; color: #6D1D1D; }
+          &:hover {
+            border-color: #6d1d1d;
+            color: #6d1d1d;
+          }
         }
 
         &.delete-btn {
           background-color: transparent;
           border: 1px solid #c0392b;
           color: #c0392b;
-          &:hover { background-color: #c0392b; color: white; }
-          &:disabled { opacity: 0.5; cursor: not-allowed; }
+          &:hover {
+            background-color: #c0392b;
+            color: white;
+          }
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
 
         &.edit-btn {
           background-color: transparent;
-          border: 1px solid #6D1D1D;
-          color: #6D1D1D;
-          &:hover { background-color: #6D1D1D; color: white; }
+          border: 1px solid #6d1d1d;
+          color: #6d1d1d;
+          &:hover {
+            background-color: #6d1d1d;
+            color: white;
+          }
         }
       }
     }
@@ -187,7 +209,9 @@
         color: themed("textColor");
         cursor: pointer;
 
-        &:hover { color: #6D1D1D; }
+        &:hover {
+          color: #6d1d1d;
+        }
       }
     }
   }

@@ -70,8 +70,12 @@ const AggieMeals = () => {
             <h3 className="meal-restaurant">{deal.restaurant}</h3>
             <p className="meal-deal">{deal.deal}</p>
             <div className="meal-meta">
-              <span>{t("meals.time")} {deal.time}</span>
-              <span>{t("meals.location")} {deal.location}</span>
+              <span>
+                {t("meals.time")} {deal.time}
+              </span>
+              <span>
+                {t("meals.location")} {deal.location}
+              </span>
             </div>
           </div>
         ))}

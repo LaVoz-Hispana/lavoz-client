@@ -21,7 +21,11 @@ const SponsorManager = () => {
   const [error, setError] = useState(null);
   const [contentEn, setContentEn] = useState("");
   const [contentEs, setContentEs] = useState("");
-  const [sectionSaveNotice, setSectionSaveNotice] = useState({ open: false, message: "", severity: "success" });
+  const [sectionSaveNotice, setSectionSaveNotice] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [sectionLastSavedAt, setSectionLastSavedAt] = useState(null);
 
   const { data: sponsors, isLoading } = useQuery({
@@ -38,12 +42,15 @@ const SponsorManager = () => {
     if (!sponsorSection) return;
     setContentEn(sponsorSection.contentEn || "");
     setContentEs(sponsorSection.contentEs || "");
-    setSectionLastSavedAt(sponsorSection.updatedAt ? new Date(sponsorSection.updatedAt) : null);
+    setSectionLastSavedAt(
+      sponsorSection.updatedAt ? new Date(sponsorSection.updatedAt) : null,
+    );
   }, [sponsorSection]);
 
   const addSponsor = useMutation({
     mutationFn: async () => {
-      if (!file || !name.trim() || !link.trim()) throw new Error("Name, link, and logo are required.");
+      if (!file || !name.trim() || !link.trim())
+        throw new Error("Name, link, and logo are required.");
       const formData = new FormData();
       formData.append("file", file);
       const upload = await makeRequest.post("/uploadSponsor", formData);
@@ -62,7 +69,12 @@ const SponsorManager = () => {
       setError(null);
       queryClient.invalidateQueries({ queryKey: ["sponsors"] });
     },
-    onError: (requestError) => setError(requestError?.response?.data?.error || requestError.message || "Could not add sponsor."),
+    onError: (requestError) =>
+      setError(
+        requestError?.response?.data?.error ||
+          requestError.message ||
+          "Could not add sponsor.",
+      ),
   });
 
   const startEditingSponsor = (sponsor) => {
@@ -89,7 +101,14 @@ const SponsorManager = () => {
   };
 
   const updateSponsor = useMutation({
-    mutationFn: async ({ id, name: nextName, link: nextLink, sponsorType: nextSponsorType, logoUrl: nextLogoUrl, file: nextFile }) => {
+    mutationFn: async ({
+      id,
+      name: nextName,
+      link: nextLink,
+      sponsorType: nextSponsorType,
+      logoUrl: nextLogoUrl,
+      file: nextFile,
+    }) => {
       let resolvedLogoUrl = nextLogoUrl;
       if (nextFile) {
         const formData = new FormData();
@@ -110,7 +129,12 @@ const SponsorManager = () => {
       cancelEditingSponsor();
       queryClient.invalidateQueries({ queryKey: ["sponsors"] });
     },
-    onError: (requestError) => setError(requestError?.response?.data?.error || requestError.message || "Could not update sponsor."),
+    onError: (requestError) =>
+      setError(
+        requestError?.response?.data?.error ||
+          requestError.message ||
+          "Could not update sponsor.",
+      ),
   });
 
   const updateSponsorSection = useMutation({
@@ -130,7 +154,12 @@ const SponsorManager = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["sponsor-section"] });
     },
-    onError: (requestError) => setError(requestError?.response?.data?.error || requestError.message || "Could not update sponsor section."),
+    onError: (requestError) =>
+      setError(
+        requestError?.response?.data?.error ||
+          requestError.message ||
+          "Could not update sponsor section.",
+      ),
   });
 
   const removeSponsor = useMutation({
@@ -156,11 +185,18 @@ const SponsorManager = () => {
   return (
     <section className="sponsor-manager">
       <h2>Sponsors</h2>
-      <p>Add a logo and the destination visitors should reach when they select it.</p>
+      <p>
+        Add a logo and the destination visitors should reach when they select
+        it.
+      </p>
       <div className="sponsor-section-editor">
         <h3>Homepage sponsor copy</h3>
-        <p>Manage the text shown above the sponsor carousel on the home page.</p>
-        {sponsorSectionLoading && <span className="state">Loading homepage copy...</span>}
+        <p>
+          Manage the text shown above the sponsor carousel on the home page.
+        </p>
+        {sponsorSectionLoading && (
+          <span className="state">Loading homepage copy...</span>
+        )}
         <div className="editor-grid">
           <label>
             <span>English</span>
@@ -194,7 +230,8 @@ const SponsorManager = () => {
         </button>
         {sectionLastSavedAt && (
           <span className="state section-meta">
-            Last saved {sectionLastSavedAt.toLocaleString([], {
+            Last saved{" "}
+            {sectionLastSavedAt.toLocaleString([], {
               month: "short",
               day: "numeric",
               hour: "numeric",
@@ -204,17 +241,39 @@ const SponsorManager = () => {
         )}
       </div>
       <form onSubmit={submit}>
-        <input value={name} onChange={(event) => setName(event.target.value)} maxLength={120} placeholder="Sponsor name" required />
-        <input value={link} onChange={(event) => setLink(event.target.value)} type="url" placeholder="https://sponsor.example" required />
+        <input
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          maxLength={120}
+          placeholder="Sponsor name"
+          required
+        />
+        <input
+          value={link}
+          onChange={(event) => setLink(event.target.value)}
+          type="url"
+          placeholder="https://sponsor.example"
+          required
+        />
         <label className="sponsor-type-field">
           <span>Sponsor Type</span>
-          <select value={sponsorType} onChange={(event) => setSponsorType(event.target.value)}>
+          <select
+            value={sponsorType}
+            onChange={(event) => setSponsorType(event.target.value)}
+          >
             <option value="regular">Regular</option>
             <option value="principle">Principle</option>
           </select>
         </label>
-        <input onChange={(event) => setFile(event.target.files?.[0] || null)} type="file" accept="image/*" required />
-        <button type="submit" disabled={addSponsor.isPending}>{addSponsor.isPending ? "Uploading..." : "Add sponsor"}</button>
+        <input
+          onChange={(event) => setFile(event.target.files?.[0] || null)}
+          type="file"
+          accept="image/*"
+          required
+        />
+        <button type="submit" disabled={addSponsor.isPending}>
+          {addSponsor.isPending ? "Uploading..." : "Add sponsor"}
+        </button>
       </form>
       {error && <span className="error-msg">{error}</span>}
       {isLoading && <span className="state">Loading sponsors...</span>}
@@ -224,37 +283,112 @@ const SponsorManager = () => {
             <div className="sponsor-row-main">
               <img src={sponsor.logoUrl} alt="" />
               {editingSponsorId === sponsor.id ? (
-                <form className="sponsor-edit-form" onSubmit={(event) => submitEdit(event, sponsor.id)}>
-                  <input value={editForm.name} onChange={(event) => setEditForm((current) => ({ ...current, name: event.target.value }))} placeholder="Sponsor name" required />
-                  <input value={editForm.link} onChange={(event) => setEditForm((current) => ({ ...current, link: event.target.value }))} type="url" placeholder="https://sponsor.example" required />
+                <form
+                  className="sponsor-edit-form"
+                  onSubmit={(event) => submitEdit(event, sponsor.id)}
+                >
+                  <input
+                    value={editForm.name}
+                    onChange={(event) =>
+                      setEditForm((current) => ({
+                        ...current,
+                        name: event.target.value,
+                      }))
+                    }
+                    placeholder="Sponsor name"
+                    required
+                  />
+                  <input
+                    value={editForm.link}
+                    onChange={(event) =>
+                      setEditForm((current) => ({
+                        ...current,
+                        link: event.target.value,
+                      }))
+                    }
+                    type="url"
+                    placeholder="https://sponsor.example"
+                    required
+                  />
                   <label className="sponsor-type-field">
                     <span>Sponsor Type</span>
-                    <select value={editForm.sponsorType} onChange={(event) => setEditForm((current) => ({ ...current, sponsorType: event.target.value }))}>
+                    <select
+                      value={editForm.sponsorType}
+                      onChange={(event) =>
+                        setEditForm((current) => ({
+                          ...current,
+                          sponsorType: event.target.value,
+                        }))
+                      }
+                    >
                       <option value="regular">Regular</option>
                       <option value="principle">Principle</option>
                     </select>
                   </label>
                   <label className="sponsor-type-field">
                     <span>Logo file</span>
-                    <input type="file" accept="image/*" onChange={(event) => setEditForm((current) => ({ ...current, file: event.target.files?.[0] || null }))} />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) =>
+                        setEditForm((current) => ({
+                          ...current,
+                          file: event.target.files?.[0] || null,
+                        }))
+                      }
+                    />
                   </label>
                   <div className="sponsor-edit-actions">
-                    <button type="submit" disabled={updateSponsor.isPending}>{updateSponsor.isPending ? "Saving..." : "Save"}</button>
-                    <button type="button" className="secondary" onClick={cancelEditingSponsor}>Cancel</button>
+                    <button type="submit" disabled={updateSponsor.isPending}>
+                      {updateSponsor.isPending ? "Saving..." : "Save"}
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={cancelEditingSponsor}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </form>
               ) : (
                 <div className="sponsor-row-content">
                   <strong>{sponsor.name}</strong>
-                  <span className={`sponsor-type-badge ${sponsor.sponsorType || "regular"}`}>{(sponsor.sponsorType || "regular").charAt(0).toUpperCase() + (sponsor.sponsorType || "regular").slice(1)}</span>
-                  <a href={sponsor.link} target="_blank" rel="noopener noreferrer">{sponsor.link}</a>
+                  <span
+                    className={`sponsor-type-badge ${sponsor.sponsorType || "regular"}`}
+                  >
+                    {(sponsor.sponsorType || "regular")
+                      .charAt(0)
+                      .toUpperCase() +
+                      (sponsor.sponsorType || "regular").slice(1)}
+                  </span>
+                  <a
+                    href={sponsor.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {sponsor.link}
+                  </a>
                 </div>
               )}
             </div>
             {!editingSponsorId && (
               <div className="sponsor-row-actions">
-                <button type="button" className="secondary" onClick={() => startEditingSponsor(sponsor)} disabled={removeSponsor.isPending}>Edit</button>
-                <button type="button" onClick={() => removeSponsor.mutate(sponsor.id)} disabled={removeSponsor.isPending}>Remove</button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => startEditingSponsor(sponsor)}
+                  disabled={removeSponsor.isPending}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSponsor.mutate(sponsor.id)}
+                  disabled={removeSponsor.isPending}
+                >
+                  Remove
+                </button>
               </div>
             )}
           </article>
@@ -266,7 +400,12 @@ const SponsorManager = () => {
         onClose={closeSectionNotice}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={closeSectionNotice} severity={sectionSaveNotice.severity} variant="filled" sx={{ width: "100%" }}>
+        <Alert
+          onClose={closeSectionNotice}
+          severity={sectionSaveNotice.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
           {sectionSaveNotice.message}
         </Alert>
       </Snackbar>

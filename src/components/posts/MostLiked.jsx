@@ -8,19 +8,24 @@ const MostLiked = () => {
   const { t, i18n } = useTranslation();
   const { isLoading, error, data } = useQuery({
     queryKey: ["topPosts"],
-    queryFn: () => makeRequest.get("/posts/top").then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/posts/top").then((res) => {
+        return res.data;
+      }),
   });
 
-  return(
+  return (
     <div>
-    {data && !isLoading && !error && data.length > 0 && <h3 className="title">{t('sections.topPosts')}</h3>}
-        <div className="grid">
-        
-        { error ? "Something went wrong!" : 
-          isLoading || !data ? "loading" :
-          data.map((post) => (<Post post={post} key={post.id} />))
-        }
-        </div>
+      {data && !isLoading && !error && data.length > 0 && (
+        <h3 className="title">{t("sections.topPosts")}</h3>
+      )}
+      <div className="grid">
+        {error
+          ? "Something went wrong!"
+          : isLoading || !data
+            ? "loading"
+            : data.map((post) => <Post post={post} key={post.id} />)}
+      </div>
     </div>
   );
 };

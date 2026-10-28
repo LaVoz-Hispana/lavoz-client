@@ -33,7 +33,8 @@ const RecTeams = ({ onBack }) => {
       id: 1,
       sport: "Basketball",
       teamName: "Aggie Hoopers",
-      description: "Looking for players who love fast-paced basketball. We play pickup games and participate in intramural leagues.",
+      description:
+        "Looking for players who love fast-paced basketball. We play pickup games and participate in intramural leagues.",
       skillLevel: "Intermediate",
       location: "Rec Center Courts 1-2",
       schedule: "Tuesdays & Thursdays 7:00 PM",
@@ -45,7 +46,8 @@ const RecTeams = ({ onBack }) => {
       id: 2,
       sport: "Soccer",
       teamName: "Maroon Soccer Club",
-      description: "Casual soccer team for all skill levels. We focus on having fun while improving our skills together.",
+      description:
+        "Casual soccer team for all skill levels. We focus on having fun while improving our skills together.",
       skillLevel: "Beginner",
       location: "Penberthy Rec Complex Field 3",
       schedule: "Sundays 2:00 PM",
@@ -57,7 +59,8 @@ const RecTeams = ({ onBack }) => {
       id: 3,
       sport: "Volleyball",
       teamName: "Net Crushers",
-      description: "Competitive volleyball team looking for experienced players. We train hard and play in tournaments.",
+      description:
+        "Competitive volleyball team looking for experienced players. We train hard and play in tournaments.",
       skillLevel: "Advanced",
       location: "Rec Center Volleyball Courts",
       schedule: "Mondays & Wednesdays 6:30 PM",
@@ -69,7 +72,8 @@ const RecTeams = ({ onBack }) => {
       id: 4,
       sport: "Tennis",
       teamName: "Aggie Rackets",
-      description: "Tennis enthusiasts of all levels welcome! We organize matches, practice sessions, and social events.",
+      description:
+        "Tennis enthusiasts of all levels welcome! We organize matches, practice sessions, and social events.",
       skillLevel: "All Levels",
       location: "Omar Smith Tennis Center",
       schedule: "Saturdays 10:00 AM",
@@ -81,7 +85,8 @@ const RecTeams = ({ onBack }) => {
       id: 5,
       sport: "Flag Football",
       teamName: "12th Man Flag Football",
-      description: "Non-contact flag football team. Great for former high school players or anyone wanting to learn the game.",
+      description:
+        "Non-contact flag football team. Great for former high school players or anyone wanting to learn the game.",
       skillLevel: "Intermediate",
       location: "Penberthy Rec Complex Field 1",
       schedule: "Fridays 5:00 PM",
@@ -93,7 +98,8 @@ const RecTeams = ({ onBack }) => {
       id: 6,
       sport: "Swimming",
       teamName: "Aggie Swimmers",
-      description: "Recreational swimming group for fitness and fun. We do laps, water aerobics, and pool games.",
+      description:
+        "Recreational swimming group for fitness and fun. We do laps, water aerobics, and pool games.",
       skillLevel: "All Levels",
       location: "Rec Center Pool",
       schedule: "Wednesdays & Fridays 8:00 AM",
@@ -103,17 +109,39 @@ const RecTeams = ({ onBack }) => {
     },
   ]);
 
-  const sports = ["All", "Basketball", "Soccer", "Volleyball", "Tennis", "Flag Football", "Swimming", "Baseball", "Softball", "Golf"];
-  const skillLevels = ["All", "Beginner", "Intermediate", "Advanced", "All Levels"];
+  const sports = [
+    "All",
+    "Basketball",
+    "Soccer",
+    "Volleyball",
+    "Tennis",
+    "Flag Football",
+    "Swimming",
+    "Baseball",
+    "Softball",
+    "Golf",
+  ];
+  const skillLevels = [
+    "All",
+    "Beginner",
+    "Intermediate",
+    "Advanced",
+    "All Levels",
+  ];
 
   const filteredTeams = recTeams.filter((team) => {
     const matchesSearch =
       team.teamName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       team.sport.toLowerCase().includes(searchTerm.toLowerCase()) ||
       team.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSport = selectedSport === "" || selectedSport === "All" || team.sport === selectedSport;
+    const matchesSport =
+      selectedSport === "" ||
+      selectedSport === "All" ||
+      team.sport === selectedSport;
     const matchesSkillLevel =
-      selectedSkillLevel === "" || selectedSkillLevel === "All" || team.skillLevel === selectedSkillLevel;
+      selectedSkillLevel === "" ||
+      selectedSkillLevel === "All" ||
+      team.skillLevel === selectedSkillLevel;
     return matchesSearch && matchesSport && matchesSkillLevel;
   });
 
@@ -212,7 +240,10 @@ const RecTeams = ({ onBack }) => {
               </div>
             </div>
 
-            <button className="create-team-btn" onClick={() => setShowCreateForm(true)}>
+            <button
+              className="create-team-btn"
+              onClick={() => setShowCreateForm(true)}
+            >
               <AddIcon /> {t("recTeams.createTeam")}
             </button>
           </div>
@@ -227,7 +258,9 @@ const RecTeams = ({ onBack }) => {
                       <label>{t("recTeams.sport")}</label>
                       <select
                         value={newTeam.sport}
-                        onChange={(e) => handleInputChange("sport", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("sport", e.target.value)
+                        }
                         required
                       >
                         <option value="">{t("recTeams.selectSport")}</option>
@@ -243,10 +276,14 @@ const RecTeams = ({ onBack }) => {
                       <label>{t("recTeams.skillLevel")}</label>
                       <select
                         value={newTeam.skillLevel}
-                        onChange={(e) => handleInputChange("skillLevel", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("skillLevel", e.target.value)
+                        }
                         required
                       >
-                        <option value="">{t("recTeams.selectSkillLevel")}</option>
+                        <option value="">
+                          {t("recTeams.selectSkillLevel")}
+                        </option>
                         {skillLevels.slice(1).map((level) => (
                           <option key={level} value={level}>
                             {level}
@@ -261,7 +298,9 @@ const RecTeams = ({ onBack }) => {
                     <input
                       type="text"
                       value={newTeam.teamName}
-                      onChange={(e) => handleInputChange("teamName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("teamName", e.target.value)
+                      }
                       placeholder={t("recTeams.teamNamePlaceholder")}
                       required
                     />
@@ -271,7 +310,9 @@ const RecTeams = ({ onBack }) => {
                     <label>{t("recTeams.description")}</label>
                     <textarea
                       value={newTeam.description}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("description", e.target.value)
+                      }
                       placeholder={t("recTeams.descriptionPlaceholder")}
                       rows="3"
                       required
@@ -284,7 +325,9 @@ const RecTeams = ({ onBack }) => {
                       <input
                         type="text"
                         value={newTeam.location}
-                        onChange={(e) => handleInputChange("location", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("location", e.target.value)
+                        }
                         placeholder={t("recTeams.locationPlaceholder")}
                         required
                       />
@@ -295,7 +338,9 @@ const RecTeams = ({ onBack }) => {
                       <input
                         type="text"
                         value={newTeam.schedule}
-                        onChange={(e) => handleInputChange("schedule", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("schedule", e.target.value)
+                        }
                         placeholder={t("recTeams.schedulePlaceholder")}
                         required
                       />
@@ -308,7 +353,9 @@ const RecTeams = ({ onBack }) => {
                       <input
                         type="number"
                         value={newTeam.maxMembers}
-                        onChange={(e) => handleInputChange("maxMembers", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("maxMembers", e.target.value)
+                        }
                         placeholder="15"
                         min="5"
                         max="50"
@@ -321,7 +368,9 @@ const RecTeams = ({ onBack }) => {
                         <input
                           type="checkbox"
                           checked={newTeam.isCompetitive}
-                          onChange={(e) => handleInputChange("isCompetitive", e.target.checked)}
+                          onChange={(e) =>
+                            handleInputChange("isCompetitive", e.target.checked)
+                          }
                         />
                         {t("recTeams.competitive")}
                       </label>
@@ -329,7 +378,11 @@ const RecTeams = ({ onBack }) => {
                   </div>
 
                   <div className="form-actions">
-                    <button type="button" onClick={() => setShowCreateForm(false)} className="cancel-btn">
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateForm(false)}
+                      className="cancel-btn"
+                    >
                       {t("common.cancel")}
                     </button>
                     <button type="submit" className="submit-btn">
@@ -349,7 +402,12 @@ const RecTeams = ({ onBack }) => {
                     <div className="team-sport">
                       <SportsIcon className="sport-icon" />
                       <span className="sport-name">{team.sport}</span>
-                      {team.isCompetitive && <EmojiEventsIcon className="competitive-icon" title="Competitive Team" />}
+                      {team.isCompetitive && (
+                        <EmojiEventsIcon
+                          className="competitive-icon"
+                          title="Competitive Team"
+                        />
+                      )}
                     </div>
                     <div className="team-members">
                       <GroupIcon className="members-icon" />
@@ -382,8 +440,13 @@ const RecTeams = ({ onBack }) => {
                   </div>
 
                   <div className="team-actions">
-                    <button className="join-btn" disabled={team.members >= team.maxMembers}>
-                      {team.members >= team.maxMembers ? t("recTeams.full") : t("recTeams.joinTeam")}
+                    <button
+                      className="join-btn"
+                      disabled={team.members >= team.maxMembers}
+                    >
+                      {team.members >= team.maxMembers
+                        ? t("recTeams.full")
+                        : t("recTeams.joinTeam")}
                     </button>
                   </div>
                 </div>

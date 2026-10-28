@@ -9,7 +9,7 @@
 
     .reactions {
       position: relative;
-    }    
+    }
     .share-icons {
       position: relative;
     }
@@ -19,7 +19,7 @@
       align-items: center;
       cursor: pointer;
       font-size: 14px;
-      
+
       img {
         width: 22px;
         height: 22px;
@@ -50,7 +50,7 @@
       padding: 5px;
       position: relative;
       left: 0px;
-      
+
       .section {
         display: flex;
         flex-direction: row;
@@ -73,7 +73,7 @@
       .reaction:hover {
         transform: scale(1.5);
         transform-origin: center;
-        margin-top: -10px; 
+        margin-top: -10px;
       }
 
       .enlarged {
@@ -85,7 +85,7 @@
 
     .reaction-icon {
       position: relative;
-    
+
       .label {
         position: absolute;
         top: -20px; // Adjust the distance from the reaction icon according to your preference
@@ -98,12 +98,12 @@
         font-size: 9px;
         display: none;
         width: max-content; // Set a width larger than the image width
-        white-space: nowrap; 
+        white-space: nowrap;
         text-align: center;
         transition: all 0.3s ease-in-out;
         color: #091ebd;
       }
-      
+
       &:hover .label {
         display: block;
       }

@@ -66,11 +66,20 @@
           font-size: 14px;
           font-family: inherit;
 
-          &:focus { outline: none; border-color: #6D1D1D; }
+          &:focus {
+            outline: none;
+            border-color: #6d1d1d;
+          }
         }
 
-        .error-msg  { color: red;   font-size: 13px; }
-        .success-msg { color: green; font-size: 13px; }
+        .error-msg {
+          color: red;
+          font-size: 13px;
+        }
+        .success-msg {
+          color: green;
+          font-size: 13px;
+        }
 
         .footer {
           display: flex;
@@ -80,14 +89,19 @@
           button {
             padding: 8px 24px;
             border-radius: 5px;
-            background-color: #6D1D1D;
+            background-color: #6d1d1d;
             color: white;
             border: none;
             font-size: 14px;
             cursor: pointer;
 
-            &:hover:not(:disabled) { background-color: #8a2424; }
-            &:disabled { opacity: 0.5; cursor: not-allowed; }
+            &:hover:not(:disabled) {
+              background-color: #8a2424;
+            }
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
           }
         }
       }

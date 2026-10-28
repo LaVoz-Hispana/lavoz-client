@@ -1,6 +1,6 @@
 @import "../../style.scss";
 
-.viral{
+.viral {
   @include themify($themes) {
     background-color: themed("bgSoft");
     display: flex;

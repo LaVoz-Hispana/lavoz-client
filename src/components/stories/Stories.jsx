@@ -1,37 +1,39 @@
 import { useContext, useState } from "react";
-import "./stories.scss"
-import { AuthContext } from "../../context/authContext"
+import "./stories.scss";
+import { AuthContext } from "../../context/authContext";
 import Image from "../../assets/img.png";
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { makeRequest } from "../../axios"
+import { makeRequest } from "../../axios";
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import { useTranslation } from "react-i18next";
 import { isAdmin } from "../../utils/admin";
 
 const Stories = () => {
   const { t } = useTranslation();
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [shareOpen, setShareOpen] = useState(false);
-  const [story,setStory] = useState(null);
+  const [story, setStory] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["stories", currentUser.id],
-    queryFn: () => makeRequest.get("/stories").then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/stories").then((res) => {
+        return res.data;
+      }),
   });
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (newStory)=>{
+    mutationFn: (newStory) => {
       return makeRequest.post("/stories", newStory);
     },
-    onSuccess:
-    () => {
-        // invalidate and refetch
-        queryClient.invalidateQueries(["stories"]);
-      },
+    onSuccess: () => {
+      // invalidate and refetch
+      queryClient.invalidateQueries(["stories"]);
+    },
   });
 
   const isVideo = (url) => {
@@ -79,8 +81,8 @@ const Stories = () => {
     } catch (err) {
       console.log(err);
     }
-  }
-  
+  };
+
   const handleDelete = async (e, id, image) => {
     e.preventDefault();
     deleteMutation.mutate(id);
@@ -91,41 +93,64 @@ const Stories = () => {
 
   return (
     <div className="stories">
-      {!isLoading && data && currentUser &&
+      {!isLoading && data && currentUser && (
         <div className="story">
           <img src={currentUser.profilePic} alt="" />
-          <button className={data.length < 5 && "lower"} onClick = {() => {setShareOpen((true))}}>+</button>
+          <button
+            className={data.length < 5 && "lower"}
+            onClick={() => {
+              setShareOpen(true);
+            }}
+          >
+            +
+          </button>
         </div>
-      }
-      {!isLoading && data && data.map(story=>(
-        <div className="story" key={story.id}>
-          <img src={story.img} alt="" />
-          <span className={data.length < 5 && "lower"}>{story.username}</span>
-          {(story.userId === currentUser.id || isAdmin(currentUser)) &&
-            <div class='x'>
-              <DisabledByDefault onClick={(e) => handleDelete(e, story.id, story.image)} color='white'/>
-            </div>
-          }
-        </div>
-      ))}
-      {shareOpen && 
+      )}
+      {!isLoading &&
+        data &&
+        data.map((story) => (
+          <div className="story" key={story.id}>
+            <img src={story.img} alt="" />
+            <span className={data.length < 5 && "lower"}>{story.username}</span>
+            {(story.userId === currentUser.id || isAdmin(currentUser)) && (
+              <div class="x">
+                <DisabledByDefault
+                  onClick={(e) => handleDelete(e, story.id, story.image)}
+                  color="white"
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      {shareOpen && (
         <div className="shareStory">
           <div className="wrapper">
-            <div style={{display: 'flex', flexDirection: "row", justifyContent: 'spaceBetween', width: "100"}}>
-              <h2>{t('story.upload')}</h2>
-              <button className="close" onClick = {() => setShareOpen(false)}>
-                <DisabledByDefault style = {{color: "red"}}/>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "spaceBetween",
+                width: "100",
+              }}
+            >
+              <h2>{t("story.upload")}</h2>
+              <button className="close" onClick={() => setShareOpen(false)}>
+                <DisabledByDefault style={{ color: "red" }} />
               </button>
             </div>
-            <span>{t('story.desc')}</span>
+            <span>{t("story.desc")}</span>
 
-              {story && 
-                <>
-                  {story.type.startsWith("image/") && 
-                    <img className="file" alt="" src={URL.createObjectURL(story)} />
-                  }
-                </>
-              }
+            {story && (
+              <>
+                {story.type.startsWith("image/") && (
+                  <img
+                    className="file"
+                    alt=""
+                    src={URL.createObjectURL(story)}
+                  />
+                )}
+              </>
+            )}
 
             <input
               type="file"
@@ -137,16 +162,27 @@ const Stories = () => {
             <label htmlFor="story">
               <div className="item">
                 <img src={Image} alt="" />
-                <span>{t('story.choose')}</span>
+                <span>{t("story.choose")}</span>
               </div>
             </label>
-            {story && isVideo(story.name) && <span className="error-msg">{t('story.error')}</span>}
-            {story && !isVideo(story.name) && <button className="post" onClick={handleClick} active={isSubmitting}> {isSubmitting ? t('share.uploading') : t('share.post') } </button>}
+            {story && isVideo(story.name) && (
+              <span className="error-msg">{t("story.error")}</span>
+            )}
+            {story && !isVideo(story.name) && (
+              <button
+                className="post"
+                onClick={handleClick}
+                active={isSubmitting}
+              >
+                {" "}
+                {isSubmitting ? t("share.uploading") : t("share.post")}{" "}
+              </button>
+            )}
           </div>
         </div>
-      }
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Stories
+export default Stories;

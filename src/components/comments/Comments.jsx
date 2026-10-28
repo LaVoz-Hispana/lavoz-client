@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import Comment from "../comment/Comment";
-import InputEmoji from 'react-input-emoji';
+import InputEmoji from "react-input-emoji";
 
 const Comments = ({ post }) => {
   const { currentUser } = useContext(AuthContext);
@@ -30,30 +30,33 @@ const Comments = ({ post }) => {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["comments", currentUser?.id || "anonymous", post.id],
-    queryFn: () => makeRequest.get("/comments?postId=" + post.id).then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/comments?postId=" + post.id).then((res) => {
+        return res.data;
+      }),
   });
-
 
   return (
     <div className="comments">
       <div className="write">
         <img src={currentUser.profilePic} alt="" />
-        <InputEmoji 
-          placeholder="write a comment" 
+        <InputEmoji
+          placeholder="write a comment"
           value={desc}
           onChange={setDesc}
-          borderRadius = {10}
+          borderRadius={10}
         />
-        <button className="submit" onClick={handleClick}>Send</button>
+        <button className="submit" onClick={handleClick}>
+          Send
+        </button>
       </div>
       {error
         ? "Something went wrong"
         : isLoading
-        ? "loading"
-        : data.map((comment) => (
-          (<Comment comment={comment} key={comment.id} />)
-        )
-      )}
+          ? "loading"
+          : data.map((comment) => (
+              <Comment comment={comment} key={comment.id} />
+            ))}
     </div>
   );
 };

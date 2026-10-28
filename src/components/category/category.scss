@@ -1,6 +1,6 @@
 @import "../../style.scss";
 
-.category{
+.category {
   @include themify($themes) {
     background-color: themed("bgSoft");
     padding: 0px;
@@ -36,7 +36,7 @@
       }
     }
     .background {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       padding: 50px 30px;
       display: flex;
       flex-direction: column;
@@ -55,7 +55,7 @@
         text-align: center;
 
         .text-content {
-            display: inline-block;
+          display: inline-block;
         }
       }
 
@@ -73,7 +73,7 @@
     .widget {
       border-radius: 10px;
       padding: 5px 10px;
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       color: white;
       border: 1px lightgray solid;
       align-items: center;
@@ -86,4 +86,4 @@
       color: themed("textColor");
     }
   }
- }
+}

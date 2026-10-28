@@ -22,11 +22,11 @@
     }
 
     .bottom {
-       flex-wrap: wrap;
-       @include mobile {
+      flex-wrap: wrap;
+      @include mobile {
         display: flex;
         align-items: flex-start;
-       }
+      }
     }
 
     .pc {
@@ -46,7 +46,7 @@
       // @include mobile {
       //   position: absolute;
       //   right: 0px;
-      // } 
+      // }
     }
 
     .left-arrow {
@@ -58,7 +58,6 @@
       top: 50%;
     }
 
-    
     .image {
       width: 25vw;
       object-fit: contain;
@@ -82,13 +81,17 @@
       .my-share-container.show {
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 1s ease-in-out, transform 0.3s ease-in-out;
+        transition:
+          opacity 1s ease-in-out,
+          transform 0.3s ease-in-out;
       }
 
       .my-share-container {
         opacity: 0;
         transform: translateY(-50%);
-        transition: opacity 1s ease-in-out, transform 0.3s ease-in-out;
+        transition:
+          opacity 1s ease-in-out,
+          transform 0.3s ease-in-out;
         display: flex;
         border-radius: 10px;
         align-items: center;
@@ -102,7 +105,7 @@
         @include pc {
           left: 30%;
         }
-        
+
         .section {
           display: flex;
           font-size: 12px;
@@ -176,7 +179,6 @@
               text-transform: capitalize;
             }
           }
-          
         }
       }
 
@@ -197,7 +199,7 @@
           margin-top: 16px;
           padding: 12px 14px;
           border: 1px solid themed("border");
-          border-left: 4px solid #6D1D1D;
+          border-left: 4px solid #6d1d1d;
           border-radius: 8px;
           background-color: themed("bgSoft");
           color: themed("textColor");
@@ -209,7 +211,7 @@
           }
 
           strong {
-            color: #6D1D1D;
+            color: #6d1d1d;
             font-size: 15px;
           }
 
@@ -237,7 +239,7 @@
             background-color: #f6f0f0;
             border: 1px solid #e0c8c8;
             border-radius: 20px;
-            color: #6D1D1D;
+            color: #6d1d1d;
             font-size: 11px;
             padding: 2px 9px;
             text-transform: capitalize;
@@ -246,11 +248,13 @@
         }
 
         .inline-mention {
-          color: #6D1D1D;
+          color: #6d1d1d;
           font-weight: 600;
           text-decoration: none;
 
-          &:hover { text-decoration: underline; }
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         .inline-link {
@@ -276,14 +280,14 @@
         }
 
         video {
-            width: 100%;
-            max-height: 500px;
-            object-fit: contain;
-            margin-top: 20px;
+          width: 100%;
+          max-height: 500px;
+          object-fit: contain;
+          margin-top: 20px;
 
-            @include mobile {
-              width: 100%;
-            }
+          @include mobile {
+            width: 100%;
+          }
         }
       }
 
@@ -305,7 +309,7 @@
           gap: 10px;
           cursor: pointer;
           font-size: 14px;
-          
+
           img {
             width: 22px;
             height: 22px;
@@ -325,10 +329,9 @@
 
 .comments {
   @include themify($themes) {
-
     .pc {
       @media screen and (min-width: 500px) {
-        display: none; 
+        display: none;
       }
     }
 
@@ -339,7 +342,7 @@
       margin: 20px 0px 0px 0px;
 
       img {
-        aspect-ratio: 1.0 !important;
+        aspect-ratio: 1 !important;
         resize: cover;
       }
 
@@ -350,8 +353,8 @@
         display: none;
       }
 
-      input{
-        flex:5;
+      input {
+        flex: 5;
         padding: 10px;
         border: 1px solid themed("border");
         background-color: transparent;
@@ -360,7 +363,7 @@
 
       .submit {
         border: none;
-        background-color: #6D1D1D;
+        background-color: #6d1d1d;
         color: white;
         padding: 10px;
         cursor: pointer;
@@ -379,7 +382,7 @@
       justify-content: space-between;
       margin: 20px 0px 0px 0px;
 
-      input{
+      input {
         padding: 10px;
         flex: 2;
         margin: 0px 5px;
@@ -390,7 +393,7 @@
       }
       .submit {
         border: none;
-        background-color: #6D1D1D;
+        background-color: #6d1d1d;
         color: white;
         padding: 10px;
         cursor: pointer;
@@ -398,7 +401,7 @@
         margin-left: 10px;
       }
     }
-    
+
     .x {
       padding: 5px;
       border-radius: 100px;
@@ -414,20 +417,20 @@
       gap: 20px;
 
       .info {
-        flex:3;
+        flex: 3;
         display: flex;
         flex-direction: column;
         gap: 3px;
         flex-wrap: wrap;
         align-items: flex-start;
         justify-content: flex-start;
-      
+
         span {
           font-weight: 500;
         }
 
-        p{
-          color:themed("textColorSoft");
+        p {
+          color: themed("textColorSoft");
         }
 
         button {
@@ -435,9 +438,9 @@
           border: none;
         }
       }
-      
-      .date{
-        flex:1;
+
+      .date {
+        flex: 1;
         justify-content: flex-end;
         color: gray;
         font-size: 12px;

@@ -8,17 +8,17 @@ import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
-import RecommendIcon from '@mui/icons-material/Recommend';
+import RecommendIcon from "@mui/icons-material/Recommend";
 import Tamu from "../../assets/tamu_flag.png";
 import Comment from "../comment/Comment";
-import InputEmoji from 'react-input-emoji';
+import InputEmoji from "react-input-emoji";
 import Carousel from "react-simply-carousel";
-import { useTranslation } from 'react-i18next';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useTranslation } from "react-i18next";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ImageNotFound from "../../assets/img_not_found.png";
 import AddGif from "@mui/icons-material/GifBox";
-import GiphySearchbox from '../gif/GiphySearchbox';
+import GiphySearchbox from "../gif/GiphySearchbox";
 import DisabledByDefault from "@mui/icons-material/DisabledByDefault";
 import Reactions from "../reactionBar/Reactions";
 import { isAdmin } from "../../utils/admin";
@@ -45,40 +45,46 @@ const Post = ({ post, openComments = false }) => {
   const postId = post.id;
   const isOfficialPost = Boolean(post.isAdminPost);
   const authorName = isOfficialPost ? "Poststation" : post.username;
-  const authorProfilePic = isOfficialPost ? PoststationAdminLogo : (post.profilePic || DefaultAvatar);
-  const authorProfileVisible = post.profileVisible !== false && Boolean(post.userId);
+  const authorProfilePic = isOfficialPost
+    ? PoststationAdminLogo
+    : post.profilePic || DefaultAvatar;
+  const authorProfileVisible =
+    post.profileVisible !== false && Boolean(post.userId);
   const [rated, setRated] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [gifOpen, setGifOpen] = useState(false);
   const [gif, setGif] = useState(null);
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   const MAX_LENGTH = 2250;
   const PREVIEW_LENGTH = 400;
-  
+
   const containerStyle = {
     height: 0,
-    paddingBottom: '25%',
-    position: 'relative',
+    paddingBottom: "25%",
+    position: "relative",
   };
 
   const iframeStyle = {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
   };
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["likes", currentUser?.id || "anonymous", post.id],
-    queryFn: () => makeRequest.get("/likes?postId=" + post.id).then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/likes?postId=" + post.id).then((res) => {
+        return res.data;
+      }),
   });
   const queryClient = useQueryClient();
 
   // Extract non-null image URLs from the post object
   const imageUrls = Object.keys(post)
-  .filter(key => key.startsWith('img') && post[key] !== null)
-  .map(key => post[key]);
+    .filter((key) => key.startsWith("img") && post[key] !== null)
+    .map((key) => post[key]);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -86,17 +92,21 @@ const Post = ({ post, openComments = false }) => {
       const hasReacted = data.some((like) => like.userId === currentUser.id);
 
       if (hasReacted) {
-        await makeRequest.delete('/likes?postId=' + post.id);
+        await makeRequest.delete("/likes?postId=" + post.id);
       }
 
-      return makeRequest.post('/likes', { postId: post.id, reaction: reaction, postUserId: post.userId });
+      return makeRequest.post("/likes", {
+        postId: post.id,
+        reaction: reaction,
+        postUserId: post.userId,
+      });
     },
     onSuccess: () => {
       // Close reactions after a short delay
       setTimeout(() => {
         setReactionsOpen(false);
       }, 800);
-      queryClient.invalidateQueries(['likes']);
+      queryClient.invalidateQueries(["likes"]);
     },
   });
 
@@ -108,7 +118,7 @@ const Post = ({ post, openComments = false }) => {
       // Invalidate and refetch
       queryClient.invalidateQueries(["likes"]);
     },
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (postId) => {
@@ -123,13 +133,15 @@ const Post = ({ post, openComments = false }) => {
   useEffect(() => {
     if (!currentUser) return;
     if (data && data.some((like) => like.userId === currentUser.id)) {
-      const userReaction = data.find((like) => like.userId === currentUser.id).reaction;
+      const userReaction = data.find(
+        (like) => like.userId === currentUser.id,
+      ).reaction;
       setReaction(userReaction);
     } else {
       setReaction(0);
     }
   }, [data, currentUser]);
-  
+
   useEffect(() => {
     if (!currentUser) return;
     if (data) {
@@ -150,7 +162,7 @@ const Post = ({ post, openComments = false }) => {
       console.log(err);
     }
   };
-  
+
   const handleDelete = async (e) => {
     e.preventDefault();
     if (!currentUser) return;
@@ -204,7 +216,7 @@ const Post = ({ post, openComments = false }) => {
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".heic"];
     return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
   };
-  
+
   const isVideo = (url) => {
     if (url === null) return false;
     const videoExtensions = [".mp4", ".mov", ".webp", ".webm", ".ogg"];
@@ -215,13 +227,13 @@ const Post = ({ post, openComments = false }) => {
     if (url === null) return false;
     const audioExtensions = [".mp3", ".m4a", ".wav"];
     return audioExtensions.some((ext) => url.toLowerCase().endsWith(ext));
-  }
+  };
 
   const handleChange = (e) => {
     setDesc(e.target.value);
-  }
+  };
 
-  // FOR COMMENTS 
+  // FOR COMMENTS
   const handleClick = () => {
     if (desc === "" || desc === null) return;
     const postId = post.id;
@@ -242,46 +254,66 @@ const Post = ({ post, openComments = false }) => {
     },
   });
 
-  const { isLoading: commentsLoading, error: commentError, data: commentData } = useQuery({
+  const {
+    isLoading: commentsLoading,
+    error: commentError,
+    data: commentData,
+  } = useQuery({
     queryKey: ["comments", currentUser?.id || "anonymous", postId],
-    queryFn: () => makeRequest.get("/comments?postId=" + postId).then((res) => {return res.data})
+    queryFn: () =>
+      makeRequest.get("/comments?postId=" + postId).then((res) => {
+        return res.data;
+      }),
   });
 
   const displayComments = () => {
     if (!currentUser) {
       navigate("/guest");
-      return; 
+      return;
     }
-    return(
+    return (
       <div className="comments">
         <div className="writePC">
           <img className="pfp" src={currentUser.profilePic} alt="" />
-            <InputEmoji 
-              placeholder={t('post.write')} 
-              value={desc}
-              onChange={setDesc}
-              borderRadius = {10}
+          <InputEmoji
+            placeholder={t("post.write")}
+            value={desc}
+            onChange={setDesc}
+            borderRadius={10}
+          />
+          <label>
+            <AddGif
+              style={{ color: "gray", cursor: "pointer" }}
+              onClick={() => setGifOpen(!gifOpen)}
             />
-            <label>
-              <AddGif style={{color: "gray", cursor: "pointer"}} onClick={()=>setGifOpen(!gifOpen)}/>
-            </label>
-          <button className="submit" onClick={handleClick}>{t('post.send')}</button>
+          </label>
+          <button className="submit" onClick={handleClick}>
+            {t("post.send")}
+          </button>
         </div>
 
         <div className="writeMobile">
           <img className="pfp" src={currentUser.profilePic} alt="" />
-          <input 
-            placeholder={t('post.write')}
+          <input
+            placeholder={t("post.write")}
             value={desc}
             onChange={handleChange}
           />
-          <button className="submit" onClick={handleClick}>{t('post.send')}</button>
+          <button className="submit" onClick={handleClick}>
+            {t("post.send")}
+          </button>
         </div>
 
-        {gif && 
+        {gif && (
           <div>
-            <button className="x" style={{position: "relative", left: "70%"}}onClick={()=>setGif(null)}>
-              <DisabledByDefault style={{color: "gray", fontSize: "medium", cursor: "pointer"}}/>
+            <button
+              className="x"
+              style={{ position: "relative", left: "70%" }}
+              onClick={() => setGif(null)}
+            >
+              <DisabledByDefault
+                style={{ color: "gray", fontSize: "medium", cursor: "pointer" }}
+              />
             </button>
             <div style={containerStyle}>
               <iframe
@@ -301,33 +333,31 @@ const Post = ({ post, openComments = false }) => {
               </p> */}
             </div>
           </div>
-        }
-        {gifOpen &&
-          <div className='searchbox-wrapper'>
+        )}
+        {gifOpen && (
+          <div className="searchbox-wrapper">
             <GiphySearchbox
-              apiKey='wTlyF2IWF5BelAJ5IdnYcy5NJPZlEW5Z' 
+              apiKey="wTlyF2IWF5BelAJ5IdnYcy5NJPZlEW5Z"
               onSelect={(item) => {
                 setGif(item.embed_url);
                 setGifOpen(false);
               }}
-              />
+            />
           </div>
-        }
+        )}
         {commentError
           ? "Something went wrong"
           : commentsLoading
-          ? "loading"
-          : commentData.map((comment) => (
-            (<Comment comment={comment} key={comment.id} />)
-          )
-        )}
+            ? "loading"
+            : commentData.map((comment) => (
+                <Comment comment={comment} key={comment.id} />
+              ))}
       </div>
-    )
-  }
-
+    );
+  };
 
   const getCarousel = () => {
-    return(
+    return (
       <div>
         <Carousel
           userSelect={true}
@@ -335,12 +365,22 @@ const Post = ({ post, openComments = false }) => {
           swipeTreshold={70}
           onRequestChange={setActiveSlide}
           forwardBtnProps={{
-            children: <ArrowForwardIosIcon style={{color: "gray"}} fontSize="medium"/>,
-            className: "right-arrow"
+            children: (
+              <ArrowForwardIosIcon
+                style={{ color: "gray" }}
+                fontSize="medium"
+              />
+            ),
+            className: "right-arrow",
           }}
           backwardBtnProps={{
-            children: <ArrowBackIosNewIcon style={{color: "gray"}} fontSize="medium"/>,
-            className: "left-arrow"
+            children: (
+              <ArrowBackIosNewIcon
+                style={{ color: "gray" }}
+                fontSize="medium"
+              />
+            ),
+            className: "left-arrow",
           }}
           dotsNav={{
             show: true,
@@ -353,8 +393,8 @@ const Post = ({ post, openComments = false }) => {
                 background: "lightgray",
                 marginTop: 10,
                 marginRight: 2,
-                marginLeft: 2
-              }
+                marginLeft: 2,
+              },
             },
             activeItemBtnProps: {
               style: {
@@ -365,9 +405,9 @@ const Post = ({ post, openComments = false }) => {
                 background: "black",
                 marginTop: 10,
                 marginRight: 2,
-                marginLeft: 2
-              }
-            }
+                marginLeft: 2,
+              },
+            },
           }}
           itemsToShow={1}
           speed={400}
@@ -382,51 +422,65 @@ const Post = ({ post, openComments = false }) => {
                 justifyContent: "center",
                 boxSizing: "border-box",
                 width: 400,
-                height: 400
+                height: 400,
               }}
-            > 
-            {isImage(imageUrl) ? <img className="image" src={imageUrl}/> 
-            : isVideo(imageUrl) ?
-            <video controls>
-              <source src={imageUrl + "#t=0.001"} className="video" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            : 
-            <audio controls>
-              <source src={post.img0} className="video" />
-            </audio>
-            }
+            >
+              {isImage(imageUrl) ? (
+                <img className="image" src={imageUrl} />
+              ) : isVideo(imageUrl) ? (
+                <video controls>
+                  <source
+                    src={imageUrl + "#t=0.001"}
+                    className="video"
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <audio controls>
+                  <source src={post.img0} className="video" />
+                </audio>
+              )}
             </div>
           ))}
         </Carousel>
       </div>
-    )
-  }
+    );
+  };
 
   const getSingleFile = () => {
-    if (post.img0 === 'not-found') {
-      return <img className="image" src={ImageNotFound}/>
+    if (post.img0 === "not-found") {
+      return <img className="image" src={ImageNotFound} />;
     }
-    if (isImage(post.img0)) 
-      return <img className="image" src={post.img0}/>
-    else if (isVideo(post.img0)) { 
+    if (isImage(post.img0)) return <img className="image" src={post.img0} />;
+    else if (isVideo(post.img0)) {
       return (
         <video controls>
-          <source src={post.img0 +"#t=0.001"} className="video" type="video/mp4" />
+          <source
+            src={post.img0 + "#t=0.001"}
+            className="video"
+            type="video/mp4"
+          />
           Your browser does not support the video tag.
         </video>
-      )
+      );
     } else if (isAudio(post.img0)) {
       return (
         <audio controls>
           <source src={post.img0} className="video" />
         </audio>
-      )
+      );
     }
-  }
+  };
 
-  
-  const jobCategories = ["construction", "restaurant", "students", "office", "sales", "temporary"];
+  const jobCategories = [
+    "construction",
+    "restaurant",
+    "students",
+    "office",
+    "sales",
+    "temporary",
+  ];
 
   const postTypeLabel = (type) => {
     if (!type) return null;
@@ -448,11 +502,26 @@ const Post = ({ post, openComments = false }) => {
 
       return segment.split(/(@[^\s@]+)/g).map((part, index) => {
         if (!part) return null;
-        const taggedUser = taggedUsers.find((user) => `@${user.username}`.toLowerCase() === part.toLowerCase());
+        const taggedUser = taggedUsers.find(
+          (user) => `@${user.username}`.toLowerCase() === part.toLowerCase(),
+        );
         if (!taggedUser) return part;
-        return taggedUser.id
-          ? <ProfileLink key={`${keyPrefix}-mention-${index}`} to={`/profile/${taggedUser.id}`} className="inline-mention">{part}</ProfileLink>
-          : <span key={`${keyPrefix}-mention-${index}`} className="inline-mention">{part}</span>;
+        return taggedUser.id ? (
+          <ProfileLink
+            key={`${keyPrefix}-mention-${index}`}
+            to={`/profile/${taggedUser.id}`}
+            className="inline-mention"
+          >
+            {part}
+          </ProfileLink>
+        ) : (
+          <span
+            key={`${keyPrefix}-mention-${index}`}
+            className="inline-mention"
+          >
+            {part}
+          </span>
+        );
       });
     };
 
@@ -463,7 +532,12 @@ const Post = ({ post, openComments = false }) => {
 
     while ((match = richTextRegex.exec(text)) !== null) {
       if (match.index > lastIndex) {
-        nodes.push(...renderMentions(text.slice(lastIndex, match.index), `text-${lastIndex}`));
+        nodes.push(
+          ...renderMentions(
+            text.slice(lastIndex, match.index),
+            `text-${lastIndex}`,
+          ),
+        );
       }
 
       if (match[1] && match[2]) {
@@ -476,7 +550,7 @@ const Post = ({ post, openComments = false }) => {
             className="inline-link"
           >
             {match[1]}
-          </a>
+          </a>,
         );
       } else if (match[3]) {
         const { trimmed, suffix } = trimTrailingPunctuation(match[3]);
@@ -490,7 +564,7 @@ const Post = ({ post, openComments = false }) => {
             className="inline-link"
           >
             {displayUrl}
-          </a>
+          </a>,
         );
         if (suffix) nodes.push(suffix);
       }
@@ -523,61 +597,78 @@ const Post = ({ post, openComments = false }) => {
                 </ProfileLink>
               )}
               <span className="date">{moment(post.createdAt).fromNow()}</span>
-              {!isOfficialPost && <ProviderBadge providerType={post.provider_type} label={post.providerTypeLabel} />}
+              {!isOfficialPost && (
+                <ProviderBadge
+                  providerType={post.provider_type}
+                  label={post.providerTypeLabel}
+                />
+              )}
               {/* Display only if job: displays job category */}
-              {jobCategories.includes(post.category) && (<span className="categ">{post.category}</span>)}
+              {jobCategories.includes(post.category) && (
+                <span className="categ">{post.category}</span>
+              )}
             </div>
-            {post.flag === 1 &&
-              <img className="flag" src={Tamu}/>
-            }
+            {post.flag === 1 && <img className="flag" src={Tamu} />}
           </div>
           <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
-          {currentUser && menuOpen && (post.userId === currentUser.id || isAdmin(currentUser)) && (
-            <button onClick={handleDelete}>delete</button>
-          )}
-        </div>
-        
-        <div className="content">
-            {(() => {
-              const postText = post.article != null ? post.article : (post.desc ?? "");
-              const truncatedPostText = postText.length > MAX_LENGTH ? postText.substring(0, MAX_LENGTH) : postText;
-
-              return (
-                <div style={{ whiteSpace: "pre-line" }}>
-                  {renderPostText(isExpanded
-                    ? truncatedPostText
-                    : truncatedPostText.substring(0, PREVIEW_LENGTH)
-                  )}
-                  {truncatedPostText.length > PREVIEW_LENGTH && (
-                    <span
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      style={{ color: "blue", cursor: "pointer", marginLeft: 5 }}
-                    >
-                      {isExpanded ? t('post.seeLess') : t('post.seeMore')}
-                    </span>
-                  )}
-                </div>
-              );
-            })()}
-
-            {post.projectId && (
-              <Link to={`/projects/${post.projectId}`} className="project-reference-card">
-                <strong>{post.projectTitle || t("projectPost.project")}</strong>
-                {post.projectDescription && <p>{post.projectDescription}</p>}
-                <div className="reference-footer">
-                  <span>{t("projectPost.project")}</span>
-                  {post.postType && (
-                    <span className="post-type-chip">{postTypeLabel(post.postType)}</span>
-                  )}
-                </div>
-              </Link>
+          {currentUser &&
+            menuOpen &&
+            (post.userId === currentUser.id || isAdmin(currentUser)) && (
+              <button onClick={handleDelete}>delete</button>
             )}
+        </div>
 
-            <div className="centered" style={{ marginTop: 10 }}>
-              {post.img1 === null ? getSingleFile() : getCarousel()}
-            </div>
+        <div className="content">
+          {(() => {
+            const postText =
+              post.article != null ? post.article : (post.desc ?? "");
+            const truncatedPostText =
+              postText.length > MAX_LENGTH
+                ? postText.substring(0, MAX_LENGTH)
+                : postText;
 
-            {post.gifUrl && 
+            return (
+              <div style={{ whiteSpace: "pre-line" }}>
+                {renderPostText(
+                  isExpanded
+                    ? truncatedPostText
+                    : truncatedPostText.substring(0, PREVIEW_LENGTH),
+                )}
+                {truncatedPostText.length > PREVIEW_LENGTH && (
+                  <span
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    style={{ color: "blue", cursor: "pointer", marginLeft: 5 }}
+                  >
+                    {isExpanded ? t("post.seeLess") : t("post.seeMore")}
+                  </span>
+                )}
+              </div>
+            );
+          })()}
+
+          {post.projectId && (
+            <Link
+              to={`/projects/${post.projectId}`}
+              className="project-reference-card"
+            >
+              <strong>{post.projectTitle || t("projectPost.project")}</strong>
+              {post.projectDescription && <p>{post.projectDescription}</p>}
+              <div className="reference-footer">
+                <span>{t("projectPost.project")}</span>
+                {post.postType && (
+                  <span className="post-type-chip">
+                    {postTypeLabel(post.postType)}
+                  </span>
+                )}
+              </div>
+            </Link>
+          )}
+
+          <div className="centered" style={{ marginTop: 10 }}>
+            {post.img1 === null ? getSingleFile() : getCarousel()}
+          </div>
+
+          {post.gifUrl && (
             <div style={containerStyle}>
               <iframe
                 src={post.gifUrl}
@@ -595,26 +686,34 @@ const Post = ({ post, openComments = false }) => {
                 </a>
               </p> */}
             </div>
-            
-            }
+          )}
         </div>
-        
-        <div>
 
+        <div>
           <div className="info bottom">
-            <Reactions postId={postId} postUserId={post.userId} currentUser={currentUser}/>
+            <Reactions
+              postId={postId}
+              postUserId={post.userId}
+              currentUser={currentUser}
+            />
             {/* <div className="item" onClick={() => open(1)}>
               <ShareOutlinedIcon />
               {t('post.share')}
             </div> */}
-            {commentError || commentsLoading ? "loading"
-            :
-            <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
-              <TextsmsOutlinedIcon />
-              {commentData.length} 
-              {commentData.length === 1 ? t('post.comment') : t('post.comment')+'s'}
-            </div>
-            }
+            {commentError || commentsLoading ? (
+              "loading"
+            ) : (
+              <div
+                className="item"
+                onClick={() => setCommentOpen(!commentOpen)}
+              >
+                <TextsmsOutlinedIcon />
+                {commentData.length}
+                {commentData.length === 1
+                  ? t("post.comment")
+                  : t("post.comment") + "s"}
+              </div>
+            )}
           </div>
         </div>
         {commentOpen && displayComments()}

@@ -1,6 +1,6 @@
 @import "../../style.scss";
 
-.pendingAd{
+.pendingAd {
   @include themify($themes) {
     -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
     -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
@@ -52,23 +52,23 @@
     }
 
     .approve {
-        display: flex;
-        gap: 20px;
-        border: 1px solid themed("border");
-        padding: 5px 10px;
-        border-radius: 50px;
-        align-items: center;
+      display: flex;
+      gap: 20px;
+      border: 1px solid themed("border");
+      padding: 5px 10px;
+      border-radius: 50px;
+      align-items: center;
 
-        .icon {
-            margin: 0px;
-            padding: 0px;
-            transition: 0.3s all ease-in;
-        }
-        .icon:hover {
-            transform: scale(1.25);
-            transform-origin: center;
-            margin-top: -5px; /* Adjust the value according to your preference */
-        }
+      .icon {
+        margin: 0px;
+        padding: 0px;
+        transition: 0.3s all ease-in;
+      }
+      .icon:hover {
+        transform: scale(1.25);
+        transform-origin: center;
+        margin-top: -5px; /* Adjust the value according to your preference */
+      }
     }
 
     .container {
@@ -77,19 +77,25 @@
       .reaction-container.show {
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 1s ease-in-out, transform 0.3s ease-in-out;
+        transition:
+          opacity 1s ease-in-out,
+          transform 0.3s ease-in-out;
       }
 
       .share-container.show {
         opacity: 1;
         transform: translateY(0);
-        transition: opacity 1s ease-in-out, transform 0.3s ease-in-out;
+        transition:
+          opacity 1s ease-in-out,
+          transform 0.3s ease-in-out;
       }
 
       .share-container {
         opacity: 0;
         transform: translateY(-50%);
-        transition: opacity 1s ease-in-out, transform 0.3s ease-in-out;
+        transition:
+          opacity 1s ease-in-out,
+          transform 0.3s ease-in-out;
         display: flex;
         border-radius: 10px;
         align-items: center;
@@ -100,7 +106,7 @@
         bottom: 10px;
         left: 150px;
         transition: 1s ease;
-        
+
         .section {
           display: flex;
           font-size: 12px;
@@ -132,7 +138,6 @@
           margin-top: -10px; /* Adjust the value according to your preference */
         }
       }
-      
 
       .user {
         display: flex;
@@ -162,7 +167,6 @@
               font-size: 12px;
             }
           }
-          
         }
       }
 
@@ -188,14 +192,14 @@
         }
 
         video {
-            width: 100%;
-            max-height: 500px;
-            object-fit: cover;
-            margin-top: 20px;
+          width: 100%;
+          max-height: 500px;
+          object-fit: cover;
+          margin-top: 20px;
 
-            @include mobile {
-              width: 75vw;
-            }
+          @include mobile {
+            width: 75vw;
+          }
         }
       }
     }

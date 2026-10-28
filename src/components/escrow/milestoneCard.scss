@@ -8,9 +8,13 @@
     overflow: hidden;
     transition: box-shadow 0.15s;
 
-    &:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    &:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
 
-    &.overdue { border-left: 3px solid #e67e22; }
+    &.overdue {
+      border-left: 3px solid #e67e22;
+    }
 
     .card-main {
       display: flex;
@@ -20,7 +24,10 @@
       cursor: pointer;
       gap: 12px;
 
-      &:focus { outline: 2px solid #6D1D1D; outline-offset: -2px; }
+      &:focus {
+        outline: 2px solid #6d1d1d;
+        outline-offset: -2px;
+      }
 
       .card-left {
         display: flex;
@@ -85,11 +92,20 @@
           color: themed("textColor");
           cursor: pointer;
 
-          &:hover { border-color: #6D1D1D; color: #6D1D1D; }
-          &:disabled { opacity: 0.5; cursor: not-allowed; }
+          &:hover {
+            border-color: #6d1d1d;
+            color: #6d1d1d;
+          }
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
 
           &.btn-danger {
-            &:hover { border-color: #e74c3c; color: #e74c3c; }
+            &:hover {
+              border-color: #e74c3c;
+              color: #e74c3c;
+            }
           }
         }
 
@@ -149,7 +165,9 @@
           color: themed("linkColor");
           text-decoration: none;
 
-          &:hover { text-decoration: underline; }
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         .artifact-date {
@@ -178,7 +196,10 @@
         font-size: 14px;
         font-weight: 600;
 
-        &::before { content: "✓"; font-size: 16px; }
+        &::before {
+          content: "✓";
+          font-size: 16px;
+        }
       }
 
       // ── Submit form ──────────────────────────────────────────────────────────
@@ -210,8 +231,13 @@
           font-family: inherit;
           resize: vertical;
 
-          &::placeholder { color: themed("textColorSoft"); }
-          &:focus { outline: none; border-color: #6D1D1D; }
+          &::placeholder {
+            color: themed("textColorSoft");
+          }
+          &:focus {
+            outline: none;
+            border-color: #6d1d1d;
+          }
         }
 
         .file-label {
@@ -222,27 +248,38 @@
           font-size: 13px;
           color: themed("textColorSoft");
 
-          &:hover { color: themed("textColor"); }
+          &:hover {
+            color: themed("textColor");
+          }
         }
 
         .msg {
           font-size: 13px;
-          &.msg-error  { color: #e74c3c; }
-          &.msg-success { color: #27ae60; }
+          &.msg-error {
+            color: #e74c3c;
+          }
+          &.msg-success {
+            color: #27ae60;
+          }
         }
 
         button[type="submit"] {
           align-self: flex-start;
           padding: 7px 20px;
           border-radius: 6px;
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           color: white;
           border: none;
           font-size: 13px;
           cursor: pointer;
 
-          &:hover { background-color: #8a2424; }
-          &:disabled { opacity: 0.6; cursor: not-allowed; }
+          &:hover {
+            background-color: #8a2424;
+          }
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
         }
       }
 
@@ -264,8 +301,13 @@
           font-size: 13px;
           cursor: pointer;
 
-          &:hover { background-color: #2ecc71; }
-          &:disabled { opacity: 0.6; cursor: not-allowed; }
+          &:hover {
+            background-color: #2ecc71;
+          }
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
         }
 
         .btn-changes {
@@ -277,8 +319,14 @@
           font-size: 13px;
           cursor: pointer;
 
-          &:hover { border-color: #e67e22; color: #e67e22; }
-          &:disabled { opacity: 0.6; cursor: not-allowed; }
+          &:hover {
+            border-color: #e67e22;
+            color: #e67e22;
+          }
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
         }
 
         .btn-ghost {
@@ -290,7 +338,10 @@
           font-size: 13px;
           cursor: pointer;
 
-          &:hover { border-color: themed("textColor"); color: themed("textColor"); }
+          &:hover {
+            border-color: themed("textColor");
+            color: themed("textColor");
+          }
         }
 
         .request-form {
@@ -321,8 +372,13 @@
             font-family: inherit;
             resize: vertical;
 
-            &::placeholder { color: themed("textColorSoft"); }
-            &:focus { outline: none; border-color: #e67e22; }
+            &::placeholder {
+              color: themed("textColorSoft");
+            }
+            &:focus {
+              outline: none;
+              border-color: #e67e22;
+            }
           }
 
           .request-form-actions {
@@ -376,7 +432,9 @@
               font-size: 12px;
               color: themed("linkColor");
               text-decoration: none;
-              &:hover { text-decoration: underline; }
+              &:hover {
+                text-decoration: underline;
+              }
             }
 
             .entry-date {

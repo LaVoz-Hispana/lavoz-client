@@ -3,11 +3,25 @@
   color: inherit;
   font-size: 14px;
   line-height: 1.5;
-  h2 { font-size: 20px; margin: 0 0 12px; }
-  h3 { font-size: 16px; margin: 0 0 8px; }
-  p { margin: 8px 0 !important; }
-  a { color: inherit; text-decoration: underline; }
-  button, input, select, textarea {
+  h2 {
+    font-size: 20px;
+    margin: 0 0 12px;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+  p {
+    margin: 8px 0 !important;
+  }
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  button,
+  input,
+  select,
+  textarea {
     box-sizing: border-box;
     font: inherit;
     border: 1px solid var(--resume-border);
@@ -17,37 +31,145 @@
     color: inherit;
     max-width: 100%;
   }
-  button { cursor: pointer; margin: 4px 0; }
-  button[type="submit"] { background: #6d1d1d; color: #fff; }
-  button:disabled { opacity: .5; cursor: not-allowed; }
-  :focus-visible { outline: 2px solid #a14343; outline-offset: 3px; }
-  [role="alert"] { color: #b32424; }
-  [role="status"] { font-weight: 600; }
-  .resume-fields { display: grid; gap: 8px; margin: 16px 0; }
-  .resume-fields input, .resume-fields select, .resume-fields textarea { width: 100%; min-width: 0; }
-  .resume-fields label { font-weight: 600; }
-  .resume-list { list-style: none; margin: 0; padding: 0; }
-  .resume-list li, .application-card { padding: 16px 0; border-bottom: 1px solid var(--resume-border); }
-  .resume-heading, .resume-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  .resume-heading strong, .application-note { overflow-wrap: anywhere; }
-  .application-note { white-space: pre-wrap; }
-  .resume-meta { font-size: 12px; opacity: .8; }
-  .resume-badge { border-radius: 12px; padding: 2px 8px; background: #e9f2e9; color: #245524; font-size: 12px; }
-  .application-status { font-weight: 600; }
-  .applicant-summary { display: grid; gap: 6px; margin-bottom: 12px; }
-  .applicant-heading { display: flex; align-items: center; gap: 10px; }
-  .applicant-heading img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
-  .applicant-heading h3 { margin: 0; }
-  .applicant-skills { display: flex; flex-wrap: wrap; gap: 6px; }
-  .applicant-skills span { border: 1px solid var(--resume-border); border-radius: 12px; padding: 2px 8px; font-size: 12px; }
-  &.resume-library { border: 1px solid var(--resume-border); padding: 16px; border-radius: 8px; }
-  &.my-applications { padding: 24px; max-width: 850px; margin: auto; }
-  &.escrow-review { margin: 24px 0; padding: 20px; border: 1px solid var(--resume-border); border-radius: 10px; }
+  button {
+    cursor: pointer;
+    margin: 4px 0;
+  }
+  button[type="submit"] {
+    background: #6d1d1d;
+    color: #fff;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  :focus-visible {
+    outline: 2px solid #a14343;
+    outline-offset: 3px;
+  }
+  [role="alert"] {
+    color: #b32424;
+  }
+  [role="status"] {
+    font-weight: 600;
+  }
+  .resume-fields {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .resume-fields input,
+  .resume-fields select,
+  .resume-fields textarea {
+    width: 100%;
+    min-width: 0;
+  }
+  .resume-fields label {
+    font-weight: 600;
+  }
+  .resume-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .resume-list li,
+  .application-card {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--resume-border);
+  }
+  .resume-heading,
+  .resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .resume-heading strong,
+  .application-note {
+    overflow-wrap: anywhere;
+  }
+  .application-note {
+    white-space: pre-wrap;
+  }
+  .resume-meta {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  .resume-badge {
+    border-radius: 12px;
+    padding: 2px 8px;
+    background: #e9f2e9;
+    color: #245524;
+    font-size: 12px;
+  }
+  .application-status {
+    font-weight: 600;
+  }
+  .applicant-summary {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .applicant-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .applicant-heading img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .applicant-heading h3 {
+    margin: 0;
+  }
+  .applicant-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .applicant-skills span {
+    border: 1px solid var(--resume-border);
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+  &.resume-library {
+    border: 1px solid var(--resume-border);
+    padding: 16px;
+    border-radius: 8px;
+  }
+  &.my-applications {
+    padding: 24px;
+    max-width: 850px;
+    margin: auto;
+  }
+  &.escrow-review {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid var(--resume-border);
+    border-radius: 10px;
+  }
   @media (max-width: 600px) {
-    &.my-applications { padding: 16px; }
-    &.escrow-review { padding: 14px; }
-    .resume-actions { align-items: stretch; }
-    .resume-actions button { flex: 1 1 140px; }
+    &.my-applications {
+      padding: 16px;
+    }
+    &.escrow-review {
+      padding: 14px;
+    }
+    .resume-actions {
+      align-items: stretch;
+    }
+    .resume-actions button {
+      flex: 1 1 140px;
+    }
   }
 }
-.theme-dark .resume-applications { --resume-border: #666; color: #eee; [role="alert"] { color: #ff9e9e; } }
+.theme-dark .resume-applications {
+  --resume-border: #666;
+  color: #eee;
+  [role="alert"] {
+    color: #ff9e9e;
+  }
+}

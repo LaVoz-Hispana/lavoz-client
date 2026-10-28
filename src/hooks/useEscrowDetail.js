@@ -1,5 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEscrowById, getArtifactsByEscrow, finalizeEscrow } from "../utils/escrows";
+import {
+  getEscrowById,
+  getArtifactsByEscrow,
+  finalizeEscrow,
+} from "../utils/escrows";
 
 export const useEscrowDetail = (escrowId) =>
   useQuery({

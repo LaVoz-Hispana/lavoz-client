@@ -40,8 +40,8 @@ const Navbar = () => {
   };
 
   const handleLogout = async (e) => {
-    e.preventDefault()
-    try{
+    e.preventDefault();
+    try {
       await logout();
       navigate("/login");
     } catch (err) {
@@ -55,34 +55,69 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <img src={logoSrc} alt="Poststation Logo" className="logo" />
         </Link>
-        <Link to='/' className="pc" style={{ textDecoration: "none", color: "inherit", display: 'flex' }}>
-          <HomeOutlinedIcon className="pc" style={{ justifyContent: "center", alignItems: "center" }} />
+        <Link
+          to="/"
+          className="pc"
+          style={{ textDecoration: "none", color: "inherit", display: "flex" }}
+        >
+          <HomeOutlinedIcon
+            className="pc"
+            style={{ justifyContent: "center", alignItems: "center" }}
+          />
         </Link>
         {darkMode ? (
-          <WbSunnyOutlinedIcon className="pc" onClick={toggle} style={{ cursor: "pointer" }} />
+          <WbSunnyOutlinedIcon
+            className="pc"
+            onClick={toggle}
+            style={{ cursor: "pointer" }}
+          />
         ) : (
-          <DarkModeOutlinedIcon className="pc" onClick={toggle} style={{ cursor: "pointer" }} />
+          <DarkModeOutlinedIcon
+            className="pc"
+            onClick={toggle}
+            style={{ cursor: "pointer" }}
+          />
         )}
         <button className="language-toggle" onClick={langToggle}>
-          <img src={language === "es" ? MxFlag : UsFlag} className="flag" alt="Language Flag"/>
+          <img
+            src={language === "es" ? MxFlag : UsFlag}
+            className="flag"
+            alt="Language Flag"
+          />
         </button>
       </div>
       {currentUser ? (
         <div className="right">
-          <Link to={authLink("/projects")} className={`nav-link${isActive("/projects") ? " active" : ""}`} title={t("projects.browse")}>
+          <Link
+            to={authLink("/projects")}
+            className={`nav-link${isActive("/projects") ? " active" : ""}`}
+            title={t("projects.browse")}
+          >
             <WorkOutlinedIcon fontSize="small" />
           </Link>
-          <Link to={authLink("/talent")} className={`nav-link${isActive("/talent") ? " active" : ""}`} title={t("talent.browse")}>
+          <Link
+            to={authLink("/talent")}
+            className={`nav-link${isActive("/talent") ? " active" : ""}`}
+            title={t("talent.browse")}
+          >
             <PeopleOutlinedIcon fontSize="small" />
           </Link>
-          <Link to="/messages" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link
+            to="/messages"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <MessageBell iconColor="inherit" />
           </Link>
-          <Link to="/notifications" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link
+            to="/notifications"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <NotificationBell iconColor="inherit" />
           </Link>
           <Link to={"/login"}>
-            <button onClick={handleLogout} className="guest-button">Logout</button>
+            <button onClick={handleLogout} className="guest-button">
+              Logout
+            </button>
           </Link>
           {/* <Link to={"/profile/" + currentUser.id} className="pc" style={{ textDecoration: "none", color: "inherit" }}>
             <div className="user">

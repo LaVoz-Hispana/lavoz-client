@@ -2,11 +2,19 @@ import { makeRequest } from "../axios";
 
 export function providerError(error, t) {
   const code = error?.response?.data?.code;
-  return t(`provider.errors.${code}`, { defaultValue: t("provider.errors.saveFailed") });
+  return t(`provider.errors.${code}`, {
+    defaultValue: t("provider.errors.saveFailed"),
+  });
 }
 
 export async function saveProfile(user, fields) {
-  const { account_type, password, confirmPassword, serviceCategoryIds, ...profile } = { ...user, ...fields };
+  const {
+    account_type,
+    password,
+    confirmPassword,
+    serviceCategoryIds,
+    ...profile
+  } = { ...user, ...fields };
   if (user.account_type === "student" && serviceCategoryIds !== undefined) {
     profile.serviceCategoryIds = serviceCategoryIds;
   }

@@ -7,7 +7,11 @@ import { useTranslation } from "react-i18next";
 const MyEscrows = () => {
   const { t } = useTranslation();
 
-  const { isLoading, error, data: escrows } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: escrows,
+  } = useQuery({
     queryKey: ["escrows", "me"],
     queryFn: () => makeRequest.get("/escrows/me").then((res) => res.data),
   });

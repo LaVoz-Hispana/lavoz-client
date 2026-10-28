@@ -33,14 +33,16 @@ const EscrowLock = () => {
   const projectsWithEscrow = new Set(
     (escrows ?? [])
       .filter((e) => e.status !== "cancelled")
-      .map((e) => e.projectId)
+      .map((e) => e.projectId),
   );
 
   const openProjects = (projects ?? []).filter(
-    (p) => p.status === "open" && !projectsWithEscrow.has(p.id)
+    (p) => p.status === "open" && !projectsWithEscrow.has(p.id),
   );
 
-  const selectedProjectObj = openProjects.find((p) => p.id === Number(projectId));
+  const selectedProjectObj = openProjects.find(
+    (p) => p.id === Number(projectId),
+  );
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -63,7 +65,11 @@ const EscrowLock = () => {
     onError: (err) => {
       const data = err?.response?.data;
       setServerError(
-        data?.code ? featureError(err, t) : typeof data === "string" ? data : data?.message || data?.error || t("admin.lockError")
+        data?.code
+          ? featureError(err, t)
+          : typeof data === "string"
+            ? data
+            : data?.message || data?.error || t("admin.lockError"),
       );
     },
   });
@@ -80,7 +86,10 @@ const EscrowLock = () => {
       <form onSubmit={handleSubmit}>
         <select
           value={studentId}
-          onChange={(e) => { setStudentId(e.target.value); setServerError(null); }}
+          onChange={(e) => {
+            setStudentId(e.target.value);
+            setServerError(null);
+          }}
           required
         >
           <option value="">{t("admin.selectStudent")}</option>
@@ -93,7 +102,10 @@ const EscrowLock = () => {
 
         <select
           value={projectId}
-          onChange={(e) => { setProjectId(e.target.value); setServerError(null); }}
+          onChange={(e) => {
+            setProjectId(e.target.value);
+            setServerError(null);
+          }}
           required
         >
           <option value="">{t("admin.selectProject")}</option>
@@ -105,9 +117,14 @@ const EscrowLock = () => {
         </select>
 
         {serverError && <span className="error-msg">{serverError}</span>}
-        {success && <span className="success-msg">{t("admin.lockSuccess")}</span>}
+        {success && (
+          <span className="success-msg">{t("admin.lockSuccess")}</span>
+        )}
 
-        <button type="submit" disabled={!studentId || !projectId || mutation.isPending}>
+        <button
+          type="submit"
+          disabled={!studentId || !projectId || mutation.isPending}
+        >
           {t("admin.lockBtn")}
         </button>
       </form>

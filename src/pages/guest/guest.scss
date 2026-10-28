@@ -53,7 +53,7 @@
       h1 {
         color: themed("logo");
         @include mobile {
-         font-size: 20px;
+          font-size: 20px;
         }
       }
 
@@ -67,7 +67,6 @@
         cursor: pointer;
         color: white;
       }
-      
     }
   }
 }

@@ -3,25 +3,31 @@ import { useState } from "react";
 import moment from "moment";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import MilestoneForm from "./MilestoneForm";
-import { useUpdateMilestone, useDeleteMilestone, useSubmitArtifact, useApproveMilestone, useRequestChanges } from "../../hooks/useMilestones";
+import {
+  useUpdateMilestone,
+  useDeleteMilestone,
+  useSubmitArtifact,
+  useApproveMilestone,
+  useRequestChanges,
+} from "../../hooks/useMilestones";
 import { useArtifacts } from "../../hooks/useEscrowDetail";
 import { uploadFile } from "../../utils/escrows";
 import { ESCROW_STATUS } from "../../utils/escrowStatus";
 
 export const MILESTONE_STATUS_COLORS = {
-  pending:            "#888",
-  active:             "#2980b9",
-  submitted:          "#8e44ad",
+  pending: "#888",
+  active: "#2980b9",
+  submitted: "#8e44ad",
   revision_requested: "#e67e22",
-  approved:           "#27ae60",
+  approved: "#27ae60",
 };
 
 const MILESTONE_STATUS_LABELS = {
-  pending:            "Pending",
-  active:             "Active",
-  submitted:          "Submitted",
+  pending: "Pending",
+  active: "Active",
+  submitted: "Submitted",
   revision_requested: "Revision Requested",
-  approved:           "Approved",
+  approved: "Approved",
 };
 
 const SUBMIT_STATUSES = new Set(["pending", "active", "revision_requested"]);
@@ -29,32 +35,34 @@ const MAX_FILE_MB = 100;
 
 const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
   const [expanded, setExpanded] = useState(false);
-  const [editing,  setEditing]  = useState(false);
+  const [editing, setEditing] = useState(false);
 
   // Submission form state
-  const [desc,         setDesc]         = useState("");
-  const [file,         setFile]         = useState(null);
-  const [submitError,  setSubmitError]  = useState(null);
+  const [desc, setDesc] = useState("");
+  const [file, setFile] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [uploading,    setUploading]    = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   // Edit/delete error
   const [editError, setEditError] = useState(null);
 
   // Request-changes state
   const [requestingChanges, setRequestingChanges] = useState(false);
-  const [note,              setNote]              = useState("");
-  const [requestError,      setRequestError]      = useState(null);
+  const [note, setNote] = useState("");
+  const [requestError, setRequestError] = useState(null);
 
-  const canEdit   = isLocal && (escrow.status === ESCROW_STATUS.PENDING || milestone.status === "pending");
+  const canEdit =
+    isLocal &&
+    (escrow.status === ESCROW_STATUS.PENDING || milestone.status === "pending");
   const isOverdue =
     milestone.dueDate &&
     milestone.status !== "approved" &&
     moment(milestone.dueDate).isBefore(moment(), "day");
 
-  const updateMutation  = useUpdateMilestone(escrow.id);
-  const deleteMutation  = useDeleteMilestone(escrow.id);
-  const submitMutation  = useSubmitArtifact(escrow.id, milestone.id);
+  const updateMutation = useUpdateMilestone(escrow.id);
+  const deleteMutation = useDeleteMilestone(escrow.id);
+  const submitMutation = useSubmitArtifact(escrow.id, milestone.id);
   const approveMutation = useApproveMilestone(escrow.id);
   const requestMutation = useRequestChanges(escrow.id);
 
@@ -69,10 +77,14 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
         onSuccess: () => setEditing(false),
         onError: (err) => {
           const data = err?.response?.data;
-          setEditError(typeof data === "string" ? data : data?.message || "Failed to update milestone.");
+          setEditError(
+            typeof data === "string"
+              ? data
+              : data?.message || "Failed to update milestone.",
+          );
           setEditing(false);
         },
-      }
+      },
     );
   };
 
@@ -82,14 +94,21 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
     deleteMutation.mutate(milestone.id, {
       onError: (err) => {
         const data = err?.response?.data;
-        setEditError(typeof data === "string" ? data : data?.message || "Failed to delete milestone.");
+        setEditError(
+          typeof data === "string"
+            ? data
+            : data?.message || "Failed to delete milestone.",
+        );
       },
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!desc.trim()) { setSubmitError("Description is required."); return; }
+    if (!desc.trim()) {
+      setSubmitError("Description is required.");
+      return;
+    }
     if (file && file.size > MAX_FILE_MB * 1024 * 1024) {
       setSubmitError(`File exceeds ${MAX_FILE_MB} MB limit.`);
       return;
@@ -99,8 +118,13 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
     let fileUrl = null;
     if (file) {
       setUploading(true);
-      try { fileUrl = await uploadFile(file); }
-      catch { setSubmitError("File upload failed."); setUploading(false); return; }
+      try {
+        fileUrl = await uploadFile(file);
+      } catch {
+        setSubmitError("File upload failed.");
+        setUploading(false);
+        return;
+      }
       setUploading(false);
     }
 
@@ -115,18 +139,25 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
         },
         onError: (err) => {
           const data = err?.response?.data;
-          setSubmitError(typeof data === "string" ? data : data?.message || "Submission failed.");
+          setSubmitError(
+            typeof data === "string"
+              ? data
+              : data?.message || "Submission failed.",
+          );
         },
-      }
+      },
     );
   };
 
   const handleApprove = () => {
-    if (!window.confirm(`Approve "${milestone.title}"? This cannot be undone.`)) return;
+    if (!window.confirm(`Approve "${milestone.title}"? This cannot be undone.`))
+      return;
     approveMutation.mutate(milestone.id, {
       onError: (err) => {
         const data = err?.response?.data;
-        setRequestError(typeof data === "string" ? data : data?.message || "Approval failed.");
+        setRequestError(
+          typeof data === "string" ? data : data?.message || "Approval failed.",
+        );
       },
     });
   };
@@ -137,12 +168,20 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
     requestMutation.mutate(
       { milestoneId: milestone.id, note: note.trim() },
       {
-        onSuccess: () => { setRequestingChanges(false); setNote(""); setRequestError(null); },
+        onSuccess: () => {
+          setRequestingChanges(false);
+          setNote("");
+          setRequestError(null);
+        },
         onError: (err) => {
           const data = err?.response?.data;
-          setRequestError(typeof data === "string" ? data : data?.message || "Request failed.");
+          setRequestError(
+            typeof data === "string"
+              ? data
+              : data?.message || "Request failed.",
+          );
         },
-      }
+      },
     );
   };
 
@@ -151,9 +190,11 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
       <div className="milestone-card">
         <MilestoneForm
           initialValues={{
-            title:       milestone.title,
+            title: milestone.title,
             description: milestone.description ?? "",
-            dueDate:     milestone.dueDate ? moment(milestone.dueDate).format("YYYY-MM-DD") : "",
+            dueDate: milestone.dueDate
+              ? moment(milestone.dueDate).format("YYYY-MM-DD")
+              : "",
           }}
           onSubmit={handleUpdate}
           onCancel={() => setEditing(false)}
@@ -179,7 +220,10 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
         <div className="card-left">
           <span
             className="status-badge"
-            style={{ backgroundColor: MILESTONE_STATUS_COLORS[milestone.status] || "#888" }}
+            style={{
+              backgroundColor:
+                MILESTONE_STATUS_COLORS[milestone.status] || "#888",
+            }}
             aria-label={`Status: ${MILESTONE_STATUS_LABELS[milestone.status] || milestone.status}`}
           >
             {MILESTONE_STATUS_LABELS[milestone.status] || milestone.status}
@@ -188,9 +232,15 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
         </div>
 
         <div className="card-right">
-          {isOverdue && <span className="overdue-badge" aria-label="Overdue">Overdue</span>}
+          {isOverdue && (
+            <span className="overdue-badge" aria-label="Overdue">
+              Overdue
+            </span>
+          )}
           {milestone.dueDate && (
-            <span className="due-date">Due {moment(milestone.dueDate).format("MMM D")}</span>
+            <span className="due-date">
+              Due {moment(milestone.dueDate).format("MMM D")}
+            </span>
           )}
           {canEdit && (
             <div className="card-actions" onClick={(e) => e.stopPropagation()}>
@@ -212,12 +262,16 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
               </button>
             </div>
           )}
-          <span className="chevron" aria-hidden="true">{expanded ? "▲" : "▼"}</span>
+          <span className="chevron" aria-hidden="true">
+            {expanded ? "▲" : "▼"}
+          </span>
         </div>
       </div>
 
       {editError && (
-        <div className="edit-error" role="alert">{editError}</div>
+        <div className="edit-error" role="alert">
+          {editError}
+        </div>
       )}
 
       {/* ── Expanded body ── */}
@@ -245,11 +299,17 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
               <textarea
                 rows={3}
                 value={desc}
-                onChange={(e) => { setDesc(e.target.value); setSubmitError(null); }}
+                onChange={(e) => {
+                  setDesc(e.target.value);
+                  setSubmitError(null);
+                }}
                 placeholder="Describe what you're submitting…"
                 aria-label="Submission description"
               />
-              <label className="file-label" htmlFor={`artifact-file-${milestone.id}`}>
+              <label
+                className="file-label"
+                htmlFor={`artifact-file-${milestone.id}`}
+              >
                 <CloudUploadIcon fontSize="small" />
                 <span>{file ? file.name : "Attach a file (optional)"}</span>
               </label>
@@ -260,70 +320,102 @@ const MilestoneCard = ({ milestone, escrow, isLocal, isStudent }) => {
                 style={{ display: "none" }}
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              {submitError  && <span className="msg msg-error"  role="alert">{submitError}</span>}
-              {submitSuccess && <span className="msg msg-success" role="status">Submitted!</span>}
-              <button type="submit" disabled={isBusy} aria-label="Submit deliverable">
+              {submitError && (
+                <span className="msg msg-error" role="alert">
+                  {submitError}
+                </span>
+              )}
+              {submitSuccess && (
+                <span className="msg msg-success" role="status">
+                  Submitted!
+                </span>
+              )}
+              <button
+                type="submit"
+                disabled={isBusy}
+                aria-label="Submit deliverable"
+              >
                 {uploading ? "Uploading…" : isBusy ? "Submitting…" : "Submit"}
               </button>
             </form>
           )}
 
           {/* ── Local: approve / request-changes (Phase 5) ── */}
-          {isLocal && milestone.status === "submitted" && escrow.status !== ESCROW_STATUS.COMPLETED && (
-            <div className="local-actions">
-              {requestingChanges ? (
-                <form className="request-form" onSubmit={handleRequestChanges}>
-                  <h4 className="form-heading">Request changes</h4>
-                  <textarea
-                    rows={3}
-                    value={note}
-                    onChange={(e) => { setNote(e.target.value); setRequestError(null); }}
-                    placeholder="Describe what needs to change… (required)"
-                    aria-label="Change request note"
-                    autoFocus
-                  />
-                  {requestError && <span className="msg msg-error" role="alert">{requestError}</span>}
-                  <div className="request-form-actions">
+          {isLocal &&
+            milestone.status === "submitted" &&
+            escrow.status !== ESCROW_STATUS.COMPLETED && (
+              <div className="local-actions">
+                {requestingChanges ? (
+                  <form
+                    className="request-form"
+                    onSubmit={handleRequestChanges}
+                  >
+                    <h4 className="form-heading">Request changes</h4>
+                    <textarea
+                      rows={3}
+                      value={note}
+                      onChange={(e) => {
+                        setNote(e.target.value);
+                        setRequestError(null);
+                      }}
+                      placeholder="Describe what needs to change… (required)"
+                      aria-label="Change request note"
+                      autoFocus
+                    />
+                    {requestError && (
+                      <span className="msg msg-error" role="alert">
+                        {requestError}
+                      </span>
+                    )}
+                    <div className="request-form-actions">
+                      <button
+                        type="submit"
+                        className="btn-changes"
+                        disabled={!note.trim() || requestMutation.isPending}
+                        aria-label="Send change request"
+                      >
+                        {requestMutation.isPending ? "Sending…" : "Send"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-ghost"
+                        onClick={() => {
+                          setRequestingChanges(false);
+                          setNote("");
+                          setRequestError(null);
+                        }}
+                        aria-label="Cancel"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="action-row">
+                    {requestError && (
+                      <span className="msg msg-error" role="alert">
+                        {requestError}
+                      </span>
+                    )}
                     <button
-                      type="submit"
-                      className="btn-changes"
-                      disabled={!note.trim() || requestMutation.isPending}
-                      aria-label="Send change request"
+                      className="btn-approve"
+                      onClick={handleApprove}
+                      disabled={approveMutation.isPending}
+                      aria-label="Approve milestone"
                     >
-                      {requestMutation.isPending ? "Sending…" : "Send"}
+                      {approveMutation.isPending ? "Approving…" : "Approve"}
                     </button>
                     <button
-                      type="button"
-                      className="btn-ghost"
-                      onClick={() => { setRequestingChanges(false); setNote(""); setRequestError(null); }}
-                      aria-label="Cancel"
+                      className="btn-changes"
+                      onClick={() => setRequestingChanges(true)}
+                      aria-label="Request changes"
                     >
-                      Cancel
+                      Request Changes
                     </button>
                   </div>
-                </form>
-              ) : (
-                <div className="action-row">
-                  {requestError && <span className="msg msg-error" role="alert">{requestError}</span>}
-                  <button
-                    className="btn-approve"
-                    onClick={handleApprove}
-                    disabled={approveMutation.isPending}
-                    aria-label="Approve milestone"
-                  >
-                    {approveMutation.isPending ? "Approving…" : "Approve"}
-                  </button>
-                  <button
-                    className="btn-changes"
-                    onClick={() => setRequestingChanges(true)}
-                    aria-label="Request changes"
-                  >
-                    Request Changes
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
 
           {/* ── Artifact history (Phase 4 task 2) ── */}
           {artifactHistory.length > 0 && (

@@ -6,9 +6,14 @@ import Post from "../post/Post";
 
 const ProjectPosts = ({ projectId }) => {
   const { t } = useTranslation();
-  const { isLoading, error, data: posts } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: posts,
+  } = useQuery({
     queryKey: ["projectPosts", String(projectId)],
-    queryFn: () => makeRequest.get(`/posts/project/${projectId}`).then((res) => res.data),
+    queryFn: () =>
+      makeRequest.get(`/posts/project/${projectId}`).then((res) => res.data),
     enabled: !!projectId,
   });
 
@@ -20,9 +25,9 @@ const ProjectPosts = ({ projectId }) => {
       {!isLoading && !error && posts?.length === 0 && (
         <span className="state">{t("projectPost.noProjectPosts")}</span>
       )}
-      {!isLoading && !error && posts?.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      {!isLoading &&
+        !error &&
+        posts?.map((post) => <Post key={post.id} post={post} />)}
     </section>
   );
 };

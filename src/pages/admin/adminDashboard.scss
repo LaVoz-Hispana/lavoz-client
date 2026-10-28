@@ -9,14 +9,18 @@
     min-height: 100%;
 
     .header {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       padding: 50px 30px;
       display: flex;
       align-items: center;
       justify-content: center;
 
-      @include mobile { padding: 10px 5px; }
-      @include tablet { padding: 10px; }
+      @include mobile {
+        padding: 10px 5px;
+      }
+      @include tablet {
+        padding: 10px;
+      }
 
       h1 {
         font-weight: bold;
@@ -25,16 +29,24 @@
         text-align: center;
         margin: 0;
 
-        @include mobile { font-size: 20px; }
-        @include tablet { font-size: 30px; }
+        @include mobile {
+          font-size: 20px;
+        }
+        @include tablet {
+          font-size: 30px;
+        }
       }
     }
 
     .content {
       padding: 30px 50px;
 
-      @include mobile { padding: 16px; }
-      @include tablet { padding: 20px; }
+      @include mobile {
+        padding: 16px;
+      }
+      @include tablet {
+        padding: 20px;
+      }
     }
 
     .state {
@@ -67,12 +79,14 @@
         cursor: pointer;
         width: 160px;
 
-        &:hover { background-color: themed("bg"); }
+        &:hover {
+          background-color: themed("bg");
+        }
 
         &.selected {
-          color: #6D1D1D;
+          color: #6d1d1d;
           font-weight: bold;
-          border-bottom: 2px solid #6D1D1D;
+          border-bottom: 2px solid #6d1d1d;
         }
       }
     }
@@ -94,12 +108,14 @@
         cursor: pointer;
         text-transform: capitalize;
 
-        &:hover { border-color: #6D1D1D; }
+        &:hover {
+          border-color: #6d1d1d;
+        }
 
         &.active {
-          background-color: #6D1D1D;
+          background-color: #6d1d1d;
           color: white;
-          border-color: #6D1D1D;
+          border-color: #6d1d1d;
         }
       }
     }
@@ -134,11 +150,15 @@
           vertical-align: middle;
         }
 
-        tr:last-child td { border-bottom: none; }
+        tr:last-child td {
+          border-bottom: none;
+        }
 
         tr.clickable {
           cursor: pointer;
-          &:hover td { background-color: themed("bgSoft"); }
+          &:hover td {
+            background-color: themed("bgSoft");
+          }
         }
       }
     }
@@ -168,11 +188,21 @@
       letter-spacing: 0.4px;
       color: white;
 
-      &.student  { background-color: #2980b9; }
-      &.local    { background-color: #27ae60; }
-      &.admin    { background-color: #6D1D1D; }
-      &.personal { background-color: #7f8c8d; }
-      &.business { background-color: #7f8c8d; }
+      &.student {
+        background-color: #2980b9;
+      }
+      &.local {
+        background-color: #27ae60;
+      }
+      &.admin {
+        background-color: #6d1d1d;
+      }
+      &.personal {
+        background-color: #7f8c8d;
+      }
+      &.business {
+        background-color: #7f8c8d;
+      }
     }
 
     /* Escrow status badge */

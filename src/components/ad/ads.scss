@@ -1,12 +1,12 @@
 @import "../../style.scss";
 
-.ads{
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    margin: 20px;
+.ads {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin: 20px;
 
-    @include mobile {
-        margin: 10px;
-    }
+  @include mobile {
+    margin: 10px;
+  }
 }

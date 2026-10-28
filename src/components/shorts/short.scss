@@ -12,7 +12,7 @@
     width: fit-content;
 
     @include mobile {
-        width: 100%;
+      width: 100%;
     }
     @include tablet {
       min-width: 50%;
@@ -34,30 +34,30 @@
     }
 
     video {
-        height: 60vh;
+      height: 60vh;
 
-        @include mobile {
-            height: fit-content;
-            width: 80vw;
-        }
+      @include mobile {
+        height: fit-content;
+        width: 80vw;
+      }
     }
 
     .preview {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     .x {
-        background-color: transparent;
-        border: none;
-        position: relative;
-        right: -50%;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        top: 0;
+      background-color: transparent;
+      border: none;
+      position: relative;
+      right: -50%;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      top: 0;
     }
 
     .confirmationHeading {
@@ -86,35 +86,44 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    
+
     @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
     }
-    
+
     .loading-text {
       margin-top: 20px;
       font-size: 24px;
       letter-spacing: 4px;
       user-select: none;
     }
-    
+
     .loading-text span {
       display: inline-block;
       animation: float 1.5s ease-in-out infinite;
     }
-    
+
     .loading-text span:nth-child(2) {
       animation-delay: 0.2s;
     }
-    
+
     .loading-text span:nth-child(3) {
       animation-delay: 0.4s;
     }
-    
+
     @keyframes float {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(10px); }
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(10px);
+      }
     }
 
     .guest-container {
@@ -130,7 +139,7 @@
           height: 40px;
           border-radius: 50%;
           object-fit: cover;
-          aspect-ratio: 1.0;
+          aspect-ratio: 1;
         }
 
         span {
@@ -156,13 +165,13 @@
         justify-self: flex-end;
       }
     }
-    
+
     .container {
       padding: 20px;
 
       .directions {
         font-size: 1em;
-        color: gray,
+        color: gray;
       }
 
       hr {
@@ -173,28 +182,27 @@
       }
 
       .bottom {
-
         img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            aspect-ratio: 1.0 !important;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          object-fit: cover;
+          aspect-ratio: 1 !important;
         }
-  
-        input {
-            border: none;
-            outline: none;
-            padding: 10px;
-            background-color: transparent;
-            width: 100%;
-            color: themed("textColor");
-            overflow: wrap;
-            resize: none;
 
-            @include mobile {
-              font-size: 1em !important;
-            }
+        input {
+          border: none;
+          outline: none;
+          padding: 10px;
+          background-color: transparent;
+          width: 100%;
+          color: themed("textColor");
+          overflow: wrap;
+          resize: none;
+
+          @include mobile {
+            font-size: 1em !important;
+          }
         }
 
         display: flex;
@@ -228,7 +236,7 @@
             padding: 5px 10px;
             color: white;
             cursor: pointer;
-            background-color: #6D1D1D;
+            background-color: #6d1d1d;
             border-radius: 3px;
 
             @include mobile {
@@ -259,7 +267,7 @@
     .container {
       padding: 20px;
     }
-    
+
     .deleteMenu {
       display: flex;
       justify-content: flex-end;
@@ -319,4 +327,3 @@
     }
   }
 }
-

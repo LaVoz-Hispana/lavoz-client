@@ -21,21 +21,30 @@ const SocialHub = ({ socialView, setSocialView }) => {
 
             <div className="social-buttons">
               <div className="social-button">
-                <button className="main-button" onClick={() => setCurrentView("studyGroups")}>
+                <button
+                  className="main-button"
+                  onClick={() => setCurrentView("studyGroups")}
+                >
                   <h3>{t("socialHub.studyGroups")}</h3>
                   <p>{t("socialHub.studyGroupsDesc")}</p>
                 </button>
               </div>
 
               <div className="social-button">
-                <button className="main-button" onClick={() => setCurrentView("recTeams")}>
+                <button
+                  className="main-button"
+                  onClick={() => setCurrentView("recTeams")}
+                >
                   <h3>{t("socialHub.recTeams")}</h3>
                   <p>{t("socialHub.recTeamsDesc")}</p>
                 </button>
               </div>
 
               <div className="social-button">
-                <button className="main-button" onClick={() => setCurrentView("orgDiscords")}>
+                <button
+                  className="main-button"
+                  onClick={() => setCurrentView("orgDiscords")}
+                >
                   <h3>{t("socialHub.discords")}</h3>
                   <p>{t("socialHub.discordsDesc")}</p>
                 </button>
@@ -44,9 +53,15 @@ const SocialHub = ({ socialView, setSocialView }) => {
           </>
         )}
 
-        {currentView === "studyGroups" && <StudyGroups onBack={() => setCurrentView("hub")} />}
-        {currentView === "recTeams" && <RecTeams onBack={() => setCurrentView("hub")} />}
-        {currentView === "orgDiscords" && <OrgDiscords onBack={() => setCurrentView("hub")} />}
+        {currentView === "studyGroups" && (
+          <StudyGroups onBack={() => setCurrentView("hub")} />
+        )}
+        {currentView === "recTeams" && (
+          <RecTeams onBack={() => setCurrentView("hub")} />
+        )}
+        {currentView === "orgDiscords" && (
+          <OrgDiscords onBack={() => setCurrentView("hub")} />
+        )}
       </div>
     </div>
   );

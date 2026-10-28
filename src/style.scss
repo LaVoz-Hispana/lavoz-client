@@ -2,11 +2,11 @@ $themes: (
   light: (
     textColor: #000,
     bg: white,
-    logo: #6D1D1D,
+    logo: #6d1d1d,
     bgSoft: #f6f3f3,
     textColorSoft: #555,
     border: lightgray,
-    linkColor: blue
+    linkColor: blue,
   ),
   dark: (
     textColor: whitesmoke,
@@ -15,14 +15,16 @@ $themes: (
     bgSoft: #333,
     textColorSoft: lightgray,
     border: #444,
-    linkColor: lightblue
+    linkColor: lightblue,
   ),
 );
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
-  margin: 0; 
+  margin: 0;
   padding: 0;
 }
 
@@ -67,12 +69,12 @@ html, body, #root {
 
 .mobile {
   @media screen and (min-width: 1201px) {
-    display: none; 
+    display: none;
   }
 }
 
 .pc {
   @media screen and (max-width: 1200px) {
-    display: none; 
+    display: none;
   }
 }

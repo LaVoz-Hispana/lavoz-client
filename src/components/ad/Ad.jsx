@@ -10,14 +10,14 @@ import { AuthContext } from "../../context/authContext";
 import Tamu from "../../assets/tamu_flag.png";
 import DefaultAvatar from "../../assets/pfp.jpg";
 import ProviderBadge from "../provider/ProviderBadge";
-import { useTranslation } from 'react-i18next';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useTranslation } from "react-i18next";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Cancel from "@mui/icons-material/Cancel";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Carousel from "react-simply-carousel";
 import { isAdmin } from "../../utils/admin";
 
@@ -26,35 +26,50 @@ const Ad = ({ ad }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const [reaction, setReaction] = useState(0);
-  const [approved, setApproved] = useState(null); // 0 for approve, 1 for reject 
-  const [selection, setSelection] = useState(null); // 0 for approve, 1 for reject 
+  const [approved, setApproved] = useState(null); // 0 for approve, 1 for reject
+  const [selection, setSelection] = useState(null); // 0 for approve, 1 for reject
   const [activeSlide, setActiveSlide] = useState(0);
 
   const containerStyle = {
     height: 0,
-    paddingBottom: '25%',
-    position: 'relative',
+    paddingBottom: "25%",
+    position: "relative",
   };
 
   const iframeStyle = {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
   };
 
   // Extract non-null image URLs from the ad object
   const imageUrls = Object.keys(ad)
-  .filter(key => key.startsWith('img') && ad[key] !== null)
-  .map(key => ad[key]);
+    .filter((key) => key.startsWith("img") && ad[key] !== null)
+    .map((key) => ad[key]);
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: () => {
-      return makeRequest.put('/ads', { approved, id: ad.id, desc: ad.desc, img0: ad.img0, img1: ad.img1, img2: ad.img2, img3: ad.img3, img4: ad.img4, img5: ad.img5, img6: ad.img6, img7: ad.img7, img8: ad.img8, img9: ad.img9, category: ad.category });
+      return makeRequest.put("/ads", {
+        approved,
+        id: ad.id,
+        desc: ad.desc,
+        img0: ad.img0,
+        img1: ad.img1,
+        img2: ad.img2,
+        img3: ad.img3,
+        img4: ad.img4,
+        img5: ad.img5,
+        img6: ad.img6,
+        img7: ad.img7,
+        img8: ad.img8,
+        img9: ad.img9,
+        category: ad.category,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['ads']);
+      queryClient.invalidateQueries(["ads"]);
     },
   });
 
@@ -74,8 +89,8 @@ const Ad = ({ ad }) => {
     } catch (err) {
       console.log(err);
     }
-  }
-  
+  };
+
   const handleDelete = async () => {
     if (currentUser.id === ad.userId || isAdmin(currentUser)) {
       const img0 = ad.img0;
@@ -126,10 +141,18 @@ const Ad = ({ ad }) => {
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".heic"];
     return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
   };
-  
+
   const isVideo = (url) => {
     if (url === null) return false;
-    const videoExtensions = [".mp4", ".m4a", ".mov", ".webp", ".mp3", ".webm", ".ogg"];
+    const videoExtensions = [
+      ".mp4",
+      ".m4a",
+      ".mov",
+      ".webp",
+      ".mp3",
+      ".webm",
+      ".ogg",
+    ];
     return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext));
   };
 
@@ -188,7 +211,7 @@ const Ad = ({ ad }) => {
   };
 
   const getCarousel = () => {
-    return(
+    return (
       <div>
         <Carousel
           containerProps={{
@@ -196,45 +219,62 @@ const Ad = ({ ad }) => {
               minWidth: 500,
               justifyContent: "space-between",
               userSelect: "none",
-            }
+            },
           }}
           activeSlideIndex={activeSlide}
-          responsiveProps={
-            [{minWidth: 0, maxWidth: 10000000, forwardBtnProps: {
-              children: <ArrowForwardIosIcon style={{color: "gray"}} fontSize="large"/>,
-              style: {
-                width: 60,
-                height: 60,
-                minWidth: 60,
-                alignSelf: "center",
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "center",
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-              }
+          responsiveProps={[
+            {
+              minWidth: 0,
+              maxWidth: 10000000,
+              forwardBtnProps: {
+                children: (
+                  <ArrowForwardIosIcon
+                    style={{ color: "gray" }}
+                    fontSize="large"
+                  />
+                ),
+                style: {
+                  width: 60,
+                  height: 60,
+                  minWidth: 60,
+                  alignSelf: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                },
+              },
+              backwardBtnProps: {
+                children: (
+                  <ArrowBackIosNewIcon
+                    style={{ color: "gray" }}
+                    fontSize="large"
+                  />
+                ),
+                style: {
+                  width: 60,
+                  height: 60,
+                  minWidth: 60,
+                  alignSelf: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                },
+              },
+              itemsToShow: 1,
             },
-            backwardBtnProps: {
-              children: <ArrowBackIosNewIcon style={{color: "gray"}} fontSize="large"/>,
-              style: {
-                width: 60,
-                height: 60,
-                minWidth: 60,
-                alignSelf: "center",
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "center",
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer"
-              }
-            }, itemsToShow: 1}, ]
-          }
+          ]}
           swipeTreshold={20}
           onRequestChange={setActiveSlide}
           forwardBtnProps={{
-            children: <ArrowForwardIosIcon style={{color: "gray"}} fontSize="large"/>,
+            children: (
+              <ArrowForwardIosIcon style={{ color: "gray" }} fontSize="large" />
+            ),
             style: {
               width: 60,
               height: 60,
@@ -246,10 +286,12 @@ const Ad = ({ ad }) => {
               backgroundColor: "transparent",
               border: "none",
               cursor: "pointer",
-            }
+            },
           }}
           backwardBtnProps={{
-            children: <ArrowBackIosNewIcon style={{color: "gray"}} fontSize="large"/>,
+            children: (
+              <ArrowBackIosNewIcon style={{ color: "gray" }} fontSize="large" />
+            ),
             style: {
               width: 60,
               height: 60,
@@ -260,8 +302,8 @@ const Ad = ({ ad }) => {
               justifyContent: "center",
               backgroundColor: "transparent",
               border: "none",
-              cursor: "pointer"
-            }
+              cursor: "pointer",
+            },
           }}
           dotsNav={{
             show: true,
@@ -274,8 +316,8 @@ const Ad = ({ ad }) => {
                 background: "lightgray",
                 marginTop: 10,
                 marginRight: 2,
-                marginLeft: 2
-              }
+                marginLeft: 2,
+              },
             },
             activeItemBtnProps: {
               style: {
@@ -286,9 +328,9 @@ const Ad = ({ ad }) => {
                 background: "black",
                 marginTop: 10,
                 marginRight: 2,
-                marginLeft: 2
-              }
-            }
+                marginLeft: 2,
+              },
+            },
           }}
           itemsToShow={1}
           speed={400}
@@ -304,105 +346,131 @@ const Ad = ({ ad }) => {
                 lineHeight: "240px",
                 boxSizing: "border-box",
                 width: 400,
-                height: 400
+                height: 400,
               }}
-            > 
-            {isImage(imageUrl) ? <img className="image" src={imageUrl}/> 
-            : 
-            <video controls>
-              <source src={imageUrl + "#t=0.001"} className="image" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            }
+            >
+              {isImage(imageUrl) ? (
+                <img className="image" src={imageUrl} />
+              ) : (
+                <video controls>
+                  <source
+                    src={imageUrl + "#t=0.001"}
+                    className="image"
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              )}
             </div>
           ))}
         </Carousel>
       </div>
-    )
-  }
+    );
+  };
 
   const getSingleFile = () => {
-    if (isImage(ad.img0)) 
-      return <img className="image" src={ad.img0}/>
-    else if (isVideo(ad.img0)) { 
+    if (isImage(ad.img0)) return <img className="image" src={ad.img0} />;
+    else if (isVideo(ad.img0)) {
       return (
         <video controls>
-          <source src={ad.img0 + "#t=0.001"} className="video" type="video/mp4" />
+          <source
+            src={ad.img0 + "#t=0.001"}
+            className="video"
+            type="video/mp4"
+          />
           Your browser does not support the video tag.
         </video>
-      )
+      );
     }
-  }
+  };
 
   return (
     <div className="pendingAd">
-      {approved === true ?
+      {approved === true ? (
         <div className="thanks-container">
-            <CheckCircleIcon style={{color: "green", fontSize: "3em"}}/>
-            <h2>{t('ad.approved')}</h2>
-            <p>{t('ad.delete')}</p>
+          <CheckCircleIcon style={{ color: "green", fontSize: "3em" }} />
+          <h2>{t("ad.approved")}</h2>
+          <p>{t("ad.delete")}</p>
         </div>
-      :approved === false ?
+      ) : approved === false ? (
         <div className="thanks-container">
-            <CheckCircleIcon style={{color: "green", fontSize: "3em"}}/>
-            <h2>{t('ad.rejected')}</h2>
+          <CheckCircleIcon style={{ color: "green", fontSize: "3em" }} />
+          <h2>{t("ad.rejected")}</h2>
         </div>
-      :selection === 0 ?
+      ) : selection === 0 ? (
         <div className="thanks-container">
-            <CheckCircleIcon style={{color: "green", fontSize: "3em"}}/>
-            <h2>{t('ad.sureApprove')}</h2>
-            <div className="row">
-                <button className="back" onClick={() => setSelection(null)}>{t('ad.back')}</button>
-                <button className="approve" onClick={() => handleAccept()}>{t('ad.approve')}</button>
-            </div>
-            
+          <CheckCircleIcon style={{ color: "green", fontSize: "3em" }} />
+          <h2>{t("ad.sureApprove")}</h2>
+          <div className="row">
+            <button className="back" onClick={() => setSelection(null)}>
+              {t("ad.back")}
+            </button>
+            <button className="approve" onClick={() => handleAccept()}>
+              {t("ad.approve")}
+            </button>
+          </div>
         </div>
-      :selection === 1?
+      ) : selection === 1 ? (
         <div className="thanks-container">
-            <Cancel style={{color: "red", fontSize: "3em"}}/>
-            <h2>{t('ad.sureReject')}</h2>
-            <div className="row">
-                <button className="back" onClick={() => setSelection(null)}>{t('ad.back')}</button>
-                <button className="reject" onClick={() => handleReject()}>{t('ad.reject')}</button>
-            </div>
+          <Cancel style={{ color: "red", fontSize: "3em" }} />
+          <h2>{t("ad.sureReject")}</h2>
+          <div className="row">
+            <button className="back" onClick={() => setSelection(null)}>
+              {t("ad.back")}
+            </button>
+            <button className="reject" onClick={() => handleReject()}>
+              {t("ad.reject")}
+            </button>
+          </div>
         </div>
-      :
+      ) : (
         <div className="container">
-            <div className="user">
+          <div className="user">
             <div className="userInfo">
-                <img src={ad.profilePic || DefaultAvatar} alt="" />
-                <div className="details">
-                {ad.profileVisible !== false && ad.userId ? <ProfileLink
+              <img src={ad.profilePic || DefaultAvatar} alt="" />
+              <div className="details">
+                {ad.profileVisible !== false && ad.userId ? (
+                  <ProfileLink
                     to={`/profile/${ad.userId}`}
                     style={{ textDecoration: "none", color: "inherit" }}
-                >
+                  >
                     <span className="name">{ad.username}</span>
-                    <ProviderBadge providerType={ad.provider_type} label={ad.providerTypeLabel} />
-                </ProfileLink> : <span className="name">{ad.username}</span>}
+                    <ProviderBadge
+                      providerType={ad.provider_type}
+                      label={ad.providerTypeLabel}
+                    />
+                  </ProfileLink>
+                ) : (
+                  <span className="name">{ad.username}</span>
+                )}
                 <span className="date">{moment(ad.createdAt).fromNow()}</span>
-                </div>
-            </div>
-            <div className = "approve">
-                <div className = "icon">
-                    <CheckCircleIcon style={{color: "green"}} onClick={() => setSelection(0)}/>
-                </div>
-                <div className = "icon">
-                    <Cancel style={{color: "red"}} onClick={() => setSelection(1)}/>
-                </div>
-            </div>
-            </div>
-            
-            <div className="content">
-              {ad.desc}
-              <div className="centered">
-                {ad.img1 === null ? getSingleFile() : getCarousel()}
-                {ad.flag === 1 && 
-                  <img className="file" src={Tamu}/>
-                }
               </div>
             </div>
+            <div className="approve">
+              <div className="icon">
+                <CheckCircleIcon
+                  style={{ color: "green" }}
+                  onClick={() => setSelection(0)}
+                />
+              </div>
+              <div className="icon">
+                <Cancel
+                  style={{ color: "red" }}
+                  onClick={() => setSelection(1)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="content">
+            {ad.desc}
+            <div className="centered">
+              {ad.img1 === null ? getSingleFile() : getCarousel()}
+              {ad.flag === 1 && <img className="file" src={Tamu} />}
+            </div>
+          </div>
         </div>
-      }
+      )}
     </div>
   );
 };

@@ -7,7 +7,7 @@ export const RoleGuard = ({ roles, children }) => {
   const { currentUser } = useContext(AuthContext);
   if (!currentUser) return <Navigate to="/login" />;
   const allowed = roles.some((role) =>
-    role === "admin" ? isAdmin(currentUser) : currentUser.account_type === role
+    role === "admin" ? isAdmin(currentUser) : currentUser.account_type === role,
   );
   if (!allowed) return <Navigate to="/" />;
   return children;

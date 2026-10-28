@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./login.scss";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTranslation } from "react-i18next";
 import US from "../../assets/us.png";
 import MX from "../../assets/mx.png";
@@ -19,10 +19,10 @@ const Login = () => {
   const [err, setErr] = useState(null);
   const [visible, setVisible] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setInputs((prev) => ({...prev, [e.target.name]: e.target.value}));
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setErr(null);
   };
   const { login, currentUser } = useContext(AuthContext);
@@ -30,61 +30,97 @@ const Login = () => {
   if (currentUser) return <Navigate to="/" replace />;
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    try{
+    e.preventDefault();
+    try {
       await login(inputs);
-      navigate("/")
+      navigate("/");
     } catch (err) {
-      setErr(t('login.invalid'));
-      console.log(t('login.error'));
+      setErr(t("login.invalid"));
+      console.log(t("login.error"));
     }
   };
 
   return (
     <div className="login">
-        <button className = "language-toggle pc" onClick={langToggle}>
-            {language === "es" ?
-              <img src={MX} className="flag"/> : <img src={US} className="flag"/>
-            }
-        </button>
+      <button className="language-toggle pc" onClick={langToggle}>
+        {language === "es" ? (
+          <img src={MX} className="flag" />
+        ) : (
+          <img src={US} className="flag" />
+        )}
+      </button>
       <div className="card">
-        <button className = "language-toggle mobile" onClick={langToggle}>
-            {language === "es" ?
-              <img src={MX} className="flag"/> : <img src={US} className="flag"/>
-            }
+        <button className="language-toggle mobile" onClick={langToggle}>
+          {language === "es" ? (
+            <img src={MX} className="flag" />
+          ) : (
+            <img src={US} className="flag" />
+          )}
         </button>
         <div className="left">
           <h1>Poststation</h1>
-          <p>
-          {t('login.desc')}
-          </p>
-          <span>{t('login.dont')}</span>
+          <p>{t("login.desc")}</p>
+          <span>{t("login.dont")}</span>
           <Link to="/register">
-            <button>{t('login.register')}</button>
+            <button>{t("login.register")}</button>
           </Link>
         </div>
         <div className="right">
-          <h1>{t('login.login')}</h1>
+          <h1>{t("login.login")}</h1>
           <form>
-            <input type="text" placeholder="Email" name="email" onChange={handleChange} />
-            <div style={{position: "relative", padding: 0}}>
-              {visible === true ? <input className="pw" placeholder="Password" type="text" name = "password" onChange = {handleChange}/> : <input placeholder="Password" className="pw" type="password" name = "password" onChange = {handleChange}/>}
-              {visible === false ? <VisibilityIcon className="eye" onClick={() => setVisible(!visible)}/> : <VisibilityOffIcon className="eye" onClick={() => setVisible(!visible)}/>}
+            <input
+              type="text"
+              placeholder="Email"
+              name="email"
+              onChange={handleChange}
+            />
+            <div style={{ position: "relative", padding: 0 }}>
+              {visible === true ? (
+                <input
+                  className="pw"
+                  placeholder="Password"
+                  type="text"
+                  name="password"
+                  onChange={handleChange}
+                />
+              ) : (
+                <input
+                  placeholder="Password"
+                  className="pw"
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                />
+              )}
+              {visible === false ? (
+                <VisibilityIcon
+                  className="eye"
+                  onClick={() => setVisible(!visible)}
+                />
+              ) : (
+                <VisibilityOffIcon
+                  className="eye"
+                  onClick={() => setVisible(!visible)}
+                />
+              )}
             </div>
-            
-            
-            {err && <div className='error'>{err}</div>}
+
+            {err && <div className="error">{err}</div>}
             <div className="buttons">
-              <button onClick={handleLogin}>{t('login.login')}</button>
+              <button onClick={handleLogin}>{t("login.login")}</button>
               <span className="or">or</span>
               <Link to="/" className="guest">
                 <button>Continue as Guest</button>
               </Link>
               <Link to="/register" class="mobile">
-                <button style={{backgroundColor: '#6D1D1D'}}>{t('login.register')}</button>
+                <button style={{ backgroundColor: "#6D1D1D" }}>
+                  {t("login.register")}
+                </button>
               </Link>
             </div>
-              <Link className="forgot" to="/forgotPassword">Forgot password?</Link>
+            <Link className="forgot" to="/forgotPassword">
+              Forgot password?
+            </Link>
           </form>
         </div>
       </div>

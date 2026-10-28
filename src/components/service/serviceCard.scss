@@ -11,7 +11,7 @@
     flex-direction: column;
 
     .card-top {
-      background-color: #6D1D1D;
+      background-color: #6d1d1d;
       color: white;
       padding: 16px 20px;
       border-radius: 20px 20px 0 0;
@@ -53,7 +53,9 @@
           object-fit: cover;
         }
 
-        a { color: white; }
+        a {
+          color: white;
+        }
 
         .university {
           opacity: 0.75;
@@ -109,28 +111,39 @@
       button {
         padding: 5px 14px;
         border-radius: 5px;
-        background-color: #6D1D1D;
+        background-color: #6d1d1d;
         color: white;
         border: none;
         font-size: 13px;
         cursor: pointer;
 
-        &:hover { background-color: #8a2424; }
+        &:hover {
+          background-color: #8a2424;
+        }
 
         &.delete-btn {
           background-color: transparent;
           border: 1px solid #c0392b;
           color: #c0392b;
-          &:hover { background-color: #c0392b; color: white; }
-          &:disabled { opacity: 0.5; cursor: not-allowed; }
+          &:hover {
+            background-color: #c0392b;
+            color: white;
+          }
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
 
         &.edit-btn {
           background-color: transparent;
-          border: 1px solid #6D1D1D;
-          color: #6D1D1D;
+          border: 1px solid #6d1d1d;
+          color: #6d1d1d;
 
-          &:hover { background-color: #6D1D1D; color: white; }
+          &:hover {
+            background-color: #6d1d1d;
+            color: white;
+          }
         }
       }
     }

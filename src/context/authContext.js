@@ -11,16 +11,18 @@ const sessionUser = (value) => {
 };
 
 const storedUser = () => {
-  try { return sessionUser(JSON.parse(localStorage.getItem("user"))); }
-  catch { return null; }
+  try {
+    return sessionUser(JSON.parse(localStorage.getItem("user")));
+  } catch {
+    return null;
+  }
 };
 
 export const AuthContextProvider = ({ children }) => {
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(storedUser);
-  
+
   const login = async (inputs) => {
-    
     const res = await makeRequest.post("/auth/login", inputs, {
       withCredentials: true,
     });
@@ -45,10 +47,10 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("accessToken");
     setCurrentUser(null);
     queryClient.clear();
-  }
+  };
 
   useEffect(() => {
-    if (currentUser)  {
+    if (currentUser) {
       localStorage.setItem("user", JSON.stringify(currentUser));
     }
   }, [currentUser]);
@@ -74,7 +76,15 @@ export const AuthContextProvider = ({ children }) => {
   }, [queryClient]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser: updateUser, updateUser, clearUser, login }}>
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        setCurrentUser: updateUser,
+        updateUser,
+        clearUser,
+        login,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

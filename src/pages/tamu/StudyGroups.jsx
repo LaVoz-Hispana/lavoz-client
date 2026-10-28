@@ -30,7 +30,8 @@ const StudyGroups = ({ onBack }) => {
       subject: "MATH",
       course: "MATH 151",
       title: "Calculus I Study Group",
-      description: "Weekly study sessions for Calculus I. We review homework, practice problems, and prepare for exams together.",
+      description:
+        "Weekly study sessions for Calculus I. We review homework, practice problems, and prepare for exams together.",
       location: "Evans Library, Room 204",
       time: "Tuesdays 6:00 PM",
       members: 8,
@@ -41,7 +42,8 @@ const StudyGroups = ({ onBack }) => {
       subject: "CSCE",
       course: "CSCE 121",
       title: "Intro to Programming Study Group",
-      description: "Learn C++ programming together. Perfect for beginners who want to practice coding and understand concepts better.",
+      description:
+        "Learn C++ programming together. Perfect for beginners who want to practice coding and understand concepts better.",
       location: "Zachry Building, Room 310",
       time: "Wednesdays 7:00 PM",
       members: 6,
@@ -52,7 +54,8 @@ const StudyGroups = ({ onBack }) => {
       subject: "PHYS",
       course: "PHYS 218",
       title: "Physics II Study Group",
-      description: "Study group for Physics II covering electricity, magnetism, and optics. Homework help and exam prep.",
+      description:
+        "Study group for Physics II covering electricity, magnetism, and optics. Homework help and exam prep.",
       location: "Mitchell Physics Building, Room 103",
       time: "Thursdays 5:30 PM",
       members: 5,
@@ -63,7 +66,8 @@ const StudyGroups = ({ onBack }) => {
       subject: "CHEM",
       course: "CHEM 107",
       title: "General Chemistry Study Group",
-      description: "Weekly chemistry study sessions. We work through problems, review concepts, and help each other succeed.",
+      description:
+        "Weekly chemistry study sessions. We work through problems, review concepts, and help each other succeed.",
       location: "Chemistry Building, Room 225",
       time: "Mondays 4:00 PM",
       members: 10,
@@ -71,14 +75,27 @@ const StudyGroups = ({ onBack }) => {
     },
   ]);
 
-  const subjects = ["All", "MATH", "CSCE", "PHYS", "CHEM", "BIOL", "HIST", "ENGL", "STAT"];
+  const subjects = [
+    "All",
+    "MATH",
+    "CSCE",
+    "PHYS",
+    "CHEM",
+    "BIOL",
+    "HIST",
+    "ENGL",
+    "STAT",
+  ];
 
   const filteredGroups = studyGroups.filter((group) => {
     const matchesSearch =
       group.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       group.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
       group.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSubject = selectedSubject === "" || selectedSubject === "All" || group.subject === selectedSubject;
+    const matchesSubject =
+      selectedSubject === "" ||
+      selectedSubject === "All" ||
+      group.subject === selectedSubject;
     return matchesSearch && matchesSubject;
   });
 
@@ -150,7 +167,10 @@ const StudyGroups = ({ onBack }) => {
               </div>
             </div>
 
-            <button className="create-group-btn" onClick={() => setShowCreateForm(true)}>
+            <button
+              className="create-group-btn"
+              onClick={() => setShowCreateForm(true)}
+            >
               <AddIcon /> {t("studyGroups.createGroup")}
             </button>
           </div>
@@ -159,16 +179,23 @@ const StudyGroups = ({ onBack }) => {
             <div className="create-group-modal">
               <div className="modal-content">
                 <h3>{t("studyGroups.createNewGroup")}</h3>
-                <form onSubmit={handleCreateGroup} className="create-group-form">
+                <form
+                  onSubmit={handleCreateGroup}
+                  className="create-group-form"
+                >
                   <div className="form-row">
                     <div className="form-group">
                       <label>{t("studyGroups.subject")}</label>
                       <select
                         value={newGroup.subject}
-                        onChange={(e) => handleInputChange("subject", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("subject", e.target.value)
+                        }
                         required
                       >
-                        <option value="">{t("studyGroups.selectSubject")}</option>
+                        <option value="">
+                          {t("studyGroups.selectSubject")}
+                        </option>
                         {subjects.slice(1).map((subject) => (
                           <option key={subject} value={subject}>
                             {subject}
@@ -182,7 +209,9 @@ const StudyGroups = ({ onBack }) => {
                       <input
                         type="text"
                         value={newGroup.course}
-                        onChange={(e) => handleInputChange("course", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("course", e.target.value)
+                        }
                         placeholder="e.g., MATH 151"
                         required
                       />
@@ -194,7 +223,9 @@ const StudyGroups = ({ onBack }) => {
                     <input
                       type="text"
                       value={newGroup.title}
-                      onChange={(e) => handleInputChange("title", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("title", e.target.value)
+                      }
                       placeholder={t("studyGroups.titlePlaceholder")}
                       required
                     />
@@ -204,7 +235,9 @@ const StudyGroups = ({ onBack }) => {
                     <label>{t("studyGroups.description")}</label>
                     <textarea
                       value={newGroup.description}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("description", e.target.value)
+                      }
                       placeholder={t("studyGroups.descriptionPlaceholder")}
                       rows="3"
                       required
@@ -217,7 +250,9 @@ const StudyGroups = ({ onBack }) => {
                       <input
                         type="text"
                         value={newGroup.location}
-                        onChange={(e) => handleInputChange("location", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("location", e.target.value)
+                        }
                         placeholder={t("studyGroups.locationPlaceholder")}
                         required
                       />
@@ -228,7 +263,9 @@ const StudyGroups = ({ onBack }) => {
                       <input
                         type="text"
                         value={newGroup.time}
-                        onChange={(e) => handleInputChange("time", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("time", e.target.value)
+                        }
                         placeholder={t("studyGroups.timePlaceholder")}
                         required
                       />
@@ -240,7 +277,9 @@ const StudyGroups = ({ onBack }) => {
                     <input
                       type="number"
                       value={newGroup.maxMembers}
-                      onChange={(e) => handleInputChange("maxMembers", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("maxMembers", e.target.value)
+                      }
                       placeholder="10"
                       min="2"
                       max="50"
@@ -249,7 +288,11 @@ const StudyGroups = ({ onBack }) => {
                   </div>
 
                   <div className="form-actions">
-                    <button type="button" onClick={() => setShowCreateForm(false)} className="cancel-btn">
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateForm(false)}
+                      className="cancel-btn"
+                    >
                       {t("common.cancel")}
                     </button>
                     <button type="submit" className="submit-btn">
@@ -293,8 +336,13 @@ const StudyGroups = ({ onBack }) => {
                   </div>
 
                   <div className="group-actions">
-                    <button className="join-btn" disabled={group.members >= group.maxMembers}>
-                      {group.members >= group.maxMembers ? t("studyGroups.full") : t("studyGroups.joinGroup")}
+                    <button
+                      className="join-btn"
+                      disabled={group.members >= group.maxMembers}
+                    >
+                      {group.members >= group.maxMembers
+                        ? t("studyGroups.full")
+                        : t("studyGroups.joinGroup")}
                     </button>
                   </div>
                 </div>

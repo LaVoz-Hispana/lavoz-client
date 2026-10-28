@@ -4,7 +4,10 @@ import GiphySearchbox from "./GiphySearchbox";
 
 jest.mock("@giphy/react-components", () => {
   const React = require("react");
-  const SearchContext = React.createContext({ fetchGifs: jest.fn(), searchKey: "trending" });
+  const SearchContext = React.createContext({
+    fetchGifs: jest.fn(),
+    searchKey: "trending",
+  });
   return {
     SearchContext,
     SearchContextManager: ({ children }) => children,
@@ -14,10 +17,16 @@ jest.mock("@giphy/react-components", () => {
         data-columns={columns}
         data-width={width}
         onClick={(event) => {
-          onGifClick({ id: "123", embed_url: "https://giphy.com/embed/123" }, event);
-          if (!noLink || !event.defaultPrevented) throw new Error("GIF selection must not navigate");
+          onGifClick(
+            { id: "123", embed_url: "https://giphy.com/embed/123" },
+            event,
+          );
+          if (!noLink || !event.defaultPrevented)
+            throw new Error("GIF selection must not navigate");
         }}
-      >Select GIF</button>
+      >
+        Select GIF
+      </button>
     ),
   };
 });
@@ -25,9 +34,14 @@ jest.mock("@giphy/react-components", () => {
 test("selecting a GIF preserves the embed URL used by comments without navigating", () => {
   const onSelect = jest.fn();
   render(<GiphySearchbox apiKey="test-key" onSelect={onSelect} />);
-  expect(screen.getByRole("textbox", { name: "Search GIPHY" })).toBeInTheDocument();
+  expect(
+    screen.getByRole("textbox", { name: "Search GIPHY" }),
+  ).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Select GIF" }));
-  expect(onSelect).toHaveBeenCalledWith({ id: "123", embed_url: "https://giphy.com/embed/123" });
+  expect(onSelect).toHaveBeenCalledWith({
+    id: "123",
+    embed_url: "https://giphy.com/embed/123",
+  });
 });
 
 test("the GIF grid retains the mobile and desktop layouts", () => {

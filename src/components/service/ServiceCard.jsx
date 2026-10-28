@@ -23,10 +23,14 @@ const ServiceCard = ({ service }) => {
   });
 
   const isOwner = currentUser && currentUser.id === service.userId;
-  const profileVisible = service.profileVisible !== false && Boolean(service.userId);
+  const profileVisible =
+    service.profileVisible !== false && Boolean(service.userId);
 
   const skills = service.skills
-    ? service.skills.split(",").map((s) => s.trim()).filter(Boolean)
+    ? service.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
     : [];
 
   return (
@@ -38,9 +42,20 @@ const ServiceCard = ({ service }) => {
         )}
         <div className="posted-by">
           <img src={service.profilePic || DefaultAvatar} alt="" />
-          {profileVisible ? <ProfileLink to={`/profile/${service.userId}`} style={{ textDecoration: "none", color: "inherit" }}>
-            {service.username} <RatingBadge rating={service.averageRating} reviewCount={service.reviewCount} />
-          </ProfileLink> : <span>{service.username}</span>}
+          {profileVisible ? (
+            <ProfileLink
+              to={`/profile/${service.userId}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {service.username}{" "}
+              <RatingBadge
+                rating={service.averageRating}
+                reviewCount={service.reviewCount}
+              />
+            </ProfileLink>
+          ) : (
+            <span>{service.username}</span>
+          )}
           {service.university && (
             <span className="university">· {service.university}</span>
           )}
@@ -53,7 +68,9 @@ const ServiceCard = ({ service }) => {
         {skills.length > 0 && (
           <div className="skills-list">
             {skills.map((skill, i) => (
-              <span key={i} className="skill-tag">{skill}</span>
+              <span key={i} className="skill-tag">
+                {skill}
+              </span>
             ))}
           </div>
         )}
@@ -67,9 +84,11 @@ const ServiceCard = ({ service }) => {
       </div>
 
       <div className="card-footer">
-        {isOwner && <ProfileLink to={`/profile/${service.userId}`}>
-          <button>{t("talent.viewProfile")}</button>
-        </ProfileLink>}
+        {isOwner && (
+          <ProfileLink to={`/profile/${service.userId}`}>
+            <button>{t("talent.viewProfile")}</button>
+          </ProfileLink>
+        )}
         {isOwner && (
           <>
             <button className="edit-btn" onClick={() => setIsEditing(true)}>
@@ -78,7 +97,8 @@ const ServiceCard = ({ service }) => {
             <button
               className="delete-btn"
               onClick={() => {
-                if (window.confirm(t("talent.deleteConfirm"))) deleteMutation.mutate();
+                if (window.confirm(t("talent.deleteConfirm")))
+                  deleteMutation.mutate();
               }}
               disabled={deleteMutation.isPending}
             >
@@ -88,10 +108,21 @@ const ServiceCard = ({ service }) => {
         )}
       </div>
       {isEditing && (
-        <div className="service-edit-modal" role="dialog" aria-modal="true" aria-label={t("services.edit")}>
-          <div className="service-edit-modal-backdrop" onClick={() => setIsEditing(false)} />
+        <div
+          className="service-edit-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("services.edit")}
+        >
+          <div
+            className="service-edit-modal-backdrop"
+            onClick={() => setIsEditing(false)}
+          />
           <div className="service-edit-modal-content">
-            <SubmitService service={service} onClose={() => setIsEditing(false)} />
+            <SubmitService
+              service={service}
+              onClose={() => setIsEditing(false)}
+            />
           </div>
         </div>
       )}
